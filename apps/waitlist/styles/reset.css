@@ -1,0 +1,88 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  vertical-align: baseline;
+  border: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  font-variation-settings: inherit;
+  font-feature-settings: "calt", "ccmp", "locl", "kern";
+  text-rendering: optimizeLegibility;
+  line-height: inherit;
+  color: inherit;
+  font-family: inherit;
+  text-transform: none;
+  text-decoration: none;
+  scroll-behavior: smooth;
+  scroll-padding-top: 128px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+ul,
+li,
+ol {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+button {
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  user-select: none;
+  background: none;
+  border: none;
+}
+
+input {
+  padding: 0;
+  font: inherit;
+  background: none;
+  border: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+#root,
+#__next {
+  isolation: isolate;
+}
