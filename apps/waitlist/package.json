@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@base-ui-components/react": "1.0.0-beta.2",
+    "@hookform/resolvers": "^5.2.1",
     "@radix-ui/react-slot": "^1.2.3",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
@@ -21,6 +22,7 @@
     "next": "^15.4.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hook-form": "^7.62.0",
     "zod": "^4.0.17",
     "zustand": "^5.0.7"
   },
