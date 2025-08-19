@@ -1,7 +1,8 @@
 "use client";
 
-import { AnimatePresence, motion, stagger } from "motion/react";
-import { useRef, useState } from "react";
+import { useForm } from "@tanstack/react-form";
+import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react";
 
 import { Button } from "@/components/button";
 import { Field } from "@/components/field";
@@ -13,60 +14,54 @@ import { schema } from "./schema";
 import styles from "./styles.module.css";
 
 export function Manifesto() {
-  const [email, setEmail] = useState("");
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-
   const { displayState, setActualState } = useButtonState();
   const state = displayState;
 
-  const isValid = schema.safeParse({ email }).success;
+  const form = useForm({
+    defaultValues: {
+      email: "",
+    },
+    onSubmit: async ({ value }) => {
+      setIsSuccess(false);
+      setActualState(State.Loading);
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    setIsSubmitting(true);
-    setErrors({});
-    setIsSuccess(false);
-    setActualState(State.Loading);
+      try {
+        const supabase = createClient();
+        const { error } = await supabase
+          .from("waitlist")
+          .insert({ email: value.email });
 
-    try {
-      const validatedData = schema.parse({ email });
-      const supabase = createClient();
-      const { error } = await supabase
-        .from("waitlist")
-        .insert({ email: validatedData.email });
-      if (error) {
-        if (error.code === "23505") {
-          setErrors({ email: "This email is already on the waitlist" });
-        } else {
-          setErrors({ email: "Something went wrong. Please try again." });
-        }
-        setActualState(State.Idle);
-        return;
-      }
-      setEmail("");
-      setIsSuccess(true);
-      setActualState(State.Success);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const formErrors: Record<string, string> = {};
-        error.issues.forEach((issue) => {
-          if (issue.path[0]) {
-            formErrors[issue.path[0] as string] = issue.message;
+        if (error) {
+          if (error.code === "23505") {
+            form.setFieldMeta("email", (prev) => ({
+              ...prev,
+              errors: ["This email is already on the waitlist"],
+            }));
+          } else {
+            form.setFieldMeta("email", (prev) => ({
+              ...prev,
+              errors: ["Something went wrong. Please try again."],
+            }));
           }
-        });
-        setErrors(formErrors);
-      } else {
-        setErrors({ email: "Something went wrong. Please try again." });
-      }
-      setActualState(State.Idle);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+          setActualState(State.Idle);
+          return;
+        }
 
-  const isButtonVisible = isValid || isSuccess;
+        form.reset();
+        setIsSuccess(true);
+        setActualState(State.Success);
+      } catch {
+        form.setFieldMeta("email", (prev) => ({
+          ...prev,
+          errors: ["Something went wrong. Please try again."],
+        }));
+        setActualState(State.Idle);
+      }
+    },
+  });
+
+  const isButtonVisible = form.state.isFormValid || isSuccess;
 
   return (
     <motion.div {...container} className={styles.manifesto}>
@@ -75,26 +70,57 @@ export function Manifesto() {
         Reimagine fitness, replacing short-term tracking with a focused journey
         toward lasting progress. A personal system built for real results.
       </motion.p>
-      <motion.form {...item} onSubmit={handleSubmit} className={styles.form}>
-        <Field.Root style={{ width: "100%", marginTop: 24 }}>
-          <Field.Control
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            spellCheck={false}
-            autoComplete="off"
-            placeholder="Email"
-            aria-invalid={!!errors.email}
-            disabled={isSuccess}
-          />
-        </Field.Root>
+      <motion.form
+        {...item}
+        onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          form.handleSubmit();
+        }}
+        className={styles.form}
+      >
+        <form.Field
+          name="email"
+          validators={{
+            onChange: ({ value }) => {
+              const result = schema.shape.email.safeParse(value);
+              return result.success
+                ? undefined
+                : result.error.issues[0]?.message;
+            },
+          }}
+        >
+          {(field) => (
+            <Field.Root style={{ width: "100%", marginTop: 24 }}>
+              <Field.Control
+                type="email"
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                spellCheck={false}
+                autoComplete="off"
+                placeholder="Email"
+                aria-invalid={field.state.meta.errors.length > 0}
+                disabled={isSuccess}
+              />
+              {field.state.meta.errors.length > 0 && (
+                <div
+                  style={{ color: "red", fontSize: "14px", marginTop: "4px" }}
+                >
+                  {field.state.meta.errors[0]?.toString()}
+                </div>
+              )}
+            </Field.Root>
+          )}
+        </form.Field>
 
         <AnimatePresence mode="popLayout">
           {isButtonVisible && (
             <motion.div {...reveal}>
               <Button.Root
                 type="submit"
-                disabled={isSubmitting}
+                disabled={form.state.isSubmitting}
                 style={{ width: "100%" }}
               >
                 <motion.div {...spinner(state === State.Loading)}>
