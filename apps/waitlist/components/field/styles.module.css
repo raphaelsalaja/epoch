@@ -7,14 +7,12 @@
 }
 
 .label {
-  font-family: var(--font-openrunde);
-  font-size: var(--size-small, 13px);
+  font-size: var(--size-small);
   font-style: normal;
-  font-weight: var(--weight-normal, 500);
+  font-weight: var(--weight-normal);
   line-height: 24px;
-  color: var(--foreground-quaternary, color(display-p3 0.61 0.61 0.61));
-  color: var(--foreground-quaternary, #9c9c9c);
-  letter-spacing: var(--spacing-small, -0.04px);
+  color: var(--foreground-quaternary);
+  letter-spacing: var(--spacing-small);
 }
 
 .control {
@@ -24,24 +22,19 @@
   align-self: stretch;
   height: 48px;
   padding: 16px;
+  font-size: var(--size-medium);
+  font-weight: var(--weight-medium);
+  color: var(--foreground-primary);
   background: var(--background-secondary);
   border-radius: 16px;
 
-  &:focus {
-    outline: 2px solid var(--foreground-quaternary);
-    outline-offset: 2px;
-    transition: outline-offset 0.2s ease-in-out;
-  }
-
   &::placeholder {
-    font-family: var(--font-openrunde);
-    font-size: var(--size-medium, 14px);
+    font-size: var(--size-medium);
     font-style: normal;
     font-weight: var(--weight-medium);
     line-height: 24px;
-    color: var(--foreground-quaternary, #9c9c9c);
-    color: var(--foreground-quaternary, color(display-p3 0.61 0.61 0.61));
-    letter-spacing: var(--spacing-medium, -0.09px);
+    color: var(--foreground-quaternary);
+    letter-spacing: var(--spacing-medium);
   }
 }
 

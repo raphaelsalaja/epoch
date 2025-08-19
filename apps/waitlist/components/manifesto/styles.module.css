@@ -5,30 +5,29 @@
   width: 384px;
 }
 
-.manifesto h1 {
-  font-family: var(--font-openrunde);
-  font-size: var(--size-large, 14px);
-  font-style: normal;
-  font-weight: var(--weight-semibold, 600);
+.manifesto h1,
+.manifesto p {
   line-height: 24px;
-  color: var(--foreground-primary, #1f1f1f);
-  color: var(--foreground-primary, color(display-p3 0.1222 0.1222 0.1222));
-  text-align: center;
-  letter-spacing: var(--spacing-large, -0.09px);
+}
+
+.manifesto h1 {
+  font-size: var(--size-large);
+  font-weight: var(--weight-semibold);
+  color: var(--foreground-primary);
+  letter-spacing: var(--spacing-large);
 }
 
 .manifesto p {
   margin-top: 12px;
-  font-family: var(--font-openrunde);
-  font-size: var(--size-medium, 14px);
-  font-style: normal;
-  font-weight: var(--weight-normal, 500);
-  line-height: 24px;
-  color: var(--foreground-quaternary, #9c9c9c);
-  color: var(--foreground-quaternary, color(display-p3 0.61 0.61 0.61));
+  font-size: var(--size-medium);
+  font-weight: var(--weight-normal);
+  color: var(--foreground-tertiary);
 }
 
-.manifesto :nth-child(5),
-.manifesto :nth-child(6) {
-  margin-top: 32px;
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  height: 120px;
 }

@@ -1,17 +1,26 @@
 import { Slot } from "@radix-ui/react-slot";
 import clsx from "clsx";
+import { type HTMLMotionProps, motion } from "motion/react";
 import type * as React from "react";
-
 import styles from "./styles.module.css";
 
-interface RootProps extends React.ComponentProps<"button"> {
+interface RootProps extends HTMLMotionProps<"button"> {
   asChild?: boolean;
 }
 
 function Root({ className, asChild = false, ...props }: RootProps) {
-  const Comp = asChild ? Slot : "button";
+  if (asChild) {
+    return (
+      <Slot
+        data-slot="button"
+        className={clsx(styles.button, className)}
+        {...(props as React.ComponentProps<typeof Slot>)}
+      />
+    );
+  }
+
   return (
-    <Comp
+    <motion.button
       data-slot="button"
       className={clsx(styles.button, className)}
       {...props}
@@ -19,10 +28,10 @@ function Root({ className, asChild = false, ...props }: RootProps) {
   );
 }
 
-interface LabelProps extends React.ComponentProps<"span"> {}
+interface LabelProps extends HTMLMotionProps<"span"> {}
 
 function Label({ className, ...props }: LabelProps) {
-  return <span className={clsx(styles.label, className)} {...props} />;
+  return <motion.span className={clsx(styles.label, className)} {...props} />;
 }
 
 export const Button = {

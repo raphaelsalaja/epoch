@@ -5,25 +5,24 @@
 }
 
 * {
-  padding: 0;
-  margin: 0;
-  vertical-align: baseline;
+  -webkit-font-smoothing: antialiased;
   border: 0;
-  font-size: inherit;
-  font-weight: inherit;
-  font-variation-settings: inherit;
-  font-feature-settings: "calt", "ccmp", "locl", "kern";
-  text-rendering: optimizeLegibility;
-  line-height: inherit;
   color: inherit;
   font-family: inherit;
-  text-transform: none;
-  text-decoration: none;
+  font-feature-settings: "calt", "ccmp", "locl", "kern";
+  font-size: inherit;
+  font-variation-settings: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
   scroll-behavior: smooth;
   scroll-padding-top: 128px;
+  text-decoration: none;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -webkit-font-smoothing: antialiased;
+  text-transform: none;
+  text-wrap: pretty;
+  vertical-align: baseline;
 }
 
 body {

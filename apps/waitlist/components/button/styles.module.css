@@ -6,26 +6,20 @@
   height: 48px;
   background: var(--black);
   border-radius: 16px;
+  transition: outline-offset 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
 
   .label {
-    font-family: var(--font-openrunde);
     font-size: var(--size-medium);
-    font-style: normal;
+    font-variation-settings: var(--font-weight-600);
     font-weight: var(--weight-semibold);
     line-height: 24px;
     color: var(--white);
     letter-spacing: var(--spacing-medium);
+    white-space: nowrap;
     user-select: none;
   }
 
   &:active {
     scale: 0.98;
-  }
-
-  &:focus,
-  &:focus-visible {
-    outline: 2px solid var(--foreground-quaternary);
-    outline-offset: 2px;
-    transition: outline-offset 0.2s ease-in-out;
   }
 }

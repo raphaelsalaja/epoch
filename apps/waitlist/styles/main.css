@@ -3,10 +3,7 @@
 @import url("./theme/font.css");
 
 html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 128px;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+  background: var(--background-primary);
 }
 
 html::selection {
@@ -27,12 +24,27 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 640px;
-  padding: 96px 0;
+  height: 100%;
+
   isolation: isolate;
   transition: width 0.4s ease;
 
   @media (width <= 800px) {
     width: 80%;
+  }
+}
+
+button,
+input {
+  outline: none;
+
+  &:focus,
+  &:focus-within {
+    box-shadow:
+      0 0 0 2px var(--background-primary),
+      0 0 0 4px var(--black);
+    transition: box-shadow 0.4s cubic-bezier(0.19, 1, 0.22, 1);
   }
 }
