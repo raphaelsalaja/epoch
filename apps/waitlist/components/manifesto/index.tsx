@@ -89,9 +89,13 @@ export function Manifesto() {
         <Controller
           name="email"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <motion.div ref={ref} style={{ width: "100%", marginTop: 24 }}>
-              <Field.Root>
+              <Field.Root
+                name="email"
+                invalid={fieldState.invalid}
+                disabled={isSuccess}
+              >
                 <Field.Control
                   type="text"
                   {...field}
@@ -136,12 +140,7 @@ export function Manifesto() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            style={{
-              color: "red",
-              fontSize: 14,
-              marginTop: 8,
-              textAlign: "center",
-            }}
+            className={styles.error}
           >
             {errors.email.message}
           </motion.div>

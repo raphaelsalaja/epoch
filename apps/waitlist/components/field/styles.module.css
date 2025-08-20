@@ -4,6 +4,18 @@
   gap: 0.25rem;
   align-items: start;
   width: 100%;
+
+  &[data-invalid] .control {
+    outline-color: color-mix(in srgb, var(--red) 100%, transparent);
+
+    &:focus-visible {
+      outline-color: color-mix(in srgb, var(--red) 100%, transparent);
+    }
+  }
+
+  &[data-focused] .control {
+    outline-color: color-mix(in srgb, var(--black) 100%, transparent);
+  }
 }
 
 .label {
@@ -31,11 +43,7 @@
   outline-offset: 0px;
   background: var(--background-secondary);
   border-radius: 16px;
-  transition: outline-color 0.4s ease;
-
-  &:focus-visible {
-    outline-color: color-mix(in srgb, var(--black) 100%, transparent);
-  }
+  transition: outline-color 0.2s ease;
 
   &::placeholder {
     font-size: var(--size-medium);

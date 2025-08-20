@@ -10,7 +10,7 @@
   outline-offset: 2px;
   background: var(--black);
   border-radius: 16px;
-  transition: outline-color 0.4s ease;
+  transition: outline-color 0.2s ease;
 
   &:focus-visible {
     outline-color: color-mix(in srgb, var(--black) 100%, transparent);
@@ -18,7 +18,6 @@
 
   .label {
     font-size: var(--size-medium);
-    font-variation-settings: var(--font-weight-600);
     font-weight: var(--weight-semibold);
     line-height: 24px;
     color: var(--white);

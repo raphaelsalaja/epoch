@@ -31,3 +31,13 @@
   width: 100%;
   height: 120px;
 }
+
+.error {
+  font-size: var(--size-regular);
+  font-weight: var(--weight-medium);
+  color: color-mix(in srgb, var(--red) 100%, transparent);
+  text-align: center;
+  letter-spacing: var(--spacing-regular);
+  white-space: nowrap;
+  user-select: none;
+}
