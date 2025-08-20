@@ -1,11 +1,15 @@
 import { Field as BaseField } from "@base-ui-components/react/field";
+import { motion } from "motion/react";
 import type React from "react";
 import styles from "./styles.module.css";
 
+const MotionFieldRoot = motion.create(BaseField.Root);
+
 interface FieldRootProps
-  extends React.ComponentPropsWithRef<typeof BaseField.Root> {}
+  extends React.ComponentPropsWithoutRef<typeof MotionFieldRoot> {}
+
 function FieldRoot(props: FieldRootProps) {
-  return <BaseField.Root className={styles.field} {...props} />;
+  return <MotionFieldRoot className={styles.field} {...props} />;
 }
 
 interface FieldLabelProps

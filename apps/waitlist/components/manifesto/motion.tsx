@@ -8,7 +8,7 @@ export const container: MotionProps = {
     show: {
       opacity: 1,
       transition: {
-        delayChildren: stagger(0.5, { ease: "easeOut" }),
+        delayChildren: stagger(0.1, { ease: "easeOut" }),
       },
     },
   },

@@ -25,8 +25,17 @@
   font-size: var(--size-medium);
   font-weight: var(--weight-medium);
   color: var(--foreground-primary);
+  outline-width: 2px;
+  outline-style: solid;
+  outline-color: color-mix(in srgb, var(--black) 0%, transparent);
+  outline-offset: 0px;
   background: var(--background-secondary);
   border-radius: 16px;
+  transition: outline-color 0.4s ease;
+
+  &:focus-visible {
+    outline-color: color-mix(in srgb, var(--black) 100%, transparent);
+  }
 
   &::placeholder {
     font-size: var(--size-medium);

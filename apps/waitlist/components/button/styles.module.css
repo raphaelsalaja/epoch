@@ -4,9 +4,17 @@
   align-self: stretch;
   justify-content: center;
   height: 48px;
+  outline-width: 2px;
+  outline-style: solid;
+  outline-color: color-mix(in srgb, var(--black) 0%, transparent);
+  outline-offset: 2px;
   background: var(--black);
   border-radius: 16px;
-  transition: outline-offset 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: outline-color 0.4s ease;
+
+  &:focus-visible {
+    outline-color: color-mix(in srgb, var(--black) 100%, transparent);
+  }
 
   .label {
     font-size: var(--size-medium);

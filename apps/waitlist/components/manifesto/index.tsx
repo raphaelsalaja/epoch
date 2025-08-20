@@ -1,11 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { animate } from "motion";
+import { AnimatePresence, motion, useAnimate } from "motion/react";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/button";
 import { Field } from "@/components/field";
 import { State, useButtonState } from "@/lib/stores/button-state";
@@ -22,6 +22,7 @@ type FormValues = z.infer<typeof schema>;
 export function Manifesto() {
   const [isSuccess, setIsSuccess] = useState(false);
   const { displayState, setActualState } = useButtonState();
+  const [ref, animate] = useAnimate();
 
   const {
     control,
@@ -65,7 +66,11 @@ export function Manifesto() {
   };
 
   const onInvalid = () => {
-    // optional: shake animation, focus first error, etc.
+    animate(
+      ref.current,
+      { x: [-6, 0] },
+      { type: "spring", stiffness: 200, damping: 2, mass: 0.1 }
+    );
   };
 
   return (
@@ -85,17 +90,19 @@ export function Manifesto() {
           name="email"
           control={control}
           render={({ field }) => (
-            <Field.Root style={{ width: "100%", marginTop: 24 }}>
-              <Field.Control
-                type="text"
-                {...field}
-                spellCheck={false}
-                autoComplete="off"
-                placeholder="Email"
-                aria-invalid={!!errors.email}
-                disabled={isSuccess}
-              />
-            </Field.Root>
+            <motion.div ref={ref} style={{ width: "100%", marginTop: 24 }}>
+              <Field.Root>
+                <Field.Control
+                  type="text"
+                  {...field}
+                  spellCheck={false}
+                  autoComplete="off"
+                  placeholder="Email"
+                  aria-invalid={!!errors.email}
+                  disabled={isSuccess}
+                />
+              </Field.Root>
+            </motion.div>
           )}
         />
 
