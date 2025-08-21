@@ -3,12 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion, useAnimate } from "motion/react";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/button";
 import { Field } from "@/components/field";
 import { State, useButtonState } from "@/lib/stores/button-state";
-import { createClient } from "@/lib/supabase/client";
+import { useGeneration } from "@/lib/stores/generation";
+import { useStepStore } from "@/lib/stores/step-state";
 import { Spinner } from "../icons/spinner";
 import { container, item, reveal, spinner, text } from "./motion";
 import styles from "./styles.module.css";
@@ -38,12 +39,13 @@ export function Generation() {
   const [isSuccess, setIsSuccess] = useState(false);
   const { displayState, setActualState } = useButtonState();
   const [ref, animate] = useAnimate();
+  const setGeneration = useGeneration((s) => s.setGeneration);
+  const nextStep = useStepStore((s) => s.nextStep);
 
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful, isValid },
-    setError,
+    formState: { errors, isSubmitting, isValid },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { name: "", activity: "" },
@@ -51,33 +53,18 @@ export function Generation() {
     reValidateMode: "onChange",
   });
 
-  const onValid = async ({ name, activity }: FormValues) => {
-    setIsSuccess(false);
+  const onValid: SubmitHandler<FormValues> = (data) => {
     setActualState(State.Loading);
-    try {
-      const supabase = createClient();
-      const { error } = await supabase
-        .from("waitlist")
-        .insert({ name, activity });
-      if (error) {
-        if (error.code === "23505") {
-          setError("name", {
-            message: "This entry already exists",
-          });
-        } else {
-          setError("name", {
-            message: "Something went wrong. Please try again.",
-          });
-        }
-        setActualState(State.Idle);
-        return;
-      }
+
+    setTimeout(() => {
+      const { name, activity } = data;
+      setGeneration({ name, result: activity });
       setIsSuccess(true);
-      setActualState(State.Success);
-    } catch {
-      setError("name", { message: "Something went wrong. Please try again." });
-      setActualState(State.Idle);
-    }
+
+      setTimeout(() => {
+        nextStep();
+      }, 1000);
+    }, 1000);
   };
 
   const onInvalid = () => {
@@ -167,10 +154,10 @@ export function Generation() {
                   Continue
                 </Button.Label>
                 <Button.Label {...spinner(displayState === State.Loading)}>
-                  Submitting
+                  Saving
                 </Button.Label>
                 <Button.Label {...text(displayState === State.Success)}>
-                  Generated
+                  Saved
                 </Button.Label>
               </Button.Root>
             </motion.div>

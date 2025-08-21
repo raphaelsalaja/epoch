@@ -8,7 +8,7 @@ import { z } from "zod";
 import { Button } from "@/components/button";
 import { Field } from "@/components/field";
 import { State, useButtonState } from "@/lib/stores/button-state";
-import { createClient } from "@/lib/supabase/client";
+import { useStepStore } from "@/lib/stores/step-state";
 import { Spinner } from "../icons/spinner";
 import { container, item, reveal, spinner, text } from "./motion";
 import styles from "./styles.module.css";
@@ -22,12 +22,12 @@ export function Manifesto() {
   const [isSuccess, setIsSuccess] = useState(false);
   const { displayState, setActualState } = useButtonState();
   const [ref, animate] = useAnimate();
+  const { setEmail, nextStep } = useStepStore();
 
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful, isValid },
-    setError,
+    formState: { errors, isSubmitting, isValid },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { email: "" },
@@ -38,26 +38,21 @@ export function Manifesto() {
   const onValid = async ({ email }: FormValues) => {
     setIsSuccess(false);
     setActualState(State.Loading);
+
+    // Simulate email signup delay
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     try {
-      const supabase = createClient();
-      const { error } = await supabase.from("waitlist").insert({ email });
-      if (error) {
-        if (error.code === "23505") {
-          setError("email", {
-            message: "This email is already on the waitlist",
-          });
-        } else {
-          setError("email", {
-            message: "Something went wrong. Please try again.",
-          });
-        }
-        setActualState(State.Idle);
-        return;
-      }
+      // Store email and proceed to next step
+      setEmail(email);
       setIsSuccess(true);
       setActualState(State.Success);
+
+      // Wait a moment for success animation, then proceed
+      setTimeout(() => {
+        nextStep();
+      }, 1500);
     } catch {
-      setError("email", { message: "Something went wrong. Please try again." });
       setActualState(State.Idle);
     }
   };
