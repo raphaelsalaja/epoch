@@ -19,9 +19,28 @@ function FieldLabel(props: FieldLabelProps) {
 }
 
 interface FieldControlProps
-  extends React.ComponentPropsWithRef<typeof BaseField.Control> {}
-function FieldControl(props: FieldControlProps) {
-  return <BaseField.Control className={styles.control} {...props} />;
+  extends React.ComponentPropsWithRef<typeof BaseField.Control> {
+  kind?: "input" | "textarea";
+}
+function FieldControl({ kind = "input", ...props }: FieldControlProps) {
+  switch (kind) {
+    case "input":
+      return (
+        <BaseField.Control
+          {...props}
+          data-field-control={kind}
+          className={styles.control}
+        />
+      );
+    case "textarea":
+      return (
+        <BaseField.Control
+          {...props}
+          className={styles.control}
+          render={(props) => <textarea data-field-control={kind} {...props} />}
+        />
+      );
+  }
 }
 
 interface FieldErrorProps

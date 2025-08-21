@@ -1,7 +1,7 @@
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 8px;
   align-items: start;
   width: 100%;
 
@@ -19,12 +19,11 @@
 }
 
 .label {
-  font-size: var(--size-small);
-  font-style: normal;
+  font-size: var(--size-regular);
   font-weight: var(--weight-normal);
   line-height: 24px;
   color: var(--foreground-quaternary);
-  letter-spacing: var(--spacing-small);
+  letter-spacing: var(--spacing-regular);
 }
 
 .control {
@@ -50,8 +49,13 @@
     font-style: normal;
     font-weight: var(--weight-medium);
     line-height: 24px;
-    color: var(--foreground-quaternary);
+    color: color-mix(in srgb, var(--foreground-quaternary) 50%, transparent);
     letter-spacing: var(--spacing-medium);
+  }
+
+  &[data-field-control="textarea"] {
+    height: 144px;
+    resize: none;
   }
 }
 

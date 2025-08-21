@@ -1,23 +1,23 @@
-.manifesto {
+.generation {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   width: 384px;
 }
 
-.manifesto h1,
-.manifesto p {
+.generation h1,
+.generation p {
   line-height: 24px;
 }
 
-.manifesto h1 {
+.generation h1 {
   font-size: var(--size-large);
   font-weight: var(--weight-semibold);
   color: var(--foreground-primary);
   letter-spacing: var(--spacing-large);
 }
 
-.manifesto p {
+.generation p {
   margin-top: 12px;
   font-size: var(--size-medium);
   font-weight: var(--weight-normal);
@@ -29,7 +29,8 @@
   flex-direction: column;
   gap: 24px;
   width: 100%;
-  height: 120px;
+  height: 352px;
+  margin-top: 24px;
 }
 
 .error {

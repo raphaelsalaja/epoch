@@ -1,9 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { animate } from "motion";
 import { AnimatePresence, motion, useAnimate } from "motion/react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/button";
@@ -27,8 +26,7 @@ export function Manifesto() {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
-    reset,
+    formState: { errors, isSubmitting, isSubmitSuccessful, isValid },
     setError,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -56,7 +54,6 @@ export function Manifesto() {
         setActualState(State.Idle);
         return;
       }
-      reset();
       setIsSuccess(true);
       setActualState(State.Success);
     } catch {
@@ -111,27 +108,30 @@ export function Manifesto() {
         />
 
         <AnimatePresence mode="popLayout">
-          <motion.div {...reveal}>
-            <Button.Root
-              type="submit"
-              disabled={isSubmitting}
-              style={{ width: "100%" }}
-            >
-              <motion.div {...spinner(displayState === State.Loading)}>
-                <Spinner />
-              </motion.div>
-              <Button.Label>Join</Button.Label>
-              <Button.Label {...text(displayState === State.Loading)}>
-                ing
-              </Button.Label>
-              <Button.Label {...text(displayState !== State.Success)}>
-                <>&nbsp;</>The Waitlist
-              </Button.Label>
-              <Button.Label {...text(displayState === State.Success)}>
-                ed
-              </Button.Label>
-            </Button.Root>
-          </motion.div>
+          {(isValid || isSubmitting) && (
+            <motion.div {...reveal}>
+              <Button.Root
+                type="submit"
+                disabled={isSubmitting}
+                style={{ width: "100%" }}
+                layout
+              >
+                <motion.div {...spinner(displayState === State.Loading)}>
+                  <Spinner />
+                </motion.div>
+                <Button.Label>Join</Button.Label>
+                <Button.Label {...text(displayState === State.Loading)}>
+                  ing
+                </Button.Label>
+                <Button.Label {...text(displayState === State.Success)}>
+                  ed!
+                </Button.Label>
+                <Button.Label {...text(displayState !== State.Success)}>
+                  <>&nbsp;</>The Waitlist
+                </Button.Label>
+              </Button.Root>
+            </motion.div>
+          )}
         </AnimatePresence>
 
         {errors.email?.message && (

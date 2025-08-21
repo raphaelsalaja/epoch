@@ -1,5 +1,11 @@
+import { Generation } from "@/components/generation";
 import { Manifesto } from "@/components/manifesto";
 
 export default function Home() {
-  return <Manifesto />;
+  return (
+    <div>
+      {/* <Manifesto /> */}
+      <Generation />
+    </div>
+  );
 }
