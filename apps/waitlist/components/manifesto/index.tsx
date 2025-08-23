@@ -7,11 +7,16 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/button";
 import { Field } from "@/components/field";
-import { State, useButtonState } from "@/lib/stores/button-state";
-import { useStepStore } from "@/lib/stores/step-state";
+import { Step, useStepStore } from "@/lib/stores/step-state";
 import { Spinner } from "../icons/spinner";
-import { container, item, reveal, spinner, text } from "./motion";
+import { reveal, spinner, text } from "./motion";
 import styles from "./styles.module.css";
+
+enum ButtonState {
+  Idle = "idle",
+  Loading = "loading",
+  Success = "success",
+}
 
 const schema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -20,9 +25,9 @@ type FormValues = z.infer<typeof schema>;
 
 export function Manifesto() {
   const [isSuccess, setIsSuccess] = useState(false);
-  const { displayState, setActualState } = useButtonState();
+  const [buttonState, setButtonState] = useState(ButtonState.Idle);
   const [ref, animate] = useAnimate();
-  const { setEmail, nextStep } = useStepStore();
+  const { setEmail, nextStep, markStepCompleted } = useStepStore();
 
   const {
     control,
@@ -37,7 +42,7 @@ export function Manifesto() {
 
   const onValid = async ({ email }: FormValues) => {
     setIsSuccess(false);
-    setActualState(State.Loading);
+    setButtonState(ButtonState.Loading);
 
     // Simulate email signup delay
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -45,15 +50,16 @@ export function Manifesto() {
     try {
       // Store email and proceed to next step
       setEmail(email);
+      markStepCompleted(Step.Manifesto);
       setIsSuccess(true);
-      setActualState(State.Success);
+      setButtonState(ButtonState.Success);
 
       // Wait a moment for success animation, then proceed
       setTimeout(() => {
         nextStep();
       }, 1500);
     } catch {
-      setActualState(State.Idle);
+      setButtonState(ButtonState.Idle);
     }
   };
 
@@ -109,17 +115,17 @@ export function Manifesto() {
                 style={{ width: "100%" }}
                 layout
               >
-                <Button.Label {...spinner(displayState === State.Loading)}>
+                <Button.Label {...spinner(buttonState === ButtonState.Loading)}>
                   <Spinner />
                 </Button.Label>
                 <Button.Label>Join</Button.Label>
-                <Button.Label {...text(displayState === State.Loading)}>
+                <Button.Label {...text(buttonState === ButtonState.Loading)}>
                   ing
                 </Button.Label>
-                <Button.Label {...text(displayState === State.Success)}>
+                <Button.Label {...text(buttonState === ButtonState.Success)}>
                   ed!
                 </Button.Label>
-                <Button.Label {...text(displayState !== State.Success)}>
+                <Button.Label {...text(buttonState !== ButtonState.Success)}>
                   <>&nbsp;</>The Waitlist
                 </Button.Label>
               </Button.Root>

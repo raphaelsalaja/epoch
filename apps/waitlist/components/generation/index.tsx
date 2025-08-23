@@ -7,15 +7,20 @@ import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/button";
 import { Field } from "@/components/field";
-import { State, useButtonState } from "@/lib/stores/button-state";
 import { useGeneration } from "@/lib/stores/generation";
-import { useStepStore } from "@/lib/stores/step-state";
+import { Step, useStepStore } from "@/lib/stores/step-state";
 import { Spinner } from "../icons/spinner";
 import { reveal, spinner, text } from "./motion";
 import styles from "./styles.module.css";
 
 const NAME_MAX_LENGTH = 100;
 const ACTIVITY_MAX_LENGTH = 200;
+
+enum ButtonState {
+  Idle = "idle",
+  Loading = "loading", 
+  Success = "success",
+}
 
 export const schema = z.object({
   name: z
@@ -37,10 +42,10 @@ type FormValues = z.infer<typeof schema>;
 
 export function Generation() {
   const [isSuccess, setIsSuccess] = useState(false);
-  const { displayState, setActualState } = useButtonState();
+  const [buttonState, setButtonState] = useState(ButtonState.Idle);
   const [ref, animate] = useAnimate();
   const setGeneration = useGeneration((s) => s.setGeneration);
-  const nextStep = useStepStore((s) => s.nextStep);
+  const { nextStep, markStepCompleted } = useStepStore();
 
   const {
     control,
@@ -54,12 +59,14 @@ export function Generation() {
   });
 
   const onValid: SubmitHandler<FormValues> = (data) => {
-    setActualState(State.Loading);
+    setButtonState(ButtonState.Loading);
 
     setTimeout(() => {
       const { name, activity } = data;
       setGeneration({ name, result: activity });
+      markStepCompleted(Step.Generation);
       setIsSuccess(true);
+      setButtonState(ButtonState.Success);
 
       setTimeout(() => {
         nextStep();
@@ -141,16 +148,16 @@ export function Generation() {
                 style={{ width: "100%" }}
                 layout
               >
-                <Button.Label {...spinner(displayState === State.Loading)}>
+                <Button.Label {...spinner(buttonState === ButtonState.Loading)}>
                   <Spinner />
                 </Button.Label>
-                <Button.Label {...text(displayState === State.Idle)}>
+                <Button.Label {...text(buttonState === ButtonState.Idle)}>
                   Continue
                 </Button.Label>
-                <Button.Label {...spinner(displayState === State.Loading)}>
+                <Button.Label {...spinner(buttonState === ButtonState.Loading)}>
                   Saving
                 </Button.Label>
-                <Button.Label {...text(displayState === State.Success)}>
+                <Button.Label {...text(buttonState === ButtonState.Success)}>
                   Saved
                 </Button.Label>
               </Button.Root>

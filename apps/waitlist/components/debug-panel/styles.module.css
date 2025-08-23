@@ -1,0 +1,100 @@
+.debugPanel {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1000;
+  max-width: 300px;
+  padding: 16px;
+  font-size: 14px;
+  background: var(--background-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.debugPanel h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+  color: var(--foreground-primary);
+}
+
+.info {
+  margin-bottom: 16px;
+}
+
+.info p {
+  margin: 4px 0;
+  color: var(--foreground-secondary);
+}
+
+.stepGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.stepButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--foreground-secondary);
+  cursor: pointer;
+  background: var(--background-secondary);
+  border: 1px solid var(--border-secondary);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.stepButton:hover:not(:disabled) {
+  background: var(--background-tertiary);
+  border-color: var(--border-primary);
+}
+
+.stepButton.current {
+  color: white;
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.stepButton.completed {
+  color: white;
+  background: var(--success-primary, #22c55e);
+  border-color: var(--success-primary, #22c55e);
+}
+
+.stepButton.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.stepName {
+  font-weight: var(--weight-medium);
+  text-transform: capitalize;
+}
+
+.stepStatus {
+  margin-top: 2px;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.resetButton {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: var(--weight-medium);
+  color: white;
+  cursor: pointer;
+  background: var(--destructive-primary, #ef4444);
+  border: none;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.resetButton:hover {
+  background: var(--destructive-secondary, #dc2626);
+}
