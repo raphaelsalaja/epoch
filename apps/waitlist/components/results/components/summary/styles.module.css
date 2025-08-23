@@ -1,0 +1,15 @@
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  align-self: stretch;
+
+  > h1 {
+    font-weight: var(--weight-semibold, 600);
+  }
+
+  > p {
+    opacity: 0.6;
+  }
+}

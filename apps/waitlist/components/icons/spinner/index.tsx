@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 
 export function Spinner() {
   return (
-    <motion.div
+    <div
       initial={{ rotate: 180 }}
       animate={{
         rotate: 0,
@@ -46,6 +46,6 @@ export function Spinner() {
           strokeLinecap="round"
         />
       </svg>
-    </motion.div>
+    </div>
   );
 }

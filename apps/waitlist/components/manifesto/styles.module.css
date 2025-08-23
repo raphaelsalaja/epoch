@@ -5,9 +5,19 @@
   width: 384px;
 }
 
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
+}
+
 .manifesto h1,
 .manifesto p {
   line-height: 24px;
+  text-align: center;
 }
 
 .manifesto h1 {
@@ -18,7 +28,6 @@
 }
 
 .manifesto p {
-  margin-top: 12px;
   font-size: var(--size-medium);
   font-weight: var(--weight-normal);
   color: var(--foreground-quaternary);

@@ -9,7 +9,7 @@
   outline-color: color-mix(in srgb, var(--black) 0%, transparent);
   outline-offset: 2px;
   background: var(--black);
-  border-radius: 16px;
+  border-radius: 12px;
   transition: outline-color 0.2s ease;
 
   &:focus-visible {

@@ -11,7 +11,7 @@ import { State, useButtonState } from "@/lib/stores/button-state";
 import { useGeneration } from "@/lib/stores/generation";
 import { useStepStore } from "@/lib/stores/step-state";
 import { Spinner } from "../icons/spinner";
-import { container, item, reveal, spinner, text } from "./motion";
+import { reveal, spinner, text } from "./motion";
 import styles from "./styles.module.css";
 
 const NAME_MAX_LENGTH = 100;
@@ -76,19 +76,15 @@ export function Generation() {
   };
 
   return (
-    <motion.div {...container} className={styles.generation}>
-      <motion.h1 {...item}>Thank you for your interest.</motion.h1>
-
-      <motion.p {...item} className={styles.paragraph}>
-        Before you go, we’d love to create a small memento from your last
-        workout. Could you share a few quick details?
-      </motion.p>
-
-      <motion.form
-        {...item}
-        onSubmit={handleSubmit(onValid, onInvalid)}
-        className={styles.form}
-      >
+    <div className={styles.generation}>
+      <div className={styles.text}>
+        <h1>Thank you for your interest.</h1>
+        <p className={styles.paragraph}>
+          Before you go, we’d love to create a small memento from your last
+          workout. Could you share a few quick details?
+        </p>
+      </div>
+      <form onSubmit={handleSubmit(onValid, onInvalid)} className={styles.form}>
         <Controller
           name="name"
           control={control}
@@ -98,14 +94,13 @@ export function Generation() {
               invalid={fieldState.invalid}
               disabled={isSuccess}
             >
-              <Field.Label>What do you go by?</Field.Label>
               <Field.Control
                 type="text"
                 {...field}
                 spellCheck={false}
                 autoComplete="off"
                 maxLength={NAME_MAX_LENGTH}
-                placeholder="eg. John Doe"
+                placeholder="Name..."
                 aria-invalid={!!errors.name}
                 disabled={isSuccess}
               />
@@ -122,7 +117,6 @@ export function Generation() {
               invalid={fieldState.invalid}
               disabled={isSuccess}
             >
-              <Field.Label>What did you do?</Field.Label>
               <Field.Control
                 {...field}
                 kind="textarea"
@@ -130,7 +124,7 @@ export function Generation() {
                 spellCheck={false}
                 autoComplete="off"
                 maxLength={ACTIVITY_MAX_LENGTH}
-                placeholder="eg. I had a white monster beforehand, then did a quick run followed by a heavy lift session."
+                placeholder="Details about your last workout...."
                 aria-invalid={!!errors.activity}
                 disabled={isSuccess}
               />
@@ -147,9 +141,9 @@ export function Generation() {
                 style={{ width: "100%" }}
                 layout
               >
-                <motion.div {...spinner(displayState === State.Loading)}>
+                <Button.Label {...spinner(displayState === State.Loading)}>
                   <Spinner />
-                </motion.div>
+                </Button.Label>
                 <Button.Label {...text(displayState === State.Idle)}>
                   Continue
                 </Button.Label>
@@ -163,7 +157,7 @@ export function Generation() {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.form>
-    </motion.div>
+      </form>
+    </div>
   );
 }

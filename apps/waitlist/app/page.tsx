@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Generation } from "@/components/generation";
 import { Manifesto } from "@/components/manifesto";
 import { Results } from "@/components/results";
@@ -9,10 +11,13 @@ export default function Home() {
   const currentStep = useStepStore((state) => state.currentStep);
 
   return (
-    <div>
-      {currentStep === Step.Manifesto && <Manifesto />}
-      {currentStep === Step.Generation && <Generation />}
-      {currentStep === Step.Results && <Results />}
-    </div>
+    <React.Fragment>
+      <Breadcrumbs />
+      <div>
+        {currentStep === Step.Manifesto && <Manifesto />}
+        {currentStep === Step.Generation && <Generation />}
+        {currentStep === Step.Results && <Results />}
+      </div>
+    </React.Fragment>
   );
 }

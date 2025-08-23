@@ -66,23 +66,21 @@ export function Manifesto() {
   };
 
   return (
-    <motion.div {...container} className={styles.manifesto}>
-      <motion.h1 {...item}>Epoch</motion.h1>
-      <motion.p {...item} className={styles.paragraph}>
-        Reimagine fitness, replacing short-term tracking with a focused journey
-        toward lasting progress. A personal system built for real results.
-      </motion.p>
-
-      <motion.form
-        {...item}
-        onSubmit={handleSubmit(onValid, onInvalid)}
-        className={styles.form}
-      >
+    <div className={styles.manifesto}>
+      <div className={styles.text}>
+        <h1>Epoch</h1>
+        <p className={styles.paragraph}>
+          Reimagine fitness, replacing short-term tracking with a focused
+          journey toward lasting progress. A personal system built for real
+          results.
+        </p>
+      </div>
+      <form onSubmit={handleSubmit(onValid, onInvalid)} className={styles.form}>
         <Controller
           name="email"
           control={control}
           render={({ field, fieldState }) => (
-            <motion.div ref={ref} style={{ width: "100%", marginTop: 24 }}>
+            <div ref={ref} style={{ width: "100%", marginTop: 24 }}>
               <Field.Root
                 name="email"
                 invalid={fieldState.invalid}
@@ -98,7 +96,7 @@ export function Manifesto() {
                   disabled={isSuccess}
                 />
               </Field.Root>
-            </motion.div>
+            </div>
           )}
         />
 
@@ -111,9 +109,9 @@ export function Manifesto() {
                 style={{ width: "100%" }}
                 layout
               >
-                <motion.div {...spinner(displayState === State.Loading)}>
+                <Button.Label {...spinner(displayState === State.Loading)}>
                   <Spinner />
-                </motion.div>
+                </Button.Label>
                 <Button.Label>Join</Button.Label>
                 <Button.Label {...text(displayState === State.Loading)}>
                   ing
@@ -130,7 +128,7 @@ export function Manifesto() {
         </AnimatePresence>
 
         {errors.email?.message && (
-          <motion.div
+          <motion.span
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -138,9 +136,9 @@ export function Manifesto() {
             className={styles.error}
           >
             {errors.email.message}
-          </motion.div>
+          </motion.span>
         )}
-      </motion.form>
-    </motion.div>
+      </form>
+    </div>
   );
 }

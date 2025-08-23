@@ -20,7 +20,7 @@
 
 .label {
   font-size: var(--size-regular);
-  font-weight: var(--weight-normal);
+  font-weight: var(--weight-medium);
   line-height: 24px;
   color: var(--foreground-quaternary);
   letter-spacing: var(--spacing-regular);
@@ -41,7 +41,7 @@
   outline-color: color-mix(in srgb, var(--black) 0%, transparent);
   outline-offset: 0px;
   background: var(--background-secondary);
-  border-radius: 16px;
+  border-radius: 12px;
   transition: outline-color 0.2s ease;
 
   &::placeholder {
