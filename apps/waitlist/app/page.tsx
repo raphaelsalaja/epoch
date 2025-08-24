@@ -1,10 +1,9 @@
 "use client";
 
+import { AnimatePresence, motion } from "motion/react";
 import React from "react";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { Generation } from "@/components/generation";
 import { Manifesto } from "@/components/manifesto";
-import { Results } from "@/components/results";
 import { Step, useStepStore } from "@/lib/stores/step-state";
 
 export default function Home() {
@@ -13,11 +12,32 @@ export default function Home() {
   return (
     <React.Fragment>
       <Breadcrumbs />
-      <div>
-        {currentStep === Step.Manifesto && <Manifesto />}
-        {currentStep === Step.Generation && <Generation />}
-        {currentStep === Step.Results && <Results />}
-      </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          initial={{
+            scale: 0.98,
+            opacity: 0,
+            y: 8,
+          }}
+          animate={{
+            scale: 1,
+            opacity: 1,
+            y: 0,
+          }}
+          exit={{
+            scale: 0.98,
+            opacity: 0,
+            y: 8,
+          }}
+          transition={{
+            duration: 0.4,
+            ease: [0.19, 1, 0.22, 1],
+          }}
+          key={currentStep}
+        >
+          {currentStep === Step.Manifesto && <Manifesto />}
+        </motion.div>
+      </AnimatePresence>
     </React.Fragment>
   );
 }

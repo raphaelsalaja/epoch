@@ -1,0 +1,17 @@
+.quote {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  align-self: stretch;
+  justify-content: center;
+
+  > h1,
+  > h2 {
+    font-size: var(--size-regular);
+    font-weight: var(--weight-medium);
+    line-height: 20px;
+    letter-spacing: var(--spacing-regular);
+    opacity: 0.4;
+  }
+}
