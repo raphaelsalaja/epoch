@@ -89,7 +89,6 @@ function EditableItem({
               alt="Item"
               width={40}
               height={40}
-              unoptimized
             />
           )}
         </div>
@@ -163,7 +162,6 @@ function EditableItem({
         <div className={styles.icon}>
           {item.image && (
             <Image
-              unoptimized
               className={styles.image}
               src={item.image}
               alt="Item"

@@ -14,7 +14,7 @@
   }
 
   &[data-focused] .control {
-    outline-color: color-mix(in srgb, var(--black) 100%, transparent);
+    outline-color: color-mix(in srgb, var(--black) 10%, transparent);
   }
 }
 

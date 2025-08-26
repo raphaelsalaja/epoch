@@ -76,9 +76,10 @@ export function Manifesto() {
       <div className={styles.text}>
         <h1>Epoch</h1>
         <p className={styles.paragraph}>
-          Reimagine fitness, replacing short-term tracking with a focused
-          journey toward lasting progress. A personal system built for real
-          results.
+          Replace short-term tracking
+          <br />
+          with a focused journey toward lasting progress.
+          <br />A personal system built for real results.
         </p>
       </div>
       <form onSubmit={handleSubmit(onValid, onInvalid)} className={styles.form}>
