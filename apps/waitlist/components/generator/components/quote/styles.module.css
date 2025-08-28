@@ -5,6 +5,18 @@
   align-items: flex-start;
   align-self: stretch;
   justify-content: center;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  -webkit-user-select: none;
+
+  /* Disable user select for better interaction */
+  user-select: none;
+
+  /* Button styles */
+  background: none;
+  border: none;
+  transition: opacity 0.2s ease;
 
   > h1,
   > h2 {
@@ -13,5 +25,24 @@
     line-height: 20px;
     letter-spacing: var(--spacing-regular);
     opacity: 0.4;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover {
+    opacity: 0.8;
+
+    > h1,
+    > h2 {
+      opacity: 0.6;
+    }
+  }
+
+  &:active {
+    opacity: 0.6;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
   }
 }

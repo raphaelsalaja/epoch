@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { Generator } from "@/components/generator";
 import { Manifesto } from "@/components/manifesto";
 import { Step, useStepStore } from "@/lib/stores/step-state";
 
@@ -32,6 +33,7 @@ export default function Home() {
         key={currentStep}
       >
         {currentStep === Step.Manifesto && <Manifesto />}
+        {currentStep !== Step.Manifesto && <Generator />}
       </motion.div>
     </AnimatePresence>
   );

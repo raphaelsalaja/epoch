@@ -1,0 +1,234 @@
+import { Input } from "@base-ui-components/react/input";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import Image from "next/image";
+import {
+  useCallback,
+  useDeferredValue,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useTrackSearch } from "@/lib/hooks/use-spotify-search";
+import { useSpotifyTrending } from "@/lib/hooks/use-spotify-trending";
+import { Button } from "../button";
+import { Dots, MagnifyingGlass, Trending } from "../icons";
+import styles from "./styles.module.css";
+
+const fade = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+  transition: { duration: 0.28 },
+};
+
+type Track = {
+  id: string;
+  image: string;
+  title: string;
+  subtitle: string;
+};
+
+function SkeletonTrack() {
+  return (
+    <div className={styles.track} data-skeleton aria-hidden="true">
+      <div className={styles.album} />
+      <div className={styles.info}>
+        <div className={styles.title} />
+        <div className={styles.artist} />
+      </div>
+      <div className={styles.menu}>
+        <Dots className={styles.icon} />
+      </div>
+    </div>
+  );
+}
+
+function TrackItem({ track }: { track: Track }) {
+  return (
+    <div className={styles.track}>
+      <Image
+        src={track.image}
+        alt={`${track.title} cover art`}
+        width={48}
+        height={48}
+        className={styles.album}
+        sizes="48px"
+        placeholder="empty"
+      />
+      <div className={styles.info}>
+        <div className={styles.title}>{track.title}</div>
+        <div className={styles.artist}>{track.subtitle}</div>
+      </div>
+      <button
+        type="button"
+        className={styles.menu}
+        aria-label="Open track menu"
+      >
+        <Dots className={styles.icon} />
+      </button>
+    </div>
+  );
+}
+
+function useDebouncedValue<T>(value: T, delay = 250) {
+  const [debounced, setDebounced] = useState(value);
+  const timeout = useRef<number | null>(null);
+
+  // simple manual debounce without extra deps
+  // window.setTimeout typing is fine in Next/TS
+  const update = useCallback(
+    (v: T) => {
+      if (timeout.current) window.clearTimeout(timeout.current);
+      timeout.current = window.setTimeout(
+        () => setDebounced(v),
+        delay
+      ) as unknown as number;
+    },
+    [delay]
+  );
+
+  // keep in sync
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useMemo(() => update(value), [value, update]);
+
+  return debounced;
+}
+
+export const Spotify = () => {
+  const prefersReducedMotion = useReducedMotion();
+  const [rawQuery, setRawQuery] = useState("");
+  const debouncedQuery = useDebouncedValue(rawQuery.trim(), 250);
+  const deferredQuery = useDeferredValue(debouncedQuery); // keeps typing responsive
+
+  const {
+    tracks: trendingTracks,
+    isLoading: trendingLoading,
+    error: trendingError,
+  } = useSpotifyTrending();
+
+  const {
+    results: searchResults,
+    isLoading: searchLoading,
+    isFetching: searchFetching,
+    error: searchError,
+  } = useTrackSearch(deferredQuery, { limit: 5 });
+
+  const isSearching = deferredQuery.length >= 2;
+  const isTransitioning = rawQuery.trim() !== deferredQuery;
+
+  // Show loading when:
+  // 1. Transitioning between search and trending
+  // 2. Actually loading/fetching data
+  // 3. User is still typing (transitioning state)
+  const isLoading = isSearching
+    ? searchLoading || searchFetching || isTransitioning
+    : trendingLoading;
+
+  const error = isSearching ? searchError : trendingError;
+
+  const list = useMemo(() => {
+    return (isSearching ? searchResults : trendingTracks) as Track[];
+  }, [isSearching, searchResults, trendingTracks]);
+
+  const onSubmit = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+  }, []);
+
+  const clear = useCallback(() => setRawQuery(""), []);
+
+  return (
+    <search
+      className={styles.container}
+      onSubmit={onSubmit}
+      aria-label="Spotify search"
+    >
+      <div className={styles.search}>
+        <MagnifyingGlass className={styles.magnifier} />
+        <Input
+          placeholder="Search Spotify..."
+          className={styles.input}
+          value={rawQuery}
+          onChange={(e) => setRawQuery(e.target.value)}
+          inputMode="search"
+          aria-label="Search tracks"
+          onKeyDown={(e) => {
+            if (e.key === "Escape") clear();
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+              (e.target as HTMLInputElement).focus();
+              e.preventDefault();
+            }
+          }}
+        />
+      </div>
+
+      <div
+        className={styles.results}
+        aria-live="polite"
+        aria-busy={isLoading || undefined}
+      >
+        <AnimatePresence mode="wait" initial={!prefersReducedMotion}>
+          {isLoading ? (
+            <motion.output
+              key="loading"
+              {...(prefersReducedMotion ? {} : fade)}
+              className={styles.list}
+              aria-label="Loading tracks"
+            >
+              <SkeletonTrack />
+            </motion.output>
+          ) : error ? (
+            <motion.div
+              key="error"
+              {...(prefersReducedMotion ? {} : fade)}
+              className={styles.empty}
+              role="alert"
+            >
+              <p>
+                Could not load {isSearching ? "search results" : "trending"}.
+              </p>
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className={styles.retry}
+              >
+                Try again
+              </button>
+            </motion.div>
+          ) : list.length === 0 ? (
+            <motion.div
+              key="empty"
+              {...(prefersReducedMotion ? {} : fade)}
+              className={styles.empty}
+            >
+              <p>
+                {isSearching
+                  ? "No tracks match your search."
+                  : "No trending tracks found."}
+              </p>
+            </motion.div>
+          ) : (
+            <motion.div
+              key={isSearching ? "search" : "trending"}
+              {...(prefersReducedMotion ? {} : fade)}
+              className={styles.list}
+            >
+              {!isSearching && (
+                <div className={styles.heading}>
+                  <Trending className={styles.icon} />
+                  <span className={styles.label}>Trending</span>
+                </div>
+              )}
+              {list.map((track) => (
+                <TrackItem key={track.id} track={track} />
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <Button.Root type="submit" layout>
+        <Button.Label>Update</Button.Label>
+      </Button.Root>
+    </search>
+  );
+};

@@ -6,21 +6,25 @@
   height: 48px;
   outline-width: 2px;
   outline-style: solid;
-  outline-color: color-mix(in srgb, var(--black) 0%, transparent);
+  outline-color: color-mix(in srgb, var(--foreground-secondary) 0%, transparent);
   outline-offset: 2px;
-  background: var(--black);
-  border-radius: 12px;
+  background: var(--foreground-primary);
+  border-radius: 16px;
   transition: outline-color 0.2s ease;
 
   &:focus-visible {
-    outline-color: color-mix(in srgb, var(--black) 100%, transparent);
+    outline-color: color-mix(
+      in srgb,
+      var(--foreground-secondary) 100%,
+      transparent
+    );
   }
 
   .label {
     font-size: var(--size-medium);
     font-weight: var(--weight-semibold);
     line-height: 24px;
-    color: var(--white);
+    color: var(--background-primary);
     letter-spacing: var(--spacing-medium);
     white-space: nowrap;
     user-select: none;

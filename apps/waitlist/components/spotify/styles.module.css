@@ -1,0 +1,190 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  width: 384px;
+}
+
+.search {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  align-self: stretch;
+  height: 48px;
+  padding: 16px;
+  background: var(--background-secondary);
+  border-radius: 16px;
+}
+
+.magnifier {
+  color: var(--foreground-quaternary);
+}
+
+.input {
+  width: 100%;
+  font-weight: var(--weight-medium);
+
+  &::placeholder {
+    font-size: var(--size-medium);
+    line-height: 24px;
+    color: var(--foreground-quaternary);
+    letter-spacing: var(--spacing-medium);
+    opacity: 0.5;
+  }
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+  align-self: stretch;
+  min-height: 368px;
+}
+
+.heading {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  .icon,
+  .label {
+    color: var(--foreground-quaternary);
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+    aspect-ratio: 1 / 1;
+  }
+
+  .label {
+    font-size: var(--size-medium);
+    font-weight: var(--weight-medium);
+    line-height: 24px;
+    letter-spacing: var(--spacing-medium);
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+  align-self: stretch;
+  height: 100%;
+}
+
+.track {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  align-self: stretch;
+  height: 40px;
+
+  .album {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+  }
+
+  .info {
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+    align-self: stretch;
+    justify-content: center;
+
+    .title,
+    .artist {
+      display: block;
+      width: 280px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: var(--weight-medium);
+      white-space: nowrap;
+    }
+
+    .title {
+      font-size: var(--size-medium);
+      color: var(--foreground-primary);
+      letter-spacing: var(--spacing-medium);
+    }
+
+    .artist {
+      font-size: var(--size-regular);
+      color: var(--foreground-quaternary);
+      letter-spacing: var(--spacing-regular);
+    }
+  }
+}
+
+.track[data-skeleton] {
+  .album {
+    background: var(--background-secondary);
+  }
+
+  .info {
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+    align-self: stretch;
+    justify-content: center;
+
+    .title,
+    .artist {
+      background: var(--background-secondary);
+    }
+
+    .title {
+      width: 220px;
+      height: 15px;
+      border-radius: 100px;
+    }
+
+    .artist {
+      width: 90px;
+      height: 13px;
+      border-radius: 100px;
+    }
+  }
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  background: none;
+  border: none;
+
+  border-radius: 6px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: var(--background-tertiary);
+
+    .icon {
+      color: var(--foreground-secondary);
+    }
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+    aspect-ratio: 1 / 1;
+    color: var(--foreground-quaternary);
+  }
+}

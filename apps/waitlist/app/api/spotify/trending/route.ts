@@ -5,30 +5,32 @@ export const runtime = "nodejs";
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const q = searchParams.get("q") ?? "";
-  const limit = Math.max(
-    1,
-    Math.min(50, Number(searchParams.get("limit") ?? 8)),
-  );
-
-  if (!q.trim()) {
-    return Response.json(
-      { items: [] },
-      { headers: { "Cache-Control": "no-store" } },
-    );
-  }
-
+export async function GET(_req: NextRequest) {
   try {
-    const res = await spotifySdk.search(q, ["track"], "US");
-    const items = normalizeTracks(res.tracks?.items).slice(0, limit);
-    return Response.json(
-      { items },
-      { headers: { "Cache-Control": "no-store" } },
+    const playlistItems = await spotifySdk.playlists.getPlaylistItems(
+      "6UeSakyzhiEt4NB3UAd6NQ",
+      "US",
+      undefined,
+      3,
+      0,
     );
-  } catch (e: unknown) {
-    const message = e instanceof Error ? e.message : "Search failed";
+
+    const tracks = (playlistItems.items ?? [])
+      .map((i) => i.track)
+      .filter(Boolean);
+
+    const items = normalizeTracks(tracks);
+
+    return Response.json(
+      {
+        items,
+        source: { playlist: "todays-top-hits", id: "6UeSakyzhiEt4NB3UAd6NQ" },
+      },
+      { headers: { "Cache-Control": "public, max-age=300" } },
+    );
+  } catch (e) {
+    const message =
+      e instanceof Error ? e.message : "Failed to fetch top tracks";
     return Response.json({ error: message }, { status: 500 });
   }
 }
