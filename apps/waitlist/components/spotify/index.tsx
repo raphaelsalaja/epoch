@@ -1,13 +1,8 @@
 import { Input } from "@base-ui-components/react/input";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
-import {
-  useCallback,
-  useDeferredValue,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useDeferredValue, useMemo, useState } from "react";
+import { useDebounce } from "use-debounce";
 import { useTrackSearch } from "@/lib/hooks/use-spotify-search";
 import { useSpotifyTrending } from "@/lib/hooks/use-spotify-trending";
 import { Button } from "../button";
@@ -70,35 +65,11 @@ function TrackItem({ track }: { track: Track }) {
   );
 }
 
-function useDebouncedValue<T>(value: T, delay = 250) {
-  const [debounced, setDebounced] = useState(value);
-  const timeout = useRef<number | null>(null);
-
-  // simple manual debounce without extra deps
-  // window.setTimeout typing is fine in Next/TS
-  const update = useCallback(
-    (v: T) => {
-      if (timeout.current) window.clearTimeout(timeout.current);
-      timeout.current = window.setTimeout(
-        () => setDebounced(v),
-        delay
-      ) as unknown as number;
-    },
-    [delay]
-  );
-
-  // keep in sync
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useMemo(() => update(value), [value, update]);
-
-  return debounced;
-}
-
 export const Spotify = () => {
   const prefersReducedMotion = useReducedMotion();
   const [rawQuery, setRawQuery] = useState("");
-  const debouncedQuery = useDebouncedValue(rawQuery.trim(), 250);
-  const deferredQuery = useDeferredValue(debouncedQuery); // keeps typing responsive
+  const [debouncedQuery] = useDebounce(rawQuery.trim(), 250);
+  const deferredQuery = useDeferredValue(debouncedQuery);
 
   const {
     tracks: trendingTracks,
@@ -114,12 +85,8 @@ export const Spotify = () => {
   } = useTrackSearch(deferredQuery, { limit: 5 });
 
   const isSearching = deferredQuery.length >= 2;
-  const isTransitioning = rawQuery.trim() !== deferredQuery;
+  const isTransitioning = rawQuery.trim() !== debouncedQuery;
 
-  // Show loading when:
-  // 1. Transitioning between search and trending
-  // 2. Actually loading/fetching data
-  // 3. User is still typing (transitioning state)
   const isLoading = isSearching
     ? searchLoading || searchFetching || isTransitioning
     : trendingLoading;
