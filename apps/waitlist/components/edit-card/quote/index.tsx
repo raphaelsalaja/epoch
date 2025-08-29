@@ -2,67 +2,43 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion, useAnimate } from "motion/react";
-import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { Button } from "@/components/button";
 import { Field } from "@/components/field";
-import { Step, useStepStore } from "@/lib/stores/step-state";
+import { QuoteSchema, useCardStore } from "@/lib/stores/card";
 import { Spinner } from "../../icons/spinner";
 import { reveal, spinner, text } from "./motion";
 import styles from "./styles.module.css";
 
-enum ButtonState {
-  Idle = "idle",
-  Loading = "loading",
-  Success = "success",
-}
-
-const schema = z.object({
-  text: z.string().min(2).max(150).nonempty("Please enter a quote"),
-  author: z.string().min(2).max(100).nonempty("Please enter an author"),
-});
-
-type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof QuoteSchema>;
 
 export function EditCardQuote() {
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [buttonState, setButtonState] = useState(ButtonState.Idle);
   const [ref, animate] = useAnimate();
-  const { setEmail, nextStep, markStepCompleted } = useStepStore();
+  const { card, updateQuote } = useCardStore();
 
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
   } = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: { email: "" },
+    resolver: zodResolver(QuoteSchema),
+    defaultValues: {
+      text: card.quote.text || "",
+      author: card.quote.author || "",
+    },
     mode: "onSubmit",
     reValidateMode: "onChange",
   });
 
-  const onValid = async ({ email }: FormValues) => {
-    setIsSuccess(false);
-    setButtonState(ButtonState.Loading);
-
-    // Simulate email signup delay
+  const onValid = async ({ text, author }: FormValues) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     try {
-      // Store email and proceed to next step
-      setEmail(email);
-      markStepCompleted(Step.Manifesto);
-      setIsSuccess(true);
-      setButtonState(ButtonState.Success);
+      updateQuote({ text, author });
 
-      // Wait a moment for success animation, then proceed
-      setTimeout(() => {
-        nextStep();
-      }, 1500);
-    } catch {
-      setButtonState(ButtonState.Idle);
-    }
+      setTimeout(() => {}, 1500);
+    } catch {}
   };
 
   const onInvalid = () => {
@@ -74,92 +50,47 @@ export function EditCardQuote() {
   };
 
   return (
-    <div className={styles.manifesto}>
+    <div className={styles.container}>
       <form onSubmit={handleSubmit(onValid, onInvalid)} className={styles.form}>
         <Controller
-          name="email"
+          name="text"
           control={control}
           render={({ field, fieldState }) => (
-            <Field.Root
-              name="email"
-              invalid={fieldState.invalid}
-              disabled={isSuccess}
-            >
+            <Field.Root name="text" invalid={fieldState.invalid}>
               <Field.Label>Quote</Field.Label>
               <Field.Control
                 type="text"
                 {...field}
                 spellCheck={false}
                 autoComplete="off"
-                placeholder="Email"
-                aria-invalid={!!errors.email}
-                disabled={isSuccess}
+                placeholder="Enter your favorite quote"
+                aria-invalid={!!errors.text}
               />
             </Field.Root>
           )}
         />
 
         <Controller
-          name="email"
+          name="author"
           control={control}
           render={({ field, fieldState }) => (
-            <Field.Root
-              name="email"
-              invalid={fieldState.invalid}
-              disabled={isSuccess}
-            >
+            <Field.Root name="author" invalid={fieldState.invalid}>
               <Field.Label>Author</Field.Label>
               <Field.Control
                 type="text"
                 {...field}
                 spellCheck={false}
                 autoComplete="off"
-                placeholder="Email"
-                aria-invalid={!!errors.email}
-                disabled={isSuccess}
+                placeholder="Quote author"
+                aria-invalid={!!errors.author}
               />
             </Field.Root>
           )}
         />
 
-        <AnimatePresence mode="popLayout">
-          {(isValid || isSubmitting) && (
-            <motion.div {...reveal}>
-              <Button.Root
-                type="submit"
-                disabled={isSubmitting}
-                style={{ width: "100%" }}
-                layout
-              >
-                <Button.Label {...spinner(buttonState === ButtonState.Loading)}>
-                  <Spinner />
-                </Button.Label>
-                <Button.Label>Join</Button.Label>
-                <Button.Label {...text(buttonState === ButtonState.Loading)}>
-                  ing
-                </Button.Label>
-                <Button.Label {...text(buttonState === ButtonState.Success)}>
-                  ed!
-                </Button.Label>
-                <Button.Label {...text(buttonState !== ButtonState.Success)}>
-                  <>&nbsp;</>The Waitlist
-                </Button.Label>
-              </Button.Root>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {errors.email?.message && (
-          <motion.span
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className={styles.error}
-          >
-            {errors.email.message}
-          </motion.span>
-        )}
+        <Button.Root type="submit" disabled={isSubmitting} layout>
+          <Button.Label>Save Changes</Button.Label>
+        </Button.Root>
       </form>
     </div>
   );

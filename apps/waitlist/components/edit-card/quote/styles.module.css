@@ -1,4 +1,4 @@
-.manifesto {
+.container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -14,20 +14,20 @@
   justify-content: center;
 }
 
-.manifesto h1,
-.manifesto p {
+.container h1,
+.container p {
   line-height: 24px;
   text-align: center;
 }
 
-.manifesto h1 {
+.container h1 {
   font-size: var(--size-large);
   font-weight: var(--weight-semibold);
   color: var(--foreground-primary);
   letter-spacing: var(--spacing-large);
 }
 
-.manifesto p {
+.container p {
   font-size: var(--size-medium);
   font-weight: var(--weight-normal);
   color: var(--foreground-quaternary);

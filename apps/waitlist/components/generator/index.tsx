@@ -3,10 +3,7 @@
 import NextImage from "next/image";
 import { Button } from "@/components/button";
 import { Icon } from "@/components/icons";
-import {
-  type Image as ImageType,
-  useGeneratorState,
-} from "@/lib/hooks/use-generator-state";
+import { type Image as ImageType, useCardStore } from "@/lib/stores/card";
 import styles from "./styles.module.css";
 
 const Image = ({ image }: { image: ImageType }) => {
@@ -25,20 +22,20 @@ const Image = ({ image }: { image: ImageType }) => {
 };
 
 export function Generator() {
-  const { state } = useGeneratorState();
+  const { card } = useCardStore();
 
   return (
     <div className={styles.container}>
       <div
         className={styles.card}
-        style={{ background: `var(--${state.activity.color})` }}
+        style={{ background: `var(--${card.activity.color})` }}
       >
         <div className={styles.activity}>
-          <h1 className={styles.title}>{state.activity.title}</h1>
-          <p className={styles.description}>{state.activity.description}</p>
+          <h1 className={styles.title}>{card.activity.title}</h1>
+          <p className={styles.description}>{card.activity.description}</p>
         </div>
         <div className={styles.items}>
-          {state.items.map((item) => (
+          {card.items.map((item) => (
             <div key={item.id} className={styles.item}>
               <div className={styles.image}>
                 <Image image={item.image} />
@@ -51,8 +48,8 @@ export function Generator() {
           ))}
         </div>
         <div className={styles.quote}>
-          <p className={styles.text}>{state.quote.text}</p>
-          <p className={styles.author}>— {state.quote.author}</p>
+          <p className={styles.text}>{card.quote.text}</p>
+          <p className={styles.author}>— {card.quote.author}</p>
         </div>
       </div>
 
