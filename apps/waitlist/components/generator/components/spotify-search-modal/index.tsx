@@ -2,16 +2,14 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import {
-  type TrackItem,
-  useTrackSearch,
-} from "../../../../lib/hooks/use-spotify-search";
+import { useTrackSearch } from "@/lib/hooks/use-spotify-search";
+import type { Track } from "@/lib/spotify/types";
 import styles from "./styles.module.css";
 
 interface SpotifySearchModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelect: (track: TrackItem) => void;
+  onSelect: (track: Track) => void;
 }
 
 export function SpotifySearchModal({
@@ -20,7 +18,7 @@ export function SpotifySearchModal({
   onSelect,
 }: SpotifySearchModalProps) {
   const [searchInput, setSearchInput] = useState("");
-  const { results, isLoading, error } = useTrackSearch(searchInput);
+  const { results, isLoading, error } = useTrackSearch({ input: searchInput });
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -34,7 +32,7 @@ export function SpotifySearchModal({
     }
   };
 
-  const handleTrackSelect = (track: TrackItem) => {
+  const handleTrackSelect = (track: Track) => {
     onSelect(track);
     onClose();
     setSearchInput("");
@@ -107,7 +105,7 @@ export function SpotifySearchModal({
               </div>
               <div className={styles.trackInfo}>
                 <h3 className={styles.trackTitle}>{track.title}</h3>
-                <p className={styles.trackArtist}>{track.subtitle}</p>
+                <p className={styles.trackArtist}>{track.artist}</p>
               </div>
             </button>
           ))}

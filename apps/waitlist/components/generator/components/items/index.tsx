@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import type { GeneratorItem } from "../../../../lib/hooks/use-generator-state";
-import type { TrackItem } from "../../../../lib/hooks/use-spotify-search";
+import type { GeneratorItem } from "@/lib/hooks/use-generator-state";
+import type { Track } from "@/lib/spotify/types";
 import { SpotifySearchModal } from "../spotify-search-modal";
 import styles from "./styles.module.css";
 
@@ -67,13 +67,12 @@ function EditableItem({
     }
   };
 
-  const handleSpotifyTrackSelect = (track: TrackItem) => {
+  const handleSpotifyTrackSelect = (track: Track) => {
     onUpdate({
       title: track.title,
-      subtitle: track.subtitle,
+      subtitle: track.artist,
       image: track.image,
-      spotifyUri: track.uri,
-      previewUrl: track.previewUrl,
+      spotifyUri: track.url,
     });
     setShowSpotifyModal(false);
   };
@@ -209,13 +208,6 @@ export function Items({
           isFirstItem={index === 0}
         />
       ))}
-      <button
-        type="button"
-        onClick={handleAddItem}
-        className={styles.addButton}
-      >
-        + Add Item
-      </button>
     </div>
   );
 }

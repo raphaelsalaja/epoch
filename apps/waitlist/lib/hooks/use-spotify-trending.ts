@@ -1,9 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import type { TrackItem } from "./use-spotify-search";
-
-type ApiResponse = { items: TrackItem[]; source?: unknown; error?: string };
+import type { SpotifyTrendingTracksResponse } from "@/lib/spotify/types";
 
 export function useSpotifyTrending() {
   const query = useQuery({
@@ -11,9 +9,10 @@ export function useSpotifyTrending() {
     queryFn: async ({ signal }) => {
       const url = new URL("/api/spotify/trending", window.location.origin);
       const res = await fetch(url, { signal });
-
       const text = await res.text();
-      let data: ApiResponse | null = null;
+
+      let data: SpotifyTrendingTracksResponse | null = null;
+
       try {
         data = JSON.parse(text);
       } catch {}
@@ -25,7 +24,7 @@ export function useSpotifyTrending() {
         throw new Error(msg);
       }
 
-      return (data as ApiResponse).items;
+      return (data as SpotifyTrendingTracksResponse).items;
     },
     retry: 1,
     staleTime: 5 * 60_000,

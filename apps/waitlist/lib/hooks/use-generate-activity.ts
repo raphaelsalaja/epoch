@@ -11,7 +11,6 @@ export interface GenerateActivityResponse {
 async function generateActivity(
   data: GenerateActivityRequest,
 ): Promise<GenerateActivityResponse> {
-  // Simply return the user's activity text as the summary
   return { summary: data.activity };
 }
 

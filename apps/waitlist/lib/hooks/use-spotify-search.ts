@@ -1,45 +1,34 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import debounce from "lodash.debounce";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
+import type {
+  SpotifyTrackSearchResponse,
+  UseTrackSearchProps,
+  UseTrackSearchResult,
+} from "@/lib/spotify/types";
 
-export type TrackItem = {
-  id: string;
-  title: string;
-  subtitle: string;
-  image: string;
-  previewUrl: string | null;
-  uri: string;
-};
+export function useTrackSearch({
+  input,
+  options,
+}: UseTrackSearchProps): UseTrackSearchResult {
+  const { limit = 3, market, minChars = 2, delay = 250 } = options ?? {};
 
-type ApiResponse = { items: TrackItem[] };
+  const [query, setQuery] = useState("");
 
-export function useTrackSearch(
-  input: string,
-  opts?: { limit?: number; market?: string; minChars?: number; delay?: number },
-) {
-  const limit = opts?.limit ?? 8;
-  const market = opts?.market;
-  const minChars = opts?.minChars ?? 2;
-  const delay = opts?.delay ?? 250;
-
-  const [q, setQ] = useState("");
-  const debouncedSetQ = useMemo(() => debounce(setQ, delay), [delay]);
+  const debouncedSetQuery = useDebouncedCallback(setQuery, delay);
 
   useEffect(() => {
-    debouncedSetQ(input.trim());
-    return () => {
-      debouncedSetQ.cancel();
-    };
-  }, [input, debouncedSetQ]);
+    debouncedSetQuery(input?.trim() || "");
+  }, [input, debouncedSetQuery]);
 
-  const query = useQuery({
-    queryKey: ["spotify-search", { q, limit, market }],
-    enabled: q.length >= minChars,
+  const queryResult = useQuery({
+    queryKey: ["spotify-search", { query, limit, market }],
+    enabled: query.length >= minChars,
     queryFn: async ({ signal }) => {
       const url = new URL("/api/spotify/search", window.location.origin);
-      url.searchParams.set("q", q);
+      url.searchParams.set("q", query);
       url.searchParams.set("limit", String(limit));
       if (market) url.searchParams.set("market", market);
 
@@ -48,7 +37,7 @@ export function useTrackSearch(
         const text = await res.text();
         throw new Error(text || `Search failed ${res.status}`);
       }
-      const json: ApiResponse = await res.json();
+      const json: SpotifyTrackSearchResponse = await res.json();
       return json.items;
     },
     placeholderData: (prev) => prev ?? [],
@@ -59,11 +48,11 @@ export function useTrackSearch(
   });
 
   return {
-    q,
-    results: query.data ?? [],
-    isLoading: query.isLoading,
-    isFetching: query.isFetching,
-    error: query.error as Error | null,
-    flush: debouncedSetQ.flush,
+    query,
+    results: queryResult.data ?? [],
+    isLoading: queryResult.isLoading,
+    isFetching: queryResult.isFetching,
+    error: (queryResult.error as Error) ?? null,
+    flush: debouncedSetQuery.flush,
   };
 }

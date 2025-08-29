@@ -5,6 +5,7 @@ import { useCallback, useDeferredValue, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useTrackSearch } from "@/lib/hooks/use-spotify-search";
 import { useSpotifyTrending } from "@/lib/hooks/use-spotify-trending";
+import type { Track } from "@/lib/spotify/types";
 import { Button } from "../button";
 import { Dots, MagnifyingGlass, Trending } from "../icons";
 import styles from "./styles.module.css";
@@ -13,14 +14,7 @@ const fade = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
   exit: { opacity: 0 },
-  transition: { duration: 0.28 },
-};
-
-type Track = {
-  id: string;
-  image: string;
-  title: string;
-  subtitle: string;
+  transition: { duration: 0.4 },
 };
 
 function SkeletonTrack() {
@@ -39,6 +33,7 @@ function SkeletonTrack() {
 }
 
 function TrackItem({ track }: { track: Track }) {
+  console.log("TrackItem received:", track);
   return (
     <div className={styles.track}>
       <Image
@@ -52,7 +47,7 @@ function TrackItem({ track }: { track: Track }) {
       />
       <div className={styles.info}>
         <div className={styles.title}>{track.title}</div>
-        <div className={styles.artist}>{track.subtitle}</div>
+        <div className={styles.artist}>{track.artist}</div>
       </div>
       <button
         type="button"
@@ -82,7 +77,7 @@ export const Spotify = () => {
     isLoading: searchLoading,
     isFetching: searchFetching,
     error: searchError,
-  } = useTrackSearch(deferredQuery, { limit: 5 });
+  } = useTrackSearch({ input: deferredQuery });
 
   const isSearching = deferredQuery.length >= 2;
   const isTransitioning = rawQuery.trim() !== debouncedQuery;
@@ -112,6 +107,7 @@ export const Spotify = () => {
       <div className={styles.search}>
         <MagnifyingGlass className={styles.magnifier} />
         <Input
+          autoComplete="off"
           placeholder="Search Spotify..."
           className={styles.input}
           value={rawQuery}
