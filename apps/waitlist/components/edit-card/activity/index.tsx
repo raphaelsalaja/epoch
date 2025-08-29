@@ -1,150 +1,195 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { AnimatePresence, motion, useAnimate } from "motion/react";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
+import { AnimatePresence } from "motion/react";
+import { useId } from "react";
+import { Controller } from "react-hook-form";
+
 import { Button } from "@/components/button";
 import { Field } from "@/components/field";
-import { Step, useStepStore } from "@/lib/stores/step-state";
-import { Spinner } from "../../icons/spinner";
-import { reveal, spinner, text } from "./motion";
+import { MeasuredContainer } from "@/components/measured-container";
+import { ColorPalette } from "@/components/pallete";
+import { useShake } from "@/lib/hooks/use-shake";
+import { useActivityForm } from "./form";
 import styles from "./styles.module.css";
 
-enum ButtonState {
-  Idle = "idle",
-  Loading = "loading",
-  Success = "success",
-}
+export function EditCardActivity() {
+  const textId = useId();
+  const descriptionId = useId();
+  const colorId = useId();
+  const textShake = useShake();
+  const descriptionShake = useShake();
+  const colorShake = useShake();
 
-const schema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-});
-type FormValues = z.infer<typeof schema>;
-
-export function Manifesto() {
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [buttonState, setButtonState] = useState(ButtonState.Idle);
-  const [ref, animate] = useAnimate();
-  const { setEmail, nextStep, markStepCompleted } = useStepStore();
-
+  const { form, onValid, createOnInvalid, maxLengths } = useActivityForm();
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid },
-  } = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: { email: "" },
-    mode: "onSubmit",
-    reValidateMode: "onChange",
+    formState: { errors },
+  } = form;
+
+  const onInvalid = createOnInvalid({
+    title: textShake.trigger,
+    description: descriptionShake.trigger,
+    color: colorShake.trigger,
   });
 
-  const onValid = async ({ email }: FormValues) => {
-    setIsSuccess(false);
-    setButtonState(ButtonState.Loading);
-
-    // Simulate email signup delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    try {
-      // Store email and proceed to next step
-      setEmail(email);
-      markStepCompleted(Step.Manifesto);
-      setIsSuccess(true);
-      setButtonState(ButtonState.Success);
-
-      // Wait a moment for success animation, then proceed
-      setTimeout(() => {
-        nextStep();
-      }, 1500);
-    } catch {
-      setButtonState(ButtonState.Idle);
-    }
-  };
-
-  const onInvalid = () => {
-    animate(
-      ref.current,
-      { x: [-6, 0] },
-      { type: "spring", stiffness: 200, damping: 2, mass: 0.1 }
-    );
-  };
-
   return (
-    <div className={styles.manifesto}>
-      <div className={styles.text}>
-        <h1>Epoch</h1>
-        <p className={styles.paragraph}>
-          Replace short-term tracking
-          <br />
-          with a focused journey toward lasting progress.
-          <br />A personal system built for real results.
-        </p>
-      </div>
+    <div className={styles.container}>
       <form onSubmit={handleSubmit(onValid, onInvalid)} className={styles.form}>
         <Controller
-          name="email"
+          name="title"
           control={control}
-          render={({ field, fieldState }) => (
-            <div ref={ref} style={{ width: "100%", marginTop: 24 }}>
-              <Field.Root
-                name="email"
-                invalid={fieldState.invalid}
-                disabled={isSuccess}
-              >
-                <Field.Control
-                  type="text"
-                  {...field}
-                  spellCheck={false}
-                  autoComplete="off"
-                  placeholder="Email"
-                  aria-invalid={!!errors.email}
-                  disabled={isSuccess}
-                />
-              </Field.Root>
-            </div>
-          )}
+          render={({ field, fieldState }) => {
+            const length = field.value?.length ?? 0;
+            return (
+              <MeasuredContainer ref={textShake.ref}>
+                <Field.Root name="title" invalid={fieldState.invalid}>
+                  <Field.Label htmlFor={textId}>
+                    Activity Title
+                    <Field.Length
+                      maxLength={maxLengths.title}
+                      length={length}
+                    />
+                  </Field.Label>
+                  <Field.Control
+                    id={textId}
+                    type="text"
+                    {...field}
+                    value={field.value ?? ""}
+                    spellCheck={false}
+                    autoComplete="off"
+                    placeholder="Enter your favorite quote"
+                    aria-invalid={!!errors.title}
+                    aria-describedby={
+                      errors.title ? `${textId}-error` : undefined
+                    }
+                    maxLength={maxLengths.title}
+                  />
+                  <AnimatePresence>
+                    {errors.title && (
+                      <Field.Error
+                        id={`${textId}-error`}
+                        role="alert"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                          duration: 0.24,
+                          ease: [0.19, 1, 0.22, 1],
+                        }}
+                        match
+                      >
+                        {errors.title.message}
+                      </Field.Error>
+                    )}
+                  </AnimatePresence>
+                </Field.Root>
+              </MeasuredContainer>
+            );
+          }}
         />
 
-        <AnimatePresence mode="popLayout">
-          {(isValid || isSubmitting) && (
-            <motion.div {...reveal}>
-              <Button.Root
-                type="submit"
-                disabled={isSubmitting}
-                style={{ width: "100%" }}
-                layout
-              >
-                <Button.Label {...spinner(buttonState === ButtonState.Loading)}>
-                  <Spinner />
-                </Button.Label>
-                <Button.Label>Join</Button.Label>
-                <Button.Label {...text(buttonState === ButtonState.Loading)}>
-                  ing
-                </Button.Label>
-                <Button.Label {...text(buttonState === ButtonState.Success)}>
-                  ed!
-                </Button.Label>
-                <Button.Label {...text(buttonState !== ButtonState.Success)}>
-                  <>&nbsp;</>The Waitlist
-                </Button.Label>
-              </Button.Root>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <Controller
+          name="description"
+          control={control}
+          render={({ field, fieldState }) => {
+            const length = field.value?.length ?? 0;
+            return (
+              <MeasuredContainer ref={descriptionShake.ref}>
+                <Field.Root name="description" invalid={fieldState.invalid}>
+                  <Field.Label htmlFor={descriptionId}>
+                    Activity Description
+                    <Field.Length
+                      length={length}
+                      maxLength={maxLengths.description}
+                    />
+                  </Field.Label>
+                  <Field.Control
+                    id={descriptionId}
+                    type="text"
+                    kind="textarea"
+                    {...field}
+                    value={field.value ?? ""}
+                    spellCheck={false}
+                    autoComplete="off"
+                    placeholder="Quote author"
+                    aria-invalid={!!errors.description}
+                    aria-describedby={
+                      errors.description ? `${descriptionId}-error` : undefined
+                    }
+                    maxLength={maxLengths.description}
+                  />
+                  <AnimatePresence>
+                    {errors.description && (
+                      <Field.Error
+                        id={`${descriptionId}-error`}
+                        role="alert"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                          duration: 0.24,
+                          ease: [0.19, 1, 0.22, 1],
+                        }}
+                        match
+                      >
+                        {errors.description.message}
+                      </Field.Error>
+                    )}
+                  </AnimatePresence>
+                </Field.Root>
+              </MeasuredContainer>
+            );
+          }}
+        />
 
-        {errors.email?.message && (
-          <motion.span
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className={styles.error}
-          >
-            {errors.email.message}
-          </motion.span>
-        )}
+        <Controller
+          name="color"
+          control={control}
+          render={({ field, fieldState }) => {
+            return (
+              <MeasuredContainer ref={colorShake.ref}>
+                <Field.Root name="color" invalid={fieldState.invalid}>
+                  <Field.Label htmlFor={colorId}>Activity Color</Field.Label>
+                  <Field.Control
+                    id={colorId}
+                    render={() => (
+                      <ColorPalette
+                        value={field.value}
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                        }}
+                        name={field.name}
+                      />
+                    )}
+                  />
+                  <AnimatePresence>
+                    {errors.color && (
+                      <Field.Error
+                        id={`${colorId}-error`}
+                        role="alert"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                          duration: 0.24,
+                          ease: [0.19, 1, 0.22, 1],
+                        }}
+                        match
+                      >
+                        {errors.color.message}
+                      </Field.Error>
+                    )}
+                  </AnimatePresence>
+                </Field.Root>
+              </MeasuredContainer>
+            );
+          }}
+        />
+
+        <Button.Root type="submit">
+          <Button.Label>Update Activity</Button.Label>
+        </Button.Root>
       </form>
     </div>
   );

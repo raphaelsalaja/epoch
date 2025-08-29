@@ -18,6 +18,20 @@ function FieldLabel(props: FieldLabelProps) {
   return <BaseField.Label className={styles.label} {...props} />;
 }
 
+interface FieldLengthProps extends React.ComponentPropsWithRef<"span"> {
+  length?: number;
+  maxLength?: number;
+}
+function FieldLength({ length, maxLength, ...props }: FieldLengthProps) {
+  if (!maxLength) return null;
+
+  return (
+    <span className={styles.length} data-field-length={maxLength} {...props}>
+      {length ?? 0}/{maxLength}
+    </span>
+  );
+}
+
 interface FieldControlProps
   extends React.ComponentPropsWithRef<typeof BaseField.Control> {
   kind?: "input" | "textarea";
@@ -43,10 +57,13 @@ function FieldControl({ kind = "input", ...props }: FieldControlProps) {
   }
 }
 
+const MotionFieldError = motion.create(BaseField.Error);
+
 interface FieldErrorProps
-  extends React.ComponentPropsWithRef<typeof BaseField.Error> {}
+  extends React.ComponentPropsWithoutRef<typeof MotionFieldError> {}
+
 function FieldError(props: FieldErrorProps) {
-  return <BaseField.Error className={styles.error} {...props} />;
+  return <MotionFieldError className={styles.error} {...props} />;
 }
 
 interface FieldDescriptionProps
@@ -58,6 +75,7 @@ function FieldDescription(props: FieldDescriptionProps) {
 export const Field = {
   Root: FieldRoot,
   Label: FieldLabel,
+  Length: FieldLength,
   Control: FieldControl,
   Error: FieldError,
   Description: FieldDescription,

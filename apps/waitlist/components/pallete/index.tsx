@@ -1,6 +1,5 @@
-import { Toggle } from "@base-ui-components/react/toggle";
-import { ToggleGroup } from "@base-ui-components/react/toggle-group";
-import type React from "react";
+import { Radio } from "@base-ui-components/react/radio";
+import { RadioGroup } from "@base-ui-components/react/radio-group";
 import styles from "./styles.module.css";
 
 const colors = [
@@ -15,13 +14,15 @@ const colors = [
   "pink",
 ] as const;
 
-interface PaletteProps extends React.ComponentPropsWithRef<typeof ToggleGroup> {
-  color?: (typeof colors)[number];
+export type ColorValue = (typeof colors)[number];
+
+interface PaletteProps {
+  color: ColorValue;
 }
 
-const Palette = ({ color = "blue", ...props }: PaletteProps) => {
+const Palette = ({ color }: PaletteProps) => {
   return (
-    <Toggle
+    <Radio.Root
       value={color}
       data-type={color}
       aria-label={color}
@@ -31,17 +32,34 @@ const Palette = ({ color = "blue", ...props }: PaletteProps) => {
   );
 };
 
-interface ColorPaletteProps
-  extends React.ComponentPropsWithRef<typeof ToggleGroup> {
+interface ColorPaletteProps {
+  value?: ColorValue;
+  onValueChange?: (value: unknown, event: Event) => void;
   kind?: "grid" | "list";
+  name?: string;
+  id?: string;
 }
 
-export function ColorPalette({ kind = "grid", ...props }: ColorPaletteProps) {
+export function ColorPalette({
+  value = "blue",
+  onValueChange,
+  kind = "grid",
+  name,
+  id,
+  ...props
+}: ColorPaletteProps) {
   return (
-    <ToggleGroup defaultValue={["red"]} className={styles.pallete}>
+    <RadioGroup
+      value={value}
+      onValueChange={onValueChange}
+      className={styles.pallete}
+      name={name}
+      id={id}
+      {...props}
+    >
       {colors.map((color) => (
         <Palette key={color} color={color} />
       ))}
-    </ToggleGroup>
+    </RadioGroup>
   );
 }

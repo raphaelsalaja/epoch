@@ -1,53 +1,34 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { AnimatePresence, motion, useAnimate } from "motion/react";
-import { Controller, useForm } from "react-hook-form";
-import type { z } from "zod";
+import { AnimatePresence } from "motion/react";
+import { useId } from "react";
+import { Controller } from "react-hook-form";
+
 import { Button } from "@/components/button";
+import { useQuoteForm } from "@/components/edit-card/quote/form";
 import { Field } from "@/components/field";
-import { QuoteSchema, useCardStore } from "@/lib/stores/card";
-import { Spinner } from "../../icons/spinner";
-import { reveal, spinner, text } from "./motion";
+import { MeasuredContainer } from "@/components/measured-container";
+import { useShake } from "@/lib/hooks/use-shake";
+
 import styles from "./styles.module.css";
 
-type FormValues = z.infer<typeof QuoteSchema>;
-
 export function EditCardQuote() {
-  const [ref, animate] = useAnimate();
-  const { card, updateQuote } = useCardStore();
+  const textId = useId();
+  const authorId = useId();
+  const textShake = useShake();
+  const authorShake = useShake();
 
+  const { form, onValid, createOnInvalid, maxLengths } = useQuoteForm();
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid },
-  } = useForm<FormValues>({
-    resolver: zodResolver(QuoteSchema),
-    defaultValues: {
-      text: card.quote.text || "",
-      author: card.quote.author || "",
-    },
-    mode: "onSubmit",
-    reValidateMode: "onChange",
+    formState: { errors },
+  } = form;
+
+  const onInvalid = createOnInvalid({
+    text: textShake.trigger,
+    author: authorShake.trigger,
   });
-
-  const onValid = async ({ text, author }: FormValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    try {
-      updateQuote({ text, author });
-
-      setTimeout(() => {}, 1500);
-    } catch {}
-  };
-
-  const onInvalid = () => {
-    animate(
-      ref.current,
-      { x: [-6, 0] },
-      { type: "spring", stiffness: 200, damping: 2, mass: 0.1 }
-    );
-  };
 
   return (
     <div className={styles.container}>
@@ -55,41 +36,109 @@ export function EditCardQuote() {
         <Controller
           name="text"
           control={control}
-          render={({ field, fieldState }) => (
-            <Field.Root name="text" invalid={fieldState.invalid}>
-              <Field.Label>Quote</Field.Label>
-              <Field.Control
-                type="text"
-                {...field}
-                spellCheck={false}
-                autoComplete="off"
-                placeholder="Enter your favorite quote"
-                aria-invalid={!!errors.text}
-              />
-            </Field.Root>
-          )}
+          render={({ field, fieldState }) => {
+            const length = field.value?.length ?? 0;
+            return (
+              <MeasuredContainer ref={textShake.ref}>
+                <Field.Root name="text" invalid={fieldState.invalid}>
+                  <Field.Label htmlFor={textId}>
+                    Quote
+                    <Field.Length maxLength={maxLengths.text} length={length} />
+                  </Field.Label>
+                  <Field.Control
+                    id={textId}
+                    kind="textarea"
+                    type="text"
+                    {...field}
+                    value={field.value ?? ""}
+                    spellCheck={false}
+                    autoComplete="off"
+                    placeholder="Enter your favorite quote"
+                    aria-invalid={!!errors.text}
+                    aria-describedby={
+                      errors.text ? `${textId}-error` : undefined
+                    }
+                    maxLength={maxLengths.text}
+                  />
+                  <AnimatePresence>
+                    {errors.text && (
+                      <Field.Error
+                        id={`${textId}-error`}
+                        role="alert"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                          duration: 0.24,
+                          ease: [0.19, 1, 0.22, 1],
+                        }}
+                        match
+                      >
+                        {errors.text.message}
+                      </Field.Error>
+                    )}
+                  </AnimatePresence>
+                </Field.Root>
+              </MeasuredContainer>
+            );
+          }}
         />
 
         <Controller
           name="author"
           control={control}
-          render={({ field, fieldState }) => (
-            <Field.Root name="author" invalid={fieldState.invalid}>
-              <Field.Label>Author</Field.Label>
-              <Field.Control
-                type="text"
-                {...field}
-                spellCheck={false}
-                autoComplete="off"
-                placeholder="Quote author"
-                aria-invalid={!!errors.author}
-              />
-            </Field.Root>
-          )}
+          render={({ field, fieldState }) => {
+            const length = field.value?.length ?? 0;
+            return (
+              <MeasuredContainer ref={authorShake.ref}>
+                <Field.Root name="author" invalid={fieldState.invalid}>
+                  <Field.Label htmlFor={authorId}>
+                    Author
+                    <Field.Length
+                      length={length}
+                      maxLength={maxLengths.author}
+                    />
+                  </Field.Label>
+                  <Field.Control
+                    id={authorId}
+                    type="text"
+                    {...field}
+                    value={field.value ?? ""}
+                    spellCheck={false}
+                    autoComplete="off"
+                    placeholder="Quote author"
+                    aria-invalid={!!errors.author}
+                    aria-describedby={
+                      errors.author ? `${authorId}-error` : undefined
+                    }
+                    maxLength={maxLengths.author}
+                  />
+                  <AnimatePresence>
+                    {errors.author && (
+                      <Field.Error
+                        id={`${authorId}-error`}
+                        role="alert"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                          duration: 0.24,
+                          ease: [0.19, 1, 0.22, 1],
+                        }}
+                        match
+                      >
+                        {errors.author.message}
+                      </Field.Error>
+                    )}
+                  </AnimatePresence>
+                </Field.Root>
+              </MeasuredContainer>
+            );
+          }}
         />
 
-        <Button.Root type="submit" disabled={isSubmitting} layout>
-          <Button.Label>Save Changes</Button.Label>
+        <Button.Root type="submit">
+          <Button.Label>Update Quote</Button.Label>
         </Button.Root>
       </form>
     </div>

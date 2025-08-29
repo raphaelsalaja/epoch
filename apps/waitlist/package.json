@@ -22,6 +22,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.62.0",
+    "react-use-measure": "^2.1.7",
     "spotify-web-api-node": "^5.0.2",
     "use-debounce": "^10.0.5",
     "zod": "^4.0.17",

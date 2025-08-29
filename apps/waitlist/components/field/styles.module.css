@@ -1,7 +1,7 @@
 .field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+
   align-items: start;
   width: 100%;
 
@@ -19,14 +19,21 @@
 }
 
 .label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 8px;
   font-size: var(--size-regular);
   font-weight: var(--weight-medium);
   line-height: 24px;
   color: var(--foreground-quaternary);
   letter-spacing: var(--spacing-regular);
+  white-space: nowrap;
 }
 
 .control {
+  position: relative;
   display: flex;
   gap: 8px;
   align-items: center;
@@ -35,13 +42,15 @@
   padding: 16px;
   font-size: var(--size-medium);
   font-weight: var(--weight-medium);
+  line-height: 24px;
   color: var(--foreground-primary);
+  letter-spacing: var(--spacing-medium);
   outline-width: 2px;
   outline-style: solid;
   outline-color: color-mix(in srgb, var(--black) 0%, transparent);
   outline-offset: 0px;
   background: var(--background-secondary);
-  border-radius: 12px;
+  border-radius: 16px;
   transition: outline-color 0.2s ease;
 
   &::placeholder {
@@ -57,17 +66,18 @@
     height: 144px;
     resize: none;
   }
+
+  &:focus-visible {
+    outline-color: color-mix(in srgb, var(--black) 10%, transparent);
+  }
 }
 
 .error {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: var(--color-red-800);
-}
-
-.description {
-  margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: var(--color-gray-600);
+  margin-top: 8px;
+  font-size: var(--size-regular);
+  font-weight: var(--weight-medium);
+  line-height: 24px;
+  color: var(--red);
+  letter-spacing: var(--spacing-regular);
+  white-space: nowrap;
 }
