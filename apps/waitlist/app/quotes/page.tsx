@@ -1,7 +1,7 @@
 "use client";
 
-import { Generator } from "@/components/generator";
+import { EditCardQuote } from "@/components/edit-card/quote";
 
 export default function Home() {
-  return <Generator />;
+  return <EditCardQuote />;
 }
