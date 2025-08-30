@@ -1,12 +1,38 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-
+import type { IconName } from "@/components/icons/types";
+import type { ColorName } from "@/components/picker";
 import { makeOnInvalid } from "@/lib/hooks/use-invalid-submit-shake";
 import { Schemas } from "@/lib/schemas";
 import { useCardStore } from "@/lib/stores/card";
 
 type FormValues = z.infer<typeof Schemas.Item>;
+
+// Helper functions for image field updates
+export const updateImageColor = (currentValue: unknown, newColor: string) => {
+  const safeColor = newColor as ColorName;
+  return {
+    color: safeColor,
+    icon: (typeof currentValue === "object" &&
+    currentValue &&
+    "icon" in currentValue
+      ? currentValue.icon
+      : "crown") as IconName,
+  };
+};
+
+export const updateImageIcon = (currentValue: unknown, newIcon: string) => {
+  const safeIcon = newIcon as IconName;
+  return {
+    color: (typeof currentValue === "object" &&
+    currentValue &&
+    "color" in currentValue
+      ? currentValue.color
+      : "blue") as ColorName,
+    icon: safeIcon,
+  };
+};
 
 export function useItemOneForm() {
   const { card, updateItemOne } = useCardStore();

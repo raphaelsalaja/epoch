@@ -9,7 +9,7 @@ import { Field } from "@/components/field";
 import { MeasuredContainer } from "@/components/measured-container";
 import { Picker } from "@/components/picker";
 import { useShake } from "@/lib/hooks/use-shake";
-import { useItemOneForm } from "./form";
+import { updateImageColor, updateImageIcon, useItemOneForm } from "./form";
 import styles from "./styles.module.css";
 
 export function EditCardItemOne() {
@@ -40,114 +40,52 @@ export function EditCardItemOne() {
           name="image"
           control={control}
           render={({ field, fieldState }) => {
-            const colorValue =
-              typeof field.value === "object" && field.value?.color
-                ? field.value.color
-                : "blue";
+            // Ensure we always have an object with color and icon
+            const imageValue =
+              typeof field.value === "object" &&
+              field.value?.color &&
+              field.value?.icon
+                ? field.value
+                : { color: "blue" as const, icon: "crown" as const };
+
             return (
               <MeasuredContainer ref={imageShake.ref}>
                 <Field.Root name="image" invalid={fieldState.invalid}>
                   <Field.Control
                     id={imageId}
                     render={() => (
-                      <Picker.Color
-                        kind="grid"
-                        value={colorValue}
-                        onValueChange={(value) => {
-                          if (typeof value === "string") {
-                            field.onChange({
-                              color: value as
-                                | "grey"
-                                | "dark-grey"
-                                | "purple"
-                                | "blue"
-                                | "green"
-                                | "yellow"
-                                | "orange"
-                                | "pink"
-                                | "red",
-                              icon:
-                                typeof field.value === "object" &&
-                                field.value?.icon
-                                  ? field.value.icon
-                                  : "crown",
-                            });
-                          }
-                        }}
-                        name={field.name}
-                      />
+                      <div>
+                        <Picker.Color
+                          kind="grid"
+                          value={imageValue.color}
+                          onValueChange={(value) => {
+                            if (typeof value === "string") {
+                              field.onChange(
+                                updateImageColor(field.value, value)
+                              );
+                            }
+                          }}
+                          name={field.name}
+                        />
+                        <Picker.Icon
+                          kind="grid"
+                          value={imageValue.icon}
+                          onValueChange={(value) => {
+                            if (typeof value === "string") {
+                              field.onChange(
+                                updateImageIcon(field.value, value)
+                              );
+                            }
+                          }}
+                          name={field.name}
+                        />
+                      </div>
                     )}
                   />
                   <AnimatePresence>
                     {errors.image && (
                       <Field.Error
                         id={`${imageId}-error`}
-                        role="alert"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{
-                          duration: 0.24,
-                          ease: [0.19, 1, 0.22, 1],
-                        }}
-                        match
-                      >
-                        {errors.image.message}
-                      </Field.Error>
-                    )}
-                  </AnimatePresence>
-                </Field.Root>
-              </MeasuredContainer>
-            );
-          }}
-        />
-
-        <Controller
-          name="image"
-          control={control}
-          render={({ field, fieldState }) => {
-            const iconValue =
-              typeof field.value === "object" && field.value?.icon
-                ? field.value.icon
-                : "crown";
-            return (
-              <MeasuredContainer ref={imageShake.ref}>
-                <Field.Root name="image" invalid={fieldState.invalid}>
-                  <Field.Control
-                    id={`${imageId}-icon`}
-                    render={() => (
-                      <Picker.Icon
-                        kind="grid"
-                        value={iconValue}
-                        onValueChange={(value) => {
-                          if (typeof value === "string") {
-                            field.onChange({
-                              color:
-                                typeof field.value === "object" &&
-                                field.value?.color
-                                  ? field.value.color
-                                  : "blue",
-                              icon: value as
-                                | "crown"
-                                | "forkKnife"
-                                | "MedicineTablet"
-                                | "diamond"
-                                | "headphones"
-                                | "cookies"
-                                | "growth"
-                                | "drink"
-                                | "explosion",
-                            });
-                          }
-                        }}
-                        name={field.name}
-                      />
-                    )}
-                  />
-                  <AnimatePresence>
-                    {errors.image && (
-                      <Field.Error
-                        id={`${imageId}-icon-error`}
                         role="alert"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
