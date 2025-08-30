@@ -16,11 +16,11 @@ const colors = [
 
 export type ColorValue = (typeof colors)[number];
 
-interface PaletteProps {
+interface ColorItemProps {
   color: ColorValue;
 }
 
-const Palette = ({ color }: PaletteProps) => {
+const ColorItem = ({ color }: ColorItemProps) => {
   return (
     <Radio.Root
       value={color}
@@ -32,7 +32,7 @@ const Palette = ({ color }: PaletteProps) => {
   );
 };
 
-interface ColorPaletteProps {
+interface ColorPickerProps {
   value?: ColorValue;
   onValueChange?: (value: unknown, event: Event) => void;
   kind?: "grid" | "list";
@@ -40,25 +40,26 @@ interface ColorPaletteProps {
   id?: string;
 }
 
-export function ColorPalette({
+export function ColorPicker({
   value = "blue",
   onValueChange,
-  kind = "grid",
+  kind = "list",
   name,
   id,
   ...props
-}: ColorPaletteProps) {
+}: ColorPickerProps) {
   return (
     <RadioGroup
+      data-kind={kind}
       value={value}
       onValueChange={onValueChange}
-      className={styles.pallete}
+      className={styles.picker}
       name={name}
       id={id}
       {...props}
     >
       {colors.map((color) => (
-        <Palette key={color} color={color} />
+        <ColorItem key={color} color={color} />
       ))}
     </RadioGroup>
   );

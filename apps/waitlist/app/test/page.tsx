@@ -1,7 +1,7 @@
 "use client";
 
-import { EditCardActivity } from "@/components/edit-card/activity";
+import { EditCardItemOne } from "@/components/edit-card/item_one";
 
 export default function Home() {
-  return <EditCardActivity />;
+  return <EditCardItemOne />;
 }

@@ -1,5 +1,4 @@
 import z from "zod";
-import { item } from "@/components/manifesto/motion";
 
 const Color = z.enum([
   "grey",
