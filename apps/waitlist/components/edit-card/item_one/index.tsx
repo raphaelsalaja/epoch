@@ -47,7 +47,6 @@ export function EditCardItemOne() {
             return (
               <MeasuredContainer ref={imageShake.ref}>
                 <Field.Root name="image" invalid={fieldState.invalid}>
-                  <Field.Label htmlFor={imageId}>Activity Color</Field.Label>
                   <Field.Control
                     id={imageId}
                     render={() => (
@@ -114,9 +113,6 @@ export function EditCardItemOne() {
             return (
               <MeasuredContainer ref={imageShake.ref}>
                 <Field.Root name="image" invalid={fieldState.invalid}>
-                  <Field.Label htmlFor={`${imageId}-icon`}>
-                    Activity Icon
-                  </Field.Label>
                   <Field.Control
                     id={`${imageId}-icon`}
                     render={() => (
