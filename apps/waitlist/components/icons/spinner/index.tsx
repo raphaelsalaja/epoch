@@ -1,8 +1,9 @@
+import { motion } from "motion/react";
 import styles from "./styles.module.css";
 
 export function Spinner() {
   return (
-    <div
+    <motion.div
       initial={{ rotate: 180 }}
       animate={{
         rotate: 0,
@@ -45,6 +46,6 @@ export function Spinner() {
           strokeLinecap="round"
         />
       </svg>
-    </div>
+    </motion.div>
   );
 }
