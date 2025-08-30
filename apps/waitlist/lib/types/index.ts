@@ -1,76 +1,13 @@
-import type * as React from "react";
-
 /**
- * Centralized type definitions for icons and colors used throughout the application.
+ * Re-exports for commonly used types throughout the application.
  *
- * This file serves as the single source of truth for:
- * - Icon names and types
- * - Color names and types
- * - Theme color variants
- * - Common component props
- *
- * These types are derived from the actual implementations to ensure consistency
- * across components, schemas, and other parts of the application.
+ * This file provides convenient re-exports of types that are defined
+ * closer to their usage but needed in multiple places.
  */
 
-// Icon Types
-export const ICON_NAMES = [
-  "crown",
-  "forkKnife",
-  "medicineTablett",
-  "diamond",
-  "headphones",
-  "cookies",
-  "growth",
-  "drink",
-  "explosion",
-] as const;
-
-export type IconName = (typeof ICON_NAMES)[number];
-
-// Color Types
-export const COLOR_NAMES = [
-  "grey",
-  "dark-grey",
-  "purple",
-  "blue",
-  "green",
-  "yellow",
-  "orange",
-  "red",
-  "pink",
-] as const;
-
-export type ColorName = (typeof COLOR_NAMES)[number];
-
-// Theme Types - includes semantic colors and brand colors
-export type ThemeColor =
-  | "border-primary"
-  | "border-secondary"
-  | "border-tertiary"
-  | "foreground-primary"
-  | "foreground-secondary"
-  | "foreground-tertiary"
-  | "foreground-quaternary"
-  | "background-primary"
-  | "background-secondary"
-  | "background-tertiary"
-  | "background-quaternary"
-  | "black"
-  | "white"
-  | ColorName;
-
-// Icon Props (matching React SVG attributes with specific constraints)
-export interface IconProps extends React.SVGAttributes<SVGElement> {
-  children?: never;
-  color?: string;
-}
-
-// Common types for picker components (icons, colors, etc.)
-export interface PickerProps<T> {
-  value?: T;
-  onValueChange?: (value: unknown, event: Event) => void;
-  kind?: "grid" | "list";
-  name?: string;
-  id?: string;
-}
+// Icon types - defined in components/icons/types.ts
+export type { IconName, IconProps } from "@/components/icons/types";
+export { ICON_NAMES } from "@/components/icons/types";
+// Color types - defined in components/picker/index.tsx
+export type { ColorName } from "@/components/picker";
+export { COLOR_NAMES } from "@/components/picker";

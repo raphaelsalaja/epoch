@@ -1,5 +1,6 @@
-import z from "zod";
-import { COLOR_NAMES, ICON_NAMES } from "@/lib/types";
+import { z } from "zod";
+import { ICON_NAMES } from "@/components/icons/types";
+import { COLOR_NAMES } from "@/components/picker";
 
 const Color = z.enum(COLOR_NAMES);
 const Icon = z.enum(ICON_NAMES);

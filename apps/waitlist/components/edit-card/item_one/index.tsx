@@ -5,10 +5,9 @@ import { useId } from "react";
 import { Controller } from "react-hook-form";
 
 import { Button } from "@/components/button";
-import { ColorPicker } from "@/components/color-picker";
 import { Field } from "@/components/field";
-import { IconPicker } from "@/components/icon-picker";
 import { MeasuredContainer } from "@/components/measured-container";
+import { Picker } from "@/components/picker";
 import { useShake } from "@/lib/hooks/use-shake";
 import { useItemOneForm } from "./form";
 import styles from "./styles.module.css";
@@ -52,7 +51,7 @@ export function EditCardItemOne() {
                   <Field.Control
                     id={imageId}
                     render={() => (
-                      <ColorPicker
+                      <Picker.Color
                         kind="grid"
                         value={colorValue}
                         onValueChange={(value) => {
@@ -121,7 +120,7 @@ export function EditCardItemOne() {
                   <Field.Control
                     id={`${imageId}-icon`}
                     render={() => (
-                      <IconPicker
+                      <Picker.Icon
                         kind="grid"
                         value={iconValue}
                         onValueChange={(value) => {
@@ -135,7 +134,7 @@ export function EditCardItemOne() {
                               icon: value as
                                 | "crown"
                                 | "forkKnife"
-                                | "medicineTablett"
+                                | "MedicineTablet"
                                 | "diamond"
                                 | "headphones"
                                 | "cookies"

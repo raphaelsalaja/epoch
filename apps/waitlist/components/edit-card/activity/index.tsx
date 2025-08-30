@@ -5,9 +5,9 @@ import { useId } from "react";
 import { Controller } from "react-hook-form";
 
 import { Button } from "@/components/button";
-import { ColorPicker } from "@/components/color-picker";
 import { Field } from "@/components/field";
 import { MeasuredContainer } from "@/components/measured-container";
+import { Picker } from "@/components/picker";
 import { useShake } from "@/lib/hooks/use-shake";
 import { useActivityForm } from "./form";
 import styles from "./styles.module.css";
@@ -154,7 +154,7 @@ export function EditCardActivity() {
                   <Field.Control
                     id={colorId}
                     render={() => (
-                      <ColorPicker
+                      <Picker.Color
                         value={field.value}
                         onValueChange={(value) => {
                           field.onChange(value);
