@@ -1,24 +1,13 @@
 import { Radio } from "@base-ui-components/react/radio";
 import { RadioGroup } from "@base-ui-components/react/radio-group";
-import { Icon, type IconName } from "@/components/icons";
+import { Icon } from "@/components/icons";
+import { ICON_NAMES, type IconName, type PickerProps } from "@/lib/types";
 import styles from "./styles.module.css";
 
-const icons = [
-  "crown",
-  "forkKnife",
-  "medicineTablett",
-  "diamond",
-  "headphones",
-  "cookies",
-  "growth",
-  "drink",
-  "explosion",
-] as const;
-
-export type IconValue = IconName;
+const icons = ICON_NAMES;
 
 interface IconItemProps {
-  icon: IconValue;
+  icon: IconName;
 }
 
 const IconItem = ({ icon }: IconItemProps) => {
@@ -34,13 +23,7 @@ const IconItem = ({ icon }: IconItemProps) => {
   );
 };
 
-interface IconPickerProps {
-  value?: IconValue;
-  onValueChange?: (value: unknown, event: Event) => void;
-  kind?: "grid" | "list";
-  name?: string;
-  id?: string;
-}
+interface IconPickerProps extends PickerProps<IconName> {}
 
 export function IconPicker({
   value = "crown",

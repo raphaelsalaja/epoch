@@ -1,28 +1,8 @@
 import z from "zod";
+import { COLOR_NAMES, ICON_NAMES } from "@/lib/types";
 
-const Color = z.enum([
-  "grey",
-  "dark-grey",
-  "purple",
-  "blue",
-  "green",
-  "yellow",
-  "orange",
-  "pink",
-  "red",
-]);
-
-const Icon = z.enum([
-  "crown",
-  "forkKnife",
-  "medicineTablett",
-  "diamond",
-  "headphones",
-  "cookies",
-  "growth",
-  "drink",
-  "explosion",
-]);
+const Color = z.enum(COLOR_NAMES);
+const Icon = z.enum(ICON_NAMES);
 
 const Image = z.union([
   z.url(),

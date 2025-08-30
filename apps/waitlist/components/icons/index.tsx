@@ -1,4 +1,4 @@
-import type { IconProps } from "@/components/icons/types";
+import type { IconName, IconProps } from "@/lib/types";
 
 export function MagnifyingGlass(props: IconProps) {
   return (
@@ -253,8 +253,6 @@ const icons = {
   drink: Drink,
   explosion: Explosion,
 } as const;
-
-export type IconName = keyof typeof icons;
 
 export const Icon = ({ name, ...props }: { name: IconName } & IconProps) => {
   const IconComponent = icons[name];

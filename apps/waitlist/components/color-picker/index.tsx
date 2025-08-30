@@ -1,23 +1,12 @@
 import { Radio } from "@base-ui-components/react/radio";
 import { RadioGroup } from "@base-ui-components/react/radio-group";
+import { COLOR_NAMES, type ColorName, type PickerProps } from "@/lib/types";
 import styles from "./styles.module.css";
 
-const colors = [
-  "grey",
-  "dark-grey",
-  "purple",
-  "blue",
-  "green",
-  "yellow",
-  "orange",
-  "red",
-  "pink",
-] as const;
-
-export type ColorValue = (typeof colors)[number];
+const colors = COLOR_NAMES;
 
 interface ColorItemProps {
-  color: ColorValue;
+  color: ColorName;
 }
 
 const ColorItem = ({ color }: ColorItemProps) => {
@@ -32,13 +21,7 @@ const ColorItem = ({ color }: ColorItemProps) => {
   );
 };
 
-interface ColorPickerProps {
-  value?: ColorValue;
-  onValueChange?: (value: unknown, event: Event) => void;
-  kind?: "grid" | "list";
-  name?: string;
-  id?: string;
-}
+interface ColorPickerProps extends PickerProps<ColorName> {}
 
 export function ColorPicker({
   value = "blue",
