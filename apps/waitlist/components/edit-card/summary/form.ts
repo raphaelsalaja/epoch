@@ -8,7 +8,7 @@ import { useCardStore } from "@/lib/stores/card";
 type FormValues = z.infer<typeof Schemas.Summary>;
 
 export function useSummaryForm() {
-  const { card, updateSummary } = useCardStore();
+  const { card, updateSection } = useCardStore();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(Schemas.Summary),
@@ -23,7 +23,7 @@ export function useSummaryForm() {
     const clean = {
       text: (text ?? "").trim(),
     };
-    updateSummary(clean);
+    updateSection("summary", clean);
     form.reset(clean, { keepDirty: false, keepValues: true });
   };
 

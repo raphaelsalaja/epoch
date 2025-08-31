@@ -9,7 +9,7 @@ import { useCardStore } from "@/lib/stores/card";
 type FormValues = z.infer<typeof Schemas.Activity>;
 
 export function useActivityForm() {
-  const { card, updateActivity } = useCardStore();
+  const { card, updateSection } = useCardStore();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(Schemas.Activity),
@@ -28,7 +28,7 @@ export function useActivityForm() {
       description: (description ?? "").trim(),
       color,
     };
-    updateActivity(clean);
+    updateSection("activity", clean);
     form.reset(clean, { keepDirty: false, keepValues: true });
   };
 

@@ -1,7 +1,7 @@
 "use client";
 
-import { EditCardItemOne } from "@/components/edit-card/item_one";
+import { EditCardQuote } from "@/components/edit-card/quote";
 
 export default function Home() {
-  return <EditCardItemOne />;
+  return <EditCardQuote />;
 }

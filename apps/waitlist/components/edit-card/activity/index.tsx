@@ -1,17 +1,16 @@
 "use client";
 
-import { Button } from "@/components/button";
 import {
   ColorFormField,
   TextareaFormField,
   TextFormField,
 } from "@/components/edit-card/fields";
+import { EditCardBase } from "@/components/edit-card/shared/edit-card-base";
 import { useShake } from "@/lib/hooks/use-shake";
 import { useActivityForm } from "./form";
-import styles from "./styles.module.css";
 
 export function EditCardActivity() {
-  const textShake = useShake();
+  const titleShake = useShake();
   const descriptionShake = useShake();
   const colorShake = useShake();
 
@@ -23,46 +22,43 @@ export function EditCardActivity() {
   } = form;
 
   const onInvalid = createOnInvalid({
-    title: textShake.trigger,
+    title: titleShake.trigger,
     description: descriptionShake.trigger,
     color: colorShake.trigger,
   });
 
   return (
-    <div className={styles.container}>
-      <form onSubmit={handleSubmit(onValid, onInvalid)} className={styles.form}>
-        <TextFormField
-          name="title"
-          label="Activity Title"
-          placeholder="Enter your favorite quote"
-          control={control}
-          errors={errors}
-          maxLength={maxLengths.title}
-          shakeRef={textShake.ref}
-        />
+    <EditCardBase
+      buttonText="Update Activity"
+      onSubmit={handleSubmit(onValid, onInvalid)}
+    >
+      <TextFormField
+        name="title"
+        label="Activity Title"
+        placeholder="Enter your favorite quote"
+        control={control}
+        errors={errors}
+        maxLength={maxLengths.title}
+        shakeRef={titleShake.ref}
+      />
 
-        <TextareaFormField
-          name="description"
-          label="Activity Description"
-          placeholder="Quote author"
-          control={control}
-          errors={errors}
-          maxLength={maxLengths.description}
-          shakeRef={descriptionShake.ref}
-        />
+      <TextareaFormField
+        name="description"
+        label="Activity Description"
+        placeholder="Quote author"
+        control={control}
+        errors={errors}
+        maxLength={maxLengths.description}
+        shakeRef={descriptionShake.ref}
+      />
 
-        <ColorFormField
-          name="color"
-          label="Activity Color"
-          control={control}
-          errors={errors}
-          shakeRef={colorShake.ref}
-        />
-
-        <Button.Root type="submit">
-          <Button.Label>Update Activity</Button.Label>
-        </Button.Root>
-      </form>
-    </div>
+      <ColorFormField
+        name="color"
+        label="Activity Color"
+        control={control}
+        errors={errors}
+        shakeRef={colorShake.ref}
+      />
+    </EditCardBase>
   );
 }

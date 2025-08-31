@@ -1,10 +1,9 @@
 "use client";
 
-import { Button } from "@/components/button";
 import { TextareaFormField } from "@/components/edit-card/fields";
+import { EditCardBase } from "@/components/edit-card/shared/edit-card-base";
 import { useShake } from "@/lib/hooks/use-shake";
 import { useSummaryForm } from "./form";
-import styles from "./styles.module.css";
 
 export function EditCardSummary() {
   const textShake = useShake();
@@ -21,22 +20,19 @@ export function EditCardSummary() {
   });
 
   return (
-    <div className={styles.container}>
-      <form onSubmit={handleSubmit(onValid, onInvalid)} className={styles.form}>
-        <TextareaFormField
-          name="text"
-          label="Summary"
-          placeholder="Write a brief summary of your day..."
-          control={control}
-          errors={errors}
-          maxLength={maxLengths.text}
-          shakeRef={textShake.ref}
-        />
-
-        <Button.Root type="submit">
-          <Button.Label>Update Summary</Button.Label>
-        </Button.Root>
-      </form>
-    </div>
+    <EditCardBase
+      buttonText="Update Summary"
+      onSubmit={handleSubmit(onValid, onInvalid)}
+    >
+      <TextareaFormField
+        name="text"
+        label="Summary"
+        placeholder="Write a brief summary of your day..."
+        control={control}
+        errors={errors}
+        maxLength={maxLengths.text}
+        shakeRef={textShake.ref}
+      />
+    </EditCardBase>
   );
 }

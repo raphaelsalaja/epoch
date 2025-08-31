@@ -35,7 +35,7 @@ export const updateImageIcon = (currentValue: unknown, newIcon: string) => {
 };
 
 export function useItemOneForm() {
-  const { card, updateItemOne } = useCardStore();
+  const { card, updateSection } = useCardStore();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(Schemas.Item),
@@ -54,7 +54,7 @@ export function useItemOneForm() {
       subtitle: (subtitle ?? "").trim(),
       image,
     };
-    updateItemOne(clean);
+    updateSection("item_one", clean);
     form.reset(clean, { keepDirty: false, keepValues: true });
   };
 

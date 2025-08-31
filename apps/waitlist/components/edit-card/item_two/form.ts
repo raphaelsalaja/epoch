@@ -8,7 +8,7 @@ import { useCardStore } from "@/lib/stores/card";
 type FormValues = z.infer<typeof Schemas.Item>;
 
 export function useItemTwoForm() {
-  const { card, updateItemTwo } = useCardStore();
+  const { card, updateSection } = useCardStore();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(Schemas.Item),
@@ -27,7 +27,7 @@ export function useItemTwoForm() {
       subtitle: (subtitle ?? "").trim(),
       image,
     };
-    updateItemTwo(clean);
+    updateSection("item_two", clean);
     form.reset(clean, { keepDirty: false, keepValues: true });
   };
 

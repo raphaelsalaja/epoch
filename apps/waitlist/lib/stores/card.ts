@@ -20,6 +20,10 @@ type CardState = {
   updateItemTwo: (updates: Partial<Item>) => void;
   updateSpotify: (updates: Partial<Spotify>) => void;
   updateQuote: (updates: Partial<Quote>) => void;
+  updateSection: <T extends keyof Card>(
+    section: T,
+    updates: Partial<Card[T]>,
+  ) => void;
   validateCard: () => boolean;
   reset: () => void;
 };
@@ -110,6 +114,28 @@ export const useCardStore = create<CardState>()(
           card: {
             ...state.card,
             quote: { ...state.card.quote, ...parsedUpdates },
+          },
+        }));
+      },
+      updateSection: <T extends keyof Card>(
+        section: T,
+        updates: Partial<Card[T]>,
+      ) => {
+        const schemaMap = {
+          activity: Schemas.Activity,
+          spotify: Schemas.Spotify,
+          item_one: Schemas.Item,
+          item_two: Schemas.Item,
+          quote: Schemas.Quote,
+          summary: Schemas.Summary,
+        } as const;
+
+        const sectionSchema = schemaMap[section];
+        const parsedUpdates = sectionSchema.partial().parse(updates);
+        set((state) => ({
+          card: {
+            ...state.card,
+            [section]: { ...state.card[section], ...parsedUpdates },
           },
         }));
       },

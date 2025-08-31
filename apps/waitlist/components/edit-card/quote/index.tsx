@@ -1,14 +1,12 @@
 "use client";
 
-import { Button } from "@/components/button";
 import {
   TextareaFormField,
   TextFormField,
 } from "@/components/edit-card/fields";
 import { useQuoteForm } from "@/components/edit-card/quote/form";
+import { EditCardBase } from "@/components/edit-card/shared/edit-card-base";
 import { useShake } from "@/lib/hooks/use-shake";
-
-import styles from "./styles.module.css";
 
 export function EditCardQuote() {
   const textShake = useShake();
@@ -27,32 +25,29 @@ export function EditCardQuote() {
   });
 
   return (
-    <div className={styles.container}>
-      <form onSubmit={handleSubmit(onValid, onInvalid)} className={styles.form}>
-        <TextareaFormField
-          name="text"
-          label="Quote"
-          placeholder="Enter your favorite quote"
-          control={control}
-          errors={errors}
-          maxLength={maxLengths.text}
-          shakeRef={textShake.ref}
-        />
+    <EditCardBase
+      buttonText="Update Quote"
+      onSubmit={handleSubmit(onValid, onInvalid)}
+    >
+      <TextareaFormField
+        name="text"
+        label="Quote"
+        placeholder="Enter your favorite quote"
+        control={control}
+        errors={errors}
+        maxLength={maxLengths.text}
+        shakeRef={textShake.ref}
+      />
 
-        <TextFormField
-          name="author"
-          label="Author"
-          placeholder="Quote author"
-          control={control}
-          errors={errors}
-          maxLength={maxLengths.author}
-          shakeRef={authorShake.ref}
-        />
-
-        <Button.Root type="submit">
-          <Button.Label>Update Quote</Button.Label>
-        </Button.Root>
-      </form>
-    </div>
+      <TextFormField
+        name="author"
+        label="Author"
+        placeholder="Quote author"
+        control={control}
+        errors={errors}
+        maxLength={maxLengths.author}
+        shakeRef={authorShake.ref}
+      />
+    </EditCardBase>
   );
 }

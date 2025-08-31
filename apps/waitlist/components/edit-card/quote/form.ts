@@ -9,7 +9,7 @@ import { useCardStore } from "@/lib/stores/card";
 type FormValues = z.infer<typeof Schemas.Quote>;
 
 export function useQuoteForm() {
-  const { card, updateQuote } = useCardStore();
+  const { card, updateSection } = useCardStore();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(Schemas.Quote),
@@ -26,7 +26,7 @@ export function useQuoteForm() {
       text: (text ?? "").trim(),
       author: (author ?? "").trim(),
     };
-    updateQuote(clean);
+    updateSection("quote", clean);
     form.reset(clean, { keepDirty: false, keepValues: true });
   };
 
