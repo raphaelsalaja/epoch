@@ -59,7 +59,7 @@ const PickerItem = forwardRef<HTMLButtonElement, PickerItemProps>(
       style,
       className,
     },
-    ref
+    ref,
   ) => {
     const label = ariaLabel ?? title ?? value;
     return (
@@ -77,7 +77,7 @@ const PickerItem = forwardRef<HTMLButtonElement, PickerItemProps>(
         {children}
       </Radio.Root>
     );
-  }
+  },
 );
 PickerItem.displayName = "PickerItem";
 

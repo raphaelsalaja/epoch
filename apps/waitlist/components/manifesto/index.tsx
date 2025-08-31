@@ -7,7 +7,6 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/button";
 import { Field } from "@/components/field";
-import { Step, useStepStore } from "@/lib/stores/step-state";
 import { Spinner } from "../icons/spinner";
 import { reveal, spinner, text } from "./motion";
 import styles from "./styles.module.css";
@@ -27,7 +26,6 @@ export function Manifesto() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [buttonState, setButtonState] = useState(ButtonState.Idle);
   const [ref, animate] = useAnimate();
-  const { setEmail, nextStep, markStepCompleted } = useStepStore();
 
   const {
     control,
@@ -48,16 +46,10 @@ export function Manifesto() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     try {
-      // Store email and proceed to next step
-      setEmail(email);
-      markStepCompleted(Step.Manifesto);
+      // TODO: Implement actual email signup logic here
+      console.log("Email signup:", email);
       setIsSuccess(true);
       setButtonState(ButtonState.Success);
-
-      // Wait a moment for success animation, then proceed
-      setTimeout(() => {
-        nextStep();
-      }, 1500);
     } catch {
       setButtonState(ButtonState.Idle);
     }
