@@ -1,26 +1,26 @@
 "use client";
 
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useId } from "react";
 import { type Control, Controller, type FieldErrors } from "react-hook-form";
-
 import { Field } from "@/components/field";
+import { Icon } from "@/components/icons/helpers";
 import type { IconName } from "@/components/icons/types";
 import { MeasuredContainer } from "@/components/measured-container";
 import type { ColorName } from "@/components/picker";
 import { Picker } from "@/components/picker";
+import styles from "./styles.module.css";
 
 interface ImageFormFieldProps {
   name: string;
   label: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   control: Control<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   errors: FieldErrors<any>;
   shakeRef: React.RefObject<HTMLDivElement>;
 }
 
-// Helper functions for image field updates
 export const updateImageColor = (currentValue: unknown, newColor: string) => {
   const safeColor = newColor as ColorName;
   return {
@@ -60,7 +60,6 @@ export function ImageFormField({
       name={name}
       control={control}
       render={({ field, fieldState }) => {
-        // Ensure we always have an object with color and icon
         const imageValue =
           typeof field.value === "object" &&
           field.value?.color &&
@@ -71,27 +70,56 @@ export function ImageFormField({
         return (
           <MeasuredContainer ref={shakeRef}>
             <Field.Root name={name} invalid={fieldState.invalid}>
-              <Field.Label htmlFor={fieldId}>{label}</Field.Label>
               <Field.Control
                 id={fieldId}
                 render={() => (
-                  <div>
-                    <Picker.Color
-                      kind="grid"
-                      value={imageValue.color}
-                      onValueChange={(value) => {
-                        if (typeof value === "string") {
-                          field.onChange(updateImageColor(field.value, value));
-                        }
-                      }}
-                      name={field.name}
-                    />
+                  <div className={styles.field}>
                     <Picker.Icon
                       kind="grid"
                       value={imageValue.icon}
                       onValueChange={(value) => {
                         if (typeof value === "string") {
                           field.onChange(updateImageIcon(field.value, value));
+                        }
+                      }}
+                      name={field.name}
+                    />
+
+                    <div
+                      className={styles.preview}
+                      style={{ background: `var(--${imageValue.color})` }}
+                    >
+                      <motion.div
+                        key={imageValue.icon}
+                        initial={{
+                          scaleX: 1,
+                          scaleY: 1,
+                        }}
+                        animate={{
+                          scaleX: [1.3, 1],
+                          scaleY: [0.8, 1],
+                          opacity: 1,
+                        }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 110,
+                          damping: 2,
+                          mass: 0.1,
+                        }}
+                        style={{
+                          transformOrigin: "center center",
+                        }}
+                      >
+                        <Icon name={imageValue.icon} className={styles.icon} />
+                      </motion.div>
+                    </div>
+
+                    <Picker.Color
+                      kind="grid"
+                      value={imageValue.color}
+                      onValueChange={(value) => {
+                        if (typeof value === "string") {
+                          field.onChange(updateImageColor(field.value, value));
                         }
                       }}
                       name={field.name}
@@ -116,7 +144,7 @@ export function ImageFormField({
                     {String(
                       typeof error === "string"
                         ? error
-                        : (error?.message ?? "Invalid input"),
+                        : (error?.message ?? "Invalid input")
                     )}
                   </Field.Error>
                 )}

@@ -1,4 +1,4 @@
-import type { IconProps } from "../types";
+import type { IconProps } from "./types";
 
 export default function MagnifyingGlass({
   size = 24,

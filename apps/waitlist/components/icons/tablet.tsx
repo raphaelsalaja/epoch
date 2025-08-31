@@ -1,10 +1,6 @@
-import type { IconProps } from "../types";
+import type { IconProps } from "./types";
 
-export default function MedicineTablet({
-  size = 24,
-  title,
-  ...props
-}: IconProps) {
+export default function Tablet({ size = 24, title, ...props }: IconProps) {
   const a11y = title
     ? { role: "img", "aria-label": title }
     : { "aria-hidden": true };

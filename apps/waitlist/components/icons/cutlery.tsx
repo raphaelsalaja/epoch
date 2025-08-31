@@ -1,6 +1,6 @@
-import type { IconProps } from "../types";
+import type { IconProps } from "./types";
 
-export default function ForkKnife({ size = 24, title, ...props }: IconProps) {
+export default function Cutlery({ size = 24, title, ...props }: IconProps) {
   const a11y = title
     ? { role: "img", "aria-label": title }
     : { "aria-hidden": true };

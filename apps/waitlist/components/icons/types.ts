@@ -2,8 +2,8 @@ import type * as React from "react";
 
 export const ICON_NAMES = [
   "crown",
-  "forkKnife",
-  "MedicineTablet",
+  "cutlery",
+  "tablet",
   "diamond",
   "headphones",
   "cookies",

@@ -1,4 +1,4 @@
-import type { IconProps } from "../types";
+import type { IconProps } from "./types";
 
 export default function Diamond({ size = 24, title, ...props }: IconProps) {
   const a11y = title

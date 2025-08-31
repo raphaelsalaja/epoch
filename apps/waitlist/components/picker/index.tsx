@@ -1,64 +1,16 @@
 import { Radio } from "@base-ui-components/react/radio";
 import { RadioGroup } from "@base-ui-components/react/radio-group";
-import type { ReactNode } from "react";
+import { forwardRef } from "react";
+import { ICON_NAMES } from "@/components/icons/types";
+import { Icon } from "../icons/helpers";
 import styles from "./styles.module.css";
-
-// Color types
-export const COLOR_NAMES = [
-  "grey",
-  "dark-grey",
-  "purple",
-  "blue",
-  "green",
-  "yellow",
-  "orange",
-  "red",
-  "pink",
-] as const;
-
-export type ColorName = (typeof COLOR_NAMES)[number];
-
 import {
-  Cookies,
-  Crown,
-  Diamond,
-  Drink,
-  Explosion,
-  ForkKnife,
-  Growth,
-  Headphones,
-  MedicineTablet,
-} from "@/components/icons";
-// Icon types (importing from the existing types file)
-import { ICON_NAMES, type IconName } from "@/components/icons/types";
-
-// Helper function to get icon component from name
-const getIconComponent = (iconName: IconName) => {
-  const iconMap = {
-    crown: Crown,
-    forkKnife: ForkKnife,
-    MedicineTablet: MedicineTablet,
-    diamond: Diamond,
-    headphones: Headphones,
-    cookies: Cookies,
-    growth: Growth,
-    drink: Drink,
-    explosion: Explosion,
-  } as const;
-
-  const IconComponent = iconMap[iconName];
-  return <IconComponent />;
-};
-
-interface PickerRootProps {
-  value?: string;
-  onValueChange?: (value: unknown, event: Event) => void;
-  kind?: "grid" | "list";
-  variant?: "icon" | "color";
-  name?: string;
-  id?: string;
-  children: ReactNode;
-}
+  COLOR_NAMES,
+  type ColorPickerProps,
+  type IconPickerProps,
+  type PickerItemProps,
+  type PickerRootProps,
+} from "./types";
 
 function PickerRoot({
   value,
@@ -68,6 +20,9 @@ function PickerRoot({
   name,
   id,
   children,
+  cols,
+  className,
+  style,
   ...props
 }: PickerRootProps) {
   return (
@@ -75,10 +30,16 @@ function PickerRoot({
       data-kind={kind}
       data-variant={variant}
       value={value}
-      onValueChange={onValueChange}
-      className={styles.picker}
+      onValueChange={
+        onValueChange as ((value: unknown, event: Event) => void) | undefined
+      }
+      className={`${styles.picker} ${className ?? ""}`}
       name={name}
       id={id}
+      style={{
+        ...(style ?? {}),
+        ...(cols ? { "--picker-grid-cols": cols } : null),
+      }}
       {...props}
     >
       {children}
@@ -86,41 +47,39 @@ function PickerRoot({
   );
 }
 
-interface PickerItemProps {
-  value: string;
-  children?: ReactNode;
-  variant?: "icon" | "color";
-  style?: React.CSSProperties;
-}
-
-function PickerItem({
-  value,
-  children,
-  variant = "icon",
-  style,
-}: PickerItemProps) {
-  return (
-    <Radio.Root
-      value={value}
-      data-type={value}
-      data-variant={variant}
-      aria-label={value}
-      className={styles.item}
-      style={style}
-    >
-      {children}
-    </Radio.Root>
-  );
-}
-
-// Convenience components for common use cases
-interface ColorPickerProps {
-  value?: ColorName;
-  onValueChange?: (value: unknown, event: Event) => void;
-  kind?: "grid" | "list";
-  name?: string;
-  id?: string;
-}
+const PickerItem = forwardRef<HTMLButtonElement, PickerItemProps>(
+  (
+    {
+      value,
+      children,
+      variant = "icon",
+      title,
+      "aria-label": ariaLabel,
+      disabled,
+      style,
+      className,
+    },
+    ref
+  ) => {
+    const label = ariaLabel ?? title ?? value;
+    return (
+      <Radio.Root
+        ref={ref}
+        value={value}
+        data-type={value}
+        data-variant={variant}
+        aria-label={label}
+        title={title}
+        disabled={disabled}
+        className={`${styles.item} ${className ?? ""}`}
+        style={style}
+      >
+        {children}
+      </Radio.Root>
+    );
+  }
+);
+PickerItem.displayName = "PickerItem";
 
 function ColorPicker({
   value = "blue",
@@ -128,6 +87,7 @@ function ColorPicker({
   kind = "list",
   name,
   id,
+  cols,
 }: ColorPickerProps) {
   return (
     <PickerRoot
@@ -137,25 +97,23 @@ function ColorPicker({
       kind={kind}
       name={name}
       id={id}
+      cols={cols}
     >
       {COLOR_NAMES.map((color) => (
         <PickerItem
           key={color}
           value={color}
           variant="color"
-          style={{ background: `var(--${color})` }}
+          style={{
+            "--swatch": `var(--${color})`,
+            background: "var(--swatch)",
+          }}
+          aria-label={color}
+          title={color}
         />
       ))}
     </PickerRoot>
   );
-}
-
-interface IconPickerProps {
-  value?: IconName;
-  onValueChange?: (value: unknown, event: Event) => void;
-  kind?: "grid" | "list";
-  name?: string;
-  id?: string;
 }
 
 function IconPicker({
@@ -164,6 +122,7 @@ function IconPicker({
   kind = "list",
   name,
   id,
+  cols,
 }: IconPickerProps) {
   return (
     <PickerRoot
@@ -173,10 +132,17 @@ function IconPicker({
       kind={kind}
       name={name}
       id={id}
+      cols={cols}
     >
       {ICON_NAMES.map((icon) => (
-        <PickerItem key={icon} value={icon} variant="icon">
-          {getIconComponent(icon)}
+        <PickerItem
+          key={icon}
+          value={icon}
+          variant="icon"
+          aria-label={icon}
+          title={icon}
+        >
+          <Icon name={icon} />
         </PickerItem>
       ))}
     </PickerRoot>
@@ -189,3 +155,7 @@ export const Picker = {
   Color: ColorPicker,
   Icon: IconPicker,
 };
+
+export type { ColorName } from "./types";
+
+export { COLOR_NAMES } from "./types";

@@ -2,37 +2,9 @@
 
 import NextImage from "next/image";
 import { Button } from "@/components/button";
-import {
-  Cookies,
-  Crown,
-  Diamond,
-  Drink,
-  Explosion,
-  ForkKnife,
-  Growth,
-  Headphones,
-  MedicineTablet,
-} from "@/components/icons";
-import type { IconName } from "@/components/icons/types";
+import { Icon } from "@/components/icons";
 import { type Image as ImageType, useCardStore } from "@/lib/stores/card";
 import styles from "./styles.module.css";
-
-const getIconComponent = (iconName: IconName) => {
-  const iconMap = {
-    crown: Crown,
-    forkKnife: ForkKnife,
-    MedicineTablet: MedicineTablet,
-    diamond: Diamond,
-    headphones: Headphones,
-    cookies: Cookies,
-    growth: Growth,
-    drink: Drink,
-    explosion: Explosion,
-  } as const;
-
-  const IconComponent = iconMap[iconName];
-  return <IconComponent />;
-};
 
 const Image = ({ image }: { image: ImageType }) => {
   if (typeof image === "string") {
@@ -44,7 +16,7 @@ const Image = ({ image }: { image: ImageType }) => {
       className={styles.icon}
       style={{ background: "", width: 40, height: 40 }}
     >
-      {getIconComponent(image.icon)}
+      <Icon name={image.icon} />
     </div>
   );
 };
