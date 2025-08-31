@@ -1,20 +1,15 @@
 "use client";
 
 import { Button } from "@/components/button";
-import {
-  TextareaFormField,
-  TextFormField,
-} from "@/components/edit-card/fields";
-import { useQuoteForm } from "@/components/edit-card/quote/form";
+import { TextareaFormField } from "@/components/edit-card/fields";
 import { useShake } from "@/lib/hooks/use-shake";
-
+import { useSummaryForm } from "./form";
 import styles from "./styles.module.css";
 
-export function EditCardQuote() {
+export function EditCardSummary() {
   const textShake = useShake();
-  const authorShake = useShake();
 
-  const { form, onValid, createOnInvalid, maxLengths } = useQuoteForm();
+  const { form, onValid, createOnInvalid, maxLengths } = useSummaryForm();
   const {
     control,
     handleSubmit,
@@ -23,7 +18,6 @@ export function EditCardQuote() {
 
   const onInvalid = createOnInvalid({
     text: textShake.trigger,
-    author: authorShake.trigger,
   });
 
   return (
@@ -31,26 +25,16 @@ export function EditCardQuote() {
       <form onSubmit={handleSubmit(onValid, onInvalid)} className={styles.form}>
         <TextareaFormField
           name="text"
-          label="Quote"
-          placeholder="Enter your favorite quote"
+          label="Summary"
+          placeholder="Write a brief summary of your day..."
           control={control}
           errors={errors}
           maxLength={maxLengths.text}
           shakeRef={textShake.ref}
         />
 
-        <TextFormField
-          name="author"
-          label="Author"
-          placeholder="Quote author"
-          control={control}
-          errors={errors}
-          maxLength={maxLengths.author}
-          shakeRef={authorShake.ref}
-        />
-
         <Button.Root type="submit">
-          <Button.Label>Update Quote</Button.Label>
+          <Button.Label>Update Summary</Button.Label>
         </Button.Root>
       </form>
     </div>

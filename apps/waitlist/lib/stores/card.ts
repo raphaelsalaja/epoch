@@ -1,4 +1,4 @@
-import { z } from "zod";
+import type { z } from "zod";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Schemas } from "@/lib/schemas";
@@ -9,12 +9,13 @@ export type Item = z.infer<typeof Schemas.Item>;
 export type Activity = z.infer<typeof Schemas.Activity>;
 export type Quote = z.infer<typeof Schemas.Quote>;
 export type Spotify = z.infer<typeof Schemas.Spotify>;
+export type Summary = z.infer<typeof Schemas.Summary>;
 export type Card = z.infer<typeof Schemas.Card>;
 
 type CardState = {
   card: Card;
   updateActivity: (updates: Partial<Activity>) => void;
-  updateSummary: (summary: string) => void;
+  updateSummary: (updates: Partial<Summary>) => void;
   updateItemOne: (updates: Partial<Item>) => void;
   updateItemTwo: (updates: Partial<Item>) => void;
   updateSpotify: (updates: Partial<Spotify>) => void;
@@ -49,6 +50,9 @@ const initialCard: Card = {
     text: "The best way to get started is to quit talking and begin doing.",
     author: "Walt Disney",
   },
+  summary: {
+    text: "This is a brief summary of my day, highlighting key activities and moments.",
+  },
 };
 
 export const useCardStore = create<CardState>()(
@@ -64,12 +68,12 @@ export const useCardStore = create<CardState>()(
           },
         }));
       },
-      updateSummary: (summary) => {
-        const parsedSummary = z.string().min(1).max(500).parse(summary);
+      updateSummary: (updates) => {
+        const parsedUpdates = Schemas.Summary.partial().parse(updates);
         set((state) => ({
           card: {
             ...state.card,
-            activity: { ...state.card.activity, description: parsedSummary },
+            summary: { ...state.card.summary, ...parsedUpdates },
           },
         }));
       },

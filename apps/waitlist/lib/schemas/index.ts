@@ -47,12 +47,17 @@ const Quote = z.object({
   author: RequiredText("Author name", 100),
 });
 
+const Summary = z.object({
+  text: RequiredText("Summary", 500),
+});
+
 const Card = z.object({
   activity: Activity,
   spotify: Spotify,
   item_one: Item,
   item_two: Item,
   quote: Quote,
+  summary: Summary,
 });
 
 export const Schemas = {
@@ -62,5 +67,6 @@ export const Schemas = {
   Activity,
   Spotify,
   Quote,
+  Summary,
   Card,
 };

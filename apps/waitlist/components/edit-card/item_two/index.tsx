@@ -3,15 +3,15 @@
 import { Button } from "@/components/button";
 import { ImageFormField, TextFormField } from "@/components/edit-card/fields";
 import { useShake } from "@/lib/hooks/use-shake";
-import { useItemOneForm } from "./form";
+import { useItemTwoForm } from "./form";
 import styles from "./styles.module.css";
 
-export function EditCardItemOne() {
+export function EditCardItemTwo() {
   const titleShake = useShake();
   const subtitleShake = useShake();
   const imageShake = useShake();
 
-  const { form, onValid, createOnInvalid, maxLengths } = useItemOneForm();
+  const { form, onValid, createOnInvalid, maxLengths } = useItemTwoForm();
   const {
     control,
     handleSubmit,
