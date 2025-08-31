@@ -6,8 +6,8 @@ import { useDebounce } from "use-debounce";
 import { useTrackSearch } from "@/lib/hooks/use-spotify-search";
 import { useSpotifyTrending } from "@/lib/hooks/use-spotify-trending";
 import type { Track } from "@/lib/spotify/types";
-import { Button } from "../button";
-import { Dots, MagnifyingGlass, Trending } from "../icons";
+import { Button } from "../../button";
+import { Dots, MagnifyingGlass, Trending } from "../../icons";
 import styles from "./styles.module.css";
 
 const fade = {
@@ -60,7 +60,7 @@ function TrackItem({ track }: { track: Track }) {
   );
 }
 
-export const Spotify = () => {
+export const EditCardSpotify = () => {
   const prefersReducedMotion = useReducedMotion();
   const [rawQuery, setRawQuery] = useState("");
   const [debouncedQuery] = useDebounce(rawQuery.trim(), 250);
