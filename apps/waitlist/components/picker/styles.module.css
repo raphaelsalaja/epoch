@@ -2,10 +2,8 @@
   --picker-grid-cols: 3;
   --gap-list: 12px;
   --gap-grid: 8px;
-
   --icon-size: 40px;
   --grid-item-size: 32px;
-
   --ring: 2px;
   --radius: 8px;
 }
@@ -58,7 +56,7 @@
 
 .item[data-variant="icon"]::before {
   position: absolute;
-  inset: -2px;
+  inset: -3px;
   z-index: -1;
   content: "";
   background: var(--border-primary);
@@ -67,7 +65,8 @@
   transform: scale(0.9);
   transition:
     opacity 0.2s ease,
-    transform 0.2s ease;
+    transform 0.2s ease,
+    color 0.2s ease;
 }
 
 .item[data-variant="icon"]:hover::before,
@@ -80,18 +79,22 @@
 .item[data-variant="icon"][data-checked],
 .item[data-variant="icon"][data-state="checked"] {
   color: var(--black);
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--white);
+  }
 }
 
 .item[data-variant="color"] {
   inline-size: 100%;
   aspect-ratio: 1 / 1;
-  padding: 5px;
+  padding: 4px;
   border-radius: 999px;
   transition: transform 0.2s ease;
 }
 
-.item[data-variant="color"]:active {
-  transform: scale(0.96);
+.item:active {
+  transform: scale(0.95);
 }
 
 .item[data-variant="color"]::after {

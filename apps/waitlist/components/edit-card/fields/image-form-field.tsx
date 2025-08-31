@@ -91,10 +91,7 @@ export function ImageFormField({
                     >
                       <motion.div
                         key={imageValue.icon}
-                        initial={{
-                          scaleX: 1,
-                          scaleY: 1,
-                        }}
+                        initial={false}
                         animate={{
                           scaleX: [1.3, 1],
                           scaleY: [0.8, 1],
