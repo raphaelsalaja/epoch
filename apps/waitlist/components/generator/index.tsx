@@ -52,6 +52,8 @@ const Image = ({ image }: { image: ImageType }) => {
 export function Generator() {
   const { card } = useCardStore();
 
+  console.log(card);
+
   return (
     <div className={styles.container}>
       <div
@@ -63,6 +65,15 @@ export function Generator() {
           <p className={styles.description}>{card.activity.description}</p>
         </div>
         <div className={styles.items}>
+          <div className={styles.item}>
+            <div className={styles.image}>
+              <Image image={card.spotify.image} />
+            </div>
+            <div className={styles.details}>
+              <div className={styles.title}>{card.spotify.title}</div>
+              <div className={styles.subtitle}>{card.spotify.subtitle}</div>
+            </div>
+          </div>
           <div className={styles.item}>
             <div className={styles.image}>
               <Image image={card.item_one.image} />

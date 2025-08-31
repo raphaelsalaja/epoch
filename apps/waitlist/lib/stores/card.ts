@@ -34,7 +34,7 @@ const initialCard: Card = {
   spotify: {
     title: "Let It Happen",
     subtitle: "Tame Impala",
-    image: "",
+    image: "https://i.scdn.co/image/ab67616d00001e029e1cfc756886ac782e363d79",
   },
   item_one: {
     title: "Chicken Nuggets",
@@ -125,6 +125,22 @@ export const useCardStore = create<CardState>()(
     }),
     {
       name: "card-store",
+      version: 1,
+      migrate: (persistedState: unknown, version: number) => {
+        // Force reset if version mismatch or wrong format
+        if (
+          version !== 1 ||
+          (persistedState &&
+            typeof persistedState === "object" &&
+            "card" in persistedState &&
+            persistedState.card &&
+            typeof persistedState.card === "object" &&
+            "items" in persistedState.card)
+        ) {
+          return { card: initialCard };
+        }
+        return persistedState as { card: Card };
+      },
     },
   ),
 );
