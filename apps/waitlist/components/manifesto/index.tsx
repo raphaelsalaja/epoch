@@ -42,11 +42,9 @@ export function Manifesto() {
     setIsSuccess(false);
     setButtonState(ButtonState.Loading);
 
-    // Simulate email signup delay
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     try {
-      // TODO: Implement actual email signup logic here
       console.log("Email signup:", email);
       setIsSuccess(true);
       setButtonState(ButtonState.Success);
