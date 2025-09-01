@@ -1,9 +1,12 @@
 "use client";
 
+import * as htmlToImage from "html-to-image";
 import { motion } from "motion/react";
 import Image from "next/image";
+import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/button";
 import { Icon } from "@/components/icons";
+import { Spinner } from "@/components/icons/spinner";
 import { viewTransition } from "@/lib/motion";
 import { useCardStore } from "@/lib/stores/card";
 import { useViewStore } from "@/lib/stores/view";
@@ -12,10 +15,60 @@ import styles from "./styles.module.css";
 export function ActivityCard() {
   const { card } = useCardStore();
   const { setView } = useViewStore();
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const [downloading, setDownloading] = useState(false);
+
+  const ensureImagesLoaded = useCallback(async (root: HTMLElement) => {
+    const images = Array.from(root.querySelectorAll<HTMLImageElement>("img"));
+    await Promise.all(
+      images.map((img) =>
+        img.decode ? img.decode().catch(() => {}) : Promise.resolve()
+      )
+    );
+  }, []);
+
+  const onDownload = useCallback(async () => {
+    if (!cardRef.current || downloading) return;
+    setDownloading(true);
+    try {
+      const node = cardRef.current;
+      await ensureImagesLoaded(node);
+
+      const dataUrl = await htmlToImage.toPng(node, {
+        pixelRatio: Math.min(
+          3,
+          (typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1) * 2
+        ),
+        cacheBust: true,
+        backgroundColor: getComputedStyle(node).backgroundColor || undefined,
+        filter: (n) => {
+          // Exclude any element marked as download control
+          if (n instanceof HTMLElement && n.dataset?.slot === "button")
+            return false;
+          if (n instanceof HTMLElement && n.classList.contains("download"))
+            return false;
+          return true;
+        },
+      });
+
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = "activity-card.png";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.error("Failed to export image", err);
+      // TODO: Optionally add server fallback using @vercel/og
+    } finally {
+      setDownloading(false);
+    }
+  }, [downloading, ensureImagesLoaded]);
 
   return (
     <motion.div {...viewTransition} className={styles.container}>
       <div
+        ref={cardRef}
         className={styles.card}
         style={{ background: `var(--${card.activity.color})` }}
       >
@@ -104,8 +157,20 @@ export function ActivityCard() {
         </button>
       </div>
 
-      <Button.Root type="submit">
-        <Button.Label>Download</Button.Label>
+      <Button.Root
+        type="button"
+        onClick={onDownload}
+        aria-label="Download activity card"
+        disabled={downloading}
+        className="download"
+      >
+        {downloading ? (
+          <Button.Label>
+            <Spinner />
+          </Button.Label>
+        ) : (
+          <Button.Label>Download</Button.Label>
+        )}
       </Button.Root>
     </motion.div>
   );
