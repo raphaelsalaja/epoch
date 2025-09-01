@@ -82,7 +82,7 @@ export function TextareaFormField<
                     {String(
                       typeof error === "string"
                         ? error
-                        : (error?.message ?? "Invalid input"),
+                        : (error?.message ?? "Invalid input")
                     )}
                   </Field.Error>
                 )}

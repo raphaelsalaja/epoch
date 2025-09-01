@@ -144,7 +144,7 @@ export function ImageFormField<TFieldValues extends FieldValues = FieldValues>({
                     {String(
                       typeof error === "string"
                         ? error
-                        : (error?.message ?? "Invalid input"),
+                        : (error?.message ?? "Invalid input")
                     )}
                   </Field.Error>
                 )}
