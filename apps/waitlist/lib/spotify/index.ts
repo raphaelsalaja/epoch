@@ -1,16 +1,17 @@
 import { SpotifyApi, type Track } from "@spotify/web-api-ts-sdk";
 
-const clientId = process.env.SPOTIFY_CLIENT_ID;
-const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+let sdk: ReturnType<typeof SpotifyApi.withClientCredentials> | null = null;
 
-if (!clientId || !clientSecret) {
-  throw new Error("Missing Spotify credentials");
+export function getSpotifySdk() {
+  if (sdk) return sdk;
+  const clientId = process.env.SPOTIFY_CLIENT_ID;
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+  if (!clientId || !clientSecret) {
+    throw new Error("Missing Spotify credentials");
+  }
+  sdk = SpotifyApi.withClientCredentials(clientId, clientSecret);
+  return sdk;
 }
-
-export const spotifySdk = SpotifyApi.withClientCredentials(
-  clientId,
-  clientSecret,
-);
 
 export function normalizeTracks(items: Track[] = []) {
   return items.map((track) => ({

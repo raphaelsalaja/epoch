@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { normalizeTracks, spotifySdk } from "@/lib/spotify";
+import { getSpotifySdk, normalizeTracks } from "@/lib/spotify";
 
 export const runtime = "edge";
 export const revalidate = 300;
@@ -7,6 +7,7 @@ export const preferredRegion = "auto";
 
 export async function GET(_req: NextRequest) {
   try {
+    const spotifySdk = getSpotifySdk();
     const playlistItems = await spotifySdk.playlists.getPlaylistItems(
       "6UeSakyzhiEt4NB3UAd6NQ",
       "US",

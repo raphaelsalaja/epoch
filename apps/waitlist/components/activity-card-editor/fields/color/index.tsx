@@ -2,29 +2,33 @@
 
 import { AnimatePresence } from "motion/react";
 import { useId } from "react";
-import { type Control, Controller, type FieldErrors } from "react-hook-form";
+import {
+  type Control,
+  Controller,
+  type FieldErrors,
+  type FieldValues,
+  type Path,
+} from "react-hook-form";
 
 import { Field } from "@/components/field";
 import { MeasuredContainer } from "@/components/measured-container";
 import { Picker } from "@/components/picker";
 
-interface ColorFormFieldProps {
-  name: string;
+interface ColorFormFieldProps<TFieldValues extends FieldValues = FieldValues> {
+  name: Path<TFieldValues>;
   label: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  errors: FieldErrors<any>;
+  control: Control<TFieldValues>;
+  errors: FieldErrors<TFieldValues>;
   shakeRef: React.RefObject<HTMLDivElement>;
 }
 
-export function ColorFormField({
+export function ColorFormField<TFieldValues extends FieldValues = FieldValues>({
   name,
   label,
   control,
   errors,
   shakeRef,
-}: ColorFormFieldProps) {
+}: ColorFormFieldProps<TFieldValues>) {
   const fieldId = useId();
   const error = errors[name];
 

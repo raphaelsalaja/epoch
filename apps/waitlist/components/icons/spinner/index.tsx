@@ -4,23 +4,10 @@ import styles from "./styles.module.css";
 export function Spinner() {
   return (
     <motion.div
-      initial={{ rotate: 180 }}
-      animate={{
-        rotate: 0,
-      }}
-      exit={{
-        position: "absolute",
-        rotate: -180,
-        transition: {
-          duration: 0.4,
-          ease: [0.175, 0.885, 0.32, 0.98],
-        },
-      }}
-      transition={{
-        duration: 0.4,
-        ease: [0.175, 0.885, 0.32, 0.98],
-        delay: 0.4,
-      }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, ease: [0.215, 0.61, 0.355, 1] }}
       className={styles.spinner}
     >
       <svg

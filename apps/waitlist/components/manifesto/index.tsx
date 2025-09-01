@@ -38,7 +38,7 @@ export function Manifesto() {
     reValidateMode: "onChange",
   });
 
-  const onValid = async ({ email }: FormValues) => {
+  const onValid = async ({ email: _email }: FormValues) => {
     setIsSuccess(false);
     setButtonState(ButtonState.Loading);
 

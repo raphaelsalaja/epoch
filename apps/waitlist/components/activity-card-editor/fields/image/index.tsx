@@ -2,7 +2,13 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useId } from "react";
-import { type Control, Controller, type FieldErrors } from "react-hook-form";
+import {
+  type Control,
+  Controller,
+  type FieldErrors,
+  type FieldValues,
+  type Path,
+} from "react-hook-form";
 import { Field } from "@/components/field";
 import { Icon } from "@/components/icons/helpers";
 import type { IconName } from "@/components/icons/types";
@@ -11,11 +17,11 @@ import type { ColorName } from "@/components/picker";
 import { Picker } from "@/components/picker";
 import styles from "../styles.module.css";
 
-interface ImageFormFieldProps {
-  name: string;
+interface ImageFormFieldProps<TFieldValues extends FieldValues = FieldValues> {
+  name: Path<TFieldValues>;
   label: string;
-  control: Control<any>;
-  errors: FieldErrors<any>;
+  control: Control<TFieldValues>;
+  errors: FieldErrors<TFieldValues>;
   shakeRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -43,13 +49,12 @@ export const updateImageIcon = (currentValue: unknown, newIcon: string) => {
   };
 };
 
-export function ImageFormField({
+export function ImageFormField<TFieldValues extends FieldValues = FieldValues>({
   name,
-  label,
   control,
   errors,
   shakeRef,
-}: ImageFormFieldProps) {
+}: ImageFormFieldProps<TFieldValues>) {
   const fieldId = useId();
   const error = errors[name];
 

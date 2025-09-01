@@ -4,7 +4,8 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "turbo run lint"
+    "lint": "turbo run lint",
+    "typecheck": "turbo run check-types"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
@@ -16,7 +17,5 @@
   "engines": {
     "node": ">=18"
   },
-  "dependencies": {
-    "csv-parser": "^3.2.0"
-  }
+  "dependencies": {}
 }

@@ -6,7 +6,8 @@
     "./*": "./src/*.tsx"
   },
   "scripts": {
-    "lint": "biome check --fix --unsafe .  --reporter=summary"
+    "lint": "biome check --fix --unsafe .  --reporter=summary",
+    "check-types": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",

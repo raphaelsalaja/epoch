@@ -5,13 +5,13 @@
   width: 18px;
   height: 18px;
 
-  transform: rotate(360deg);
-  animation: spin 1s linear infinite;
+  /* CSS-only spin for performance; Motion handles mount/unmount */
+  animation: spin 0.8s linear infinite;
 
   .svg {
     position: relative;
     display: block;
-    animation: spin 1s ease-in-out infinite;
+    /* Keep SVG stable; outer container spins */
   }
 }
 
@@ -32,5 +32,11 @@
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
   }
 }

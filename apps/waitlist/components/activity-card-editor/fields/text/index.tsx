@@ -2,24 +2,28 @@
 
 import { AnimatePresence } from "motion/react";
 import { useId } from "react";
-import { type Control, Controller, type FieldErrors } from "react-hook-form";
+import {
+  type Control,
+  Controller,
+  type FieldErrors,
+  type FieldValues,
+  type Path,
+} from "react-hook-form";
 
 import { Field } from "@/components/field";
 import { MeasuredContainer } from "@/components/measured-container";
 
-interface TextFormFieldProps {
-  name: string;
+interface TextFormFieldProps<TFieldValues extends FieldValues = FieldValues> {
+  name: Path<TFieldValues>;
   label: string;
   placeholder: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  errors: FieldErrors<any>;
+  control: Control<TFieldValues>;
+  errors: FieldErrors<TFieldValues>;
   maxLength: number;
   shakeRef: React.RefObject<HTMLDivElement>;
 }
 
-export function TextFormField({
+export function TextFormField<TFieldValues extends FieldValues = FieldValues>({
   name,
   label,
   placeholder,
@@ -27,7 +31,7 @@ export function TextFormField({
   errors,
   maxLength,
   shakeRef,
-}: TextFormFieldProps) {
+}: TextFormFieldProps<TFieldValues>) {
   const fieldId = useId();
   const error = errors[name];
 

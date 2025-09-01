@@ -1,5 +1,6 @@
+import type { Market } from "@spotify/web-api-ts-sdk";
 import type { NextRequest } from "next/server";
-import { normalizeTracks, spotifySdk } from "@/lib/spotify";
+import { getSpotifySdk, normalizeTracks } from "@/lib/spotify";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -12,6 +13,10 @@ export async function GET(req: NextRequest) {
     1,
     Math.min(50, Number(searchParams.get("limit") ?? 8)),
   );
+  const marketParam = (searchParams.get("market") ?? "US").toUpperCase();
+  const market: Market | undefined = /^[A-Z]{2}$/.test(marketParam)
+    ? (marketParam as Market)
+    : undefined;
 
   if (!q.trim()) {
     return Response.json(
@@ -21,7 +26,8 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const res = await spotifySdk.search(q, ["track"], "US");
+    const spotifySdk = getSpotifySdk();
+    const res = await spotifySdk.search(q, ["track"], market);
     const items = normalizeTracks(res.tracks?.items).slice(0, limit);
     return Response.json(
       { items },

@@ -11,7 +11,9 @@
       "dependsOn": ["^lint"]
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": ["^check-types"],
+      "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "**/*.tsx", "tsconfig.json"],
+      "outputs": []
     },
     "dev": {
       "cache": false,

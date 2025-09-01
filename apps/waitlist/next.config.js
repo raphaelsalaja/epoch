@@ -1,5 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    optimizePackageImports: [
+      "@tanstack/react-query",
+      "@tanstack/react-query-devtools",
+      "zustand",
+    ],
+  },
   images: {
     remotePatterns: [
       {
