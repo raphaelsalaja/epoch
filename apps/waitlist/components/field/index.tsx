@@ -1,4 +1,5 @@
 import { Field as BaseField } from "@base-ui-components/react/field";
+import clsx from "clsx";
 import { motion } from "motion/react";
 import type React from "react";
 import styles from "./styles.module.css";
@@ -8,14 +9,18 @@ const MotionFieldRoot = motion.create(BaseField.Root);
 interface FieldRootProps
   extends React.ComponentPropsWithoutRef<typeof MotionFieldRoot> {}
 
-function FieldRoot(props: FieldRootProps) {
-  return <MotionFieldRoot className={styles.field} {...props} />;
+function FieldRoot({ className, ...props }: FieldRootProps) {
+  return (
+    <MotionFieldRoot className={clsx(styles.field, className)} {...props} />
+  );
 }
 
 interface FieldLabelProps
   extends React.ComponentPropsWithRef<typeof BaseField.Label> {}
-function FieldLabel(props: FieldLabelProps) {
-  return <BaseField.Label className={styles.label} {...props} />;
+function FieldLabel({ className, ...props }: FieldLabelProps) {
+  return (
+    <BaseField.Label className={clsx(styles.label, className)} {...props} />
+  );
 }
 
 interface FieldLengthProps extends React.ComponentPropsWithRef<"span"> {
@@ -36,21 +41,25 @@ interface FieldControlProps
   extends React.ComponentPropsWithRef<typeof BaseField.Control> {
   kind?: "input" | "textarea";
 }
-function FieldControl({ kind = "input", ...props }: FieldControlProps) {
+function FieldControl({
+  kind = "input",
+  className,
+  ...props
+}: FieldControlProps) {
   switch (kind) {
     case "input":
       return (
         <BaseField.Control
           {...props}
           data-field-control={kind}
-          className={styles.control}
+          className={clsx(styles.control, className)}
         />
       );
     case "textarea":
       return (
         <BaseField.Control
           {...props}
-          className={styles.control}
+          className={clsx(styles.control, className)}
           render={(props) => <textarea data-field-control={kind} {...props} />}
         />
       );
@@ -62,14 +71,21 @@ const MotionFieldError = motion.create(BaseField.Error);
 interface FieldErrorProps
   extends React.ComponentPropsWithoutRef<typeof MotionFieldError> {}
 
-function FieldError(props: FieldErrorProps) {
-  return <MotionFieldError className={styles.error} {...props} />;
+function FieldError({ className, ...props }: FieldErrorProps) {
+  return (
+    <MotionFieldError className={clsx(styles.error, className)} {...props} />
+  );
 }
 
 interface FieldDescriptionProps
   extends React.ComponentPropsWithRef<typeof BaseField.Description> {}
-function FieldDescription(props: FieldDescriptionProps) {
-  return <BaseField.Description className={styles.description} {...props} />;
+function FieldDescription({ className, ...props }: FieldDescriptionProps) {
+  return (
+    <BaseField.Description
+      className={clsx(styles.description, className)}
+      {...props}
+    />
+  );
 }
 
 export const Field = {

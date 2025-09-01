@@ -2,10 +2,13 @@ import localFont from "next/font/local";
 
 const inter = localFont({
   src: "../../app/fonts/inter/variable.ttf",
+  display: "swap",
 });
 
 const openrunde = localFont({
   variable: "--font-openrunde",
+  display: "swap",
+  preload: true,
   src: [
     {
       path: "../../app/fonts/openrunde/regular.woff2",

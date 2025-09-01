@@ -1,31 +1,21 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Manifesto } from "@/components/manifesto";
 
 export default function Home() {
+  const reduce = useReducedMotion();
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        initial={{
-          scale: 0.98,
-          opacity: 0,
-          y: 8,
-        }}
-        animate={{
-          scale: 1,
-          opacity: 1,
-          y: 0,
-        }}
-        exit={{
-          scale: 0.98,
-          opacity: 0,
-          y: 8,
-        }}
-        transition={{
-          duration: 0.4,
-          ease: [0.19, 1, 0.22, 1],
-        }}
+        initial={reduce ? { opacity: 0 } : { scale: 0.98, opacity: 0, y: 8 }}
+        animate={reduce ? { opacity: 1 } : { scale: 1, opacity: 1, y: 0 }}
+        exit={reduce ? { opacity: 0 } : { scale: 0.98, opacity: 0, y: 8 }}
+        transition={
+          reduce
+            ? { duration: 0.2 }
+            : { type: "spring", bounce: 0.2, duration: 0.3 }
+        }
       >
         <Manifesto />
       </motion.div>

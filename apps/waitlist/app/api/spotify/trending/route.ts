@@ -1,9 +1,10 @@
 import type { NextRequest } from "next/server";
 import { normalizeTracks, spotifySdk } from "@/lib/spotify";
 
-export const runtime = "nodejs";
-export const revalidate = 0;
-export const dynamic = "force-dynamic";
+// Trending is broadly cacheable; serve from Edge and revalidate periodically
+export const runtime = "edge";
+export const revalidate = 300; // 5 minutes
+export const preferredRegion = "auto";
 
 export async function GET(_req: NextRequest) {
   try {
@@ -26,7 +27,11 @@ export async function GET(_req: NextRequest) {
         items,
         source: { playlist: "todays-top-hits", id: "6UeSakyzhiEt4NB3UAd6NQ" },
       },
-      { headers: { "Cache-Control": "public, max-age=300" } },
+      {
+        headers: {
+          "Cache-Control": "public, max-age=300, stale-while-revalidate=60",
+        },
+      },
     );
   } catch (e) {
     const message =

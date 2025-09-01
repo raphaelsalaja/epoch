@@ -1,9 +1,10 @@
 import type { NextRequest } from "next/server";
 import { normalizeTracks, spotifySdk } from "@/lib/spotify";
 
-export const runtime = "nodejs";
-export const revalidate = 0;
+// Search results are user-driven and should not be cached; use Edge for low latency
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
+export const preferredRegion = "auto";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);

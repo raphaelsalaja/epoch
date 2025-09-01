@@ -74,7 +74,13 @@ export function Manifesto() {
           <br />A personal system built for real results.
         </p>
       </div>
-      <form onSubmit={handleSubmit(onValid, onInvalid)} className={styles.form}>
+      <form
+        method="post"
+        action="#"
+        aria-busy={isSubmitting}
+        onSubmit={handleSubmit(onValid, onInvalid)}
+        className={styles.form}
+      >
         <Controller
           name="email"
           control={control}
@@ -85,13 +91,20 @@ export function Manifesto() {
                 invalid={fieldState.invalid}
                 disabled={isSuccess}
               >
+                {/* Visually hidden label for accessibility */}
+                <Field.Label htmlFor="email" className="sr">
+                  Email address
+                </Field.Label>
                 <Field.Control
-                  type="text"
+                  id="email"
+                  type="email"
                   {...field}
                   spellCheck={false}
-                  autoComplete="off"
+                  autoComplete="email"
+                  required
                   placeholder="Email"
                   aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? "email-error" : undefined}
                   disabled={isSuccess}
                 />
               </Field.Root>
@@ -131,8 +144,11 @@ export function Manifesto() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.16 }}
             className={styles.error}
+            role="alert"
+            aria-live="polite"
+            id="email-error"
           >
             {errors.email.message}
           </motion.span>

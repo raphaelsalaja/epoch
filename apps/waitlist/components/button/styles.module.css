@@ -10,7 +10,9 @@
   outline-offset: 2px;
   background: var(--foreground-primary);
   border-radius: 16px;
-  transition: outline-color 0.2s ease;
+  transition:
+    outline-color 0.2s ease,
+    transform 0.2s ease-out;
 
   &:focus-visible {
     outline-color: color-mix(
@@ -31,6 +33,13 @@
   }
 
   &:active {
-    scale: 0.98;
+    transform: scale(0.98);
+  }
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
   }
 }
