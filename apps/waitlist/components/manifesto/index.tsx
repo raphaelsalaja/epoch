@@ -56,7 +56,7 @@ export function Manifesto() {
     animate(
       ref.current,
       { x: [-6, 0] },
-      { type: "spring", stiffness: 200, damping: 2, mass: 0.1 }
+      { type: "spring", stiffness: 200, damping: 2, mass: 0.1 },
     );
   };
 

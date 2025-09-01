@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { FormProvider } from "react-hook-form";
 import {
   TextareaFormField,
   TextFormField,
@@ -18,11 +19,7 @@ export function EditCardQuote() {
   const authorShake = useShake();
 
   const { form, onValid, createOnInvalid, maxLengths } = useQuoteForm();
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = form;
+  const { handleSubmit } = form;
 
   const onInvalid = createOnInvalid({
     text: textShake.trigger,
@@ -30,39 +27,37 @@ export function EditCardQuote() {
   });
 
   return (
-    <motion.form
-      {...viewTransition}
-      id="edit-quote-form"
-      onSubmit={handleSubmit((values) => {
-        onValid(values);
-        setView("card");
-      }, onInvalid)}
-      className={styles.form}
-    >
-      <TextareaFormField
-        name="text"
-        label="Quote"
-        placeholder="Enter your favorite quote"
-        control={control}
-        errors={errors}
-        maxLength={maxLengths.text}
-        shakeRef={textShake.ref}
-      />
+    <FormProvider {...form}>
+      <motion.form
+        {...viewTransition}
+        id="edit-quote-form"
+        onSubmit={handleSubmit((values) => {
+          onValid(values);
+          setView("card");
+        }, onInvalid)}
+        className={styles.form}
+      >
+        <TextareaFormField
+          name="text"
+          label="Quote"
+          placeholder="Enter your favorite quote"
+          maxLength={maxLengths.text}
+          shakeRef={textShake.ref}
+        />
 
-      <TextFormField
-        name="author"
-        label="Author"
-        placeholder="Quote author"
-        control={control}
-        errors={errors}
-        maxLength={maxLengths.author}
-        shakeRef={authorShake.ref}
-      />
+        <TextFormField
+          name="author"
+          label="Author"
+          placeholder="Quote author"
+          maxLength={maxLengths.author}
+          shakeRef={authorShake.ref}
+        />
 
-      <Button.Root type="submit">
-        <Button.Label>Update Quote</Button.Label>
-      </Button.Root>
-      <button type="submit" hidden aria-hidden="true" tabIndex={-1} />
-    </motion.form>
+        <Button.Root type="submit">
+          <Button.Label>Update Quote</Button.Label>
+        </Button.Root>
+        <button type="submit" hidden aria-hidden="true" tabIndex={-1} />
+      </motion.form>
+    </FormProvider>
   );
 }

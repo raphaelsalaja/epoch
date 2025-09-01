@@ -1,16 +1,15 @@
 "use client";
 
 import { motion } from "motion/react";
-import {
-  ColorFormField,
-  TextareaFormField,
-  TextFormField,
-} from "@/components/activity-card-editor/fields";
+import { FormProvider } from "react-hook-form";
 import { Button } from "@/components/button";
 import { useShake } from "@/lib/hooks/use-shake";
 import { viewTransition } from "@/lib/motion";
 import { useViewStore } from "@/lib/stores/view";
+import type { FieldConfig } from "../../registry/fields";
+import { RenderField } from "../../registry/fields";
 import styles from "../styles.module.css";
+import type { ActivityFormValues } from "./form";
 import { useActivityForm } from "./form";
 
 export function EditCardActivity() {
@@ -20,11 +19,7 @@ export function EditCardActivity() {
   const colorShake = useShake();
 
   const { form, onValid, createOnInvalid, maxLengths } = useActivityForm();
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = form;
+  const { handleSubmit } = form;
 
   const onInvalid = createOnInvalid({
     title: titleShake.trigger,
@@ -32,48 +27,59 @@ export function EditCardActivity() {
     color: colorShake.trigger,
   });
 
+  const fields: FieldConfig<ActivityFormValues>[] = [
+    {
+      kind: "text",
+      name: "title",
+      label: "Activity Title",
+      placeholder: "Enter your favorite quote",
+      maxLength: maxLengths.title,
+    },
+    {
+      kind: "textarea",
+      name: "description",
+      label: "Activity Description",
+      placeholder: "Quote author",
+      maxLength: maxLengths.description,
+    },
+    {
+      kind: "color",
+      name: "color",
+      label: "Activity Color",
+    },
+  ];
+
+  const shakeRefs: Record<string, React.RefObject<HTMLDivElement>> = {
+    title: titleShake.ref,
+    description: descriptionShake.ref,
+    color: colorShake.ref,
+  };
+
   return (
-    <motion.form
-      {...viewTransition}
-      id="edit-activity-form"
-      onSubmit={handleSubmit((values) => {
-        onValid(values);
-        setView("card");
-      }, onInvalid)}
-      className={styles.form}
-    >
-      <TextFormField
-        name="title"
-        label="Activity Title"
-        placeholder="Enter your favorite quote"
-        control={control}
-        errors={errors}
-        maxLength={maxLengths.title}
-        shakeRef={titleShake.ref}
-      />
+    <FormProvider {...form}>
+      <motion.form
+        {...viewTransition}
+        id="edit-activity-form"
+        onSubmit={handleSubmit((values) => {
+          onValid(values);
+          setView("card");
+        }, onInvalid)}
+        className={styles.form}
+      >
+        {fields.map((config) => (
+          <RenderField
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${config.kind}:${String(config.name)}`}
+            config={config}
+            shakeRef={shakeRefs[String(config.name)]}
+          />
+        ))}
 
-      <TextareaFormField
-        name="description"
-        label="Activity Description"
-        placeholder="Quote author"
-        control={control}
-        errors={errors}
-        maxLength={maxLengths.description}
-        shakeRef={descriptionShake.ref}
-      />
-
-      <ColorFormField
-        name="color"
-        label="Activity Color"
-        control={control}
-        errors={errors}
-        shakeRef={colorShake.ref}
-      />
-
-      <Button.Root type="submit">
-        <Button.Label>Update Activity</Button.Label>
-      </Button.Root>
-      <button type="submit" hidden aria-hidden="true" tabIndex={-1} />
-    </motion.form>
+        <Button.Root type="submit">
+          <Button.Label>Update Activity</Button.Label>
+        </Button.Root>
+        <button type="submit" hidden aria-hidden="true" tabIndex={-1} />
+      </motion.form>
+    </FormProvider>
   );
 }
