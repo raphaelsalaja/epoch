@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { ActivityCard } from "@/components/activity-card";
 import { Manifesto } from "@/components/manifesto";
 
 export default function Home() {
@@ -17,7 +18,7 @@ export default function Home() {
             : { type: "spring", bounce: 0.2, duration: 0.3 }
         }
       >
-        <Manifesto />
+        <ActivityCard />
       </motion.div>
     </AnimatePresence>
   );
