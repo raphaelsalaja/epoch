@@ -1,8 +1,9 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  align-items: center;
+  gap: 32px;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .card {
@@ -29,6 +30,7 @@
     font-size: var(--size-medium);
     line-height: 24px;
     color: var(--white);
+    text-align: left;
     letter-spacing: var(--spacing-medium);
   }
 
@@ -132,6 +134,7 @@
     font-weight: var(--weight-medium);
     line-height: 150%;
     color: var(--white);
+    text-align: left;
     letter-spacing: var(--spacing-regular);
     opacity: 0.6;
   }
@@ -139,11 +142,11 @@
 
 :where(.activity, .item, .quote)::before {
   position: absolute;
-  inset: -10px;
+  inset: -12px;
   z-index: 0;
   content: "";
   background: var(--white);
-  border-radius: 16px;
+  border-radius: 12px;
   opacity: 0;
   scale: 0.98;
   transition:

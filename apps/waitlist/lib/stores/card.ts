@@ -3,8 +3,6 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Schemas } from "@/lib/schemas";
 
-export type Color = z.infer<typeof Schemas.Color>;
-export type Image = z.infer<typeof Schemas.Image>;
 export type Item = z.infer<typeof Schemas.Item>;
 export type Activity = z.infer<typeof Schemas.Activity>;
 export type Quote = z.infer<typeof Schemas.Quote>;
@@ -43,12 +41,14 @@ const initialCard: Card = {
   item_one: {
     title: "Chicken Nuggets",
     subtitle: "8 pieces",
-    image: { color: "yellow", icon: "cookies" },
+    color: "yellow",
+    icon: "cookies",
   },
   item_two: {
     title: "Airpods Max",
     subtitle: "Apple",
-    image: { color: "grey", icon: "headphones" },
+    color: "grey",
+    icon: "headphones",
   },
   quote: {
     text: "The best way to get started is to quit talking and begin doing.",
@@ -153,7 +153,6 @@ export const useCardStore = create<CardState>()(
       name: "card-store",
       version: 1,
       migrate: (persistedState: unknown, version: number) => {
-        // Force reset if version mismatch or wrong format
         if (
           version !== 1 ||
           (persistedState &&

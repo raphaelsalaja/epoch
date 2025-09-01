@@ -6,25 +6,28 @@ import { type Control, Controller, type FieldErrors } from "react-hook-form";
 
 import { Field } from "@/components/field";
 import { MeasuredContainer } from "@/components/measured-container";
-import { Picker } from "@/components/picker";
 
-interface ColorFormFieldProps {
+interface TextareaFormFieldProps {
   name: string;
   label: string;
+  placeholder: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errors: FieldErrors<any>;
+  maxLength: number;
   shakeRef: React.RefObject<HTMLDivElement>;
 }
 
-export function ColorFormField({
+export function TextareaFormField({
   name,
   label,
+  placeholder,
   control,
   errors,
+  maxLength,
   shakeRef,
-}: ColorFormFieldProps) {
+}: TextareaFormFieldProps) {
   const fieldId = useId();
   const error = errors[name];
 
@@ -33,21 +36,26 @@ export function ColorFormField({
       name={name}
       control={control}
       render={({ field, fieldState }) => {
+        const length = (field.value as string)?.length ?? 0;
         return (
           <MeasuredContainer ref={shakeRef}>
             <Field.Root name={name} invalid={fieldState.invalid}>
-              <Field.Label htmlFor={fieldId}>{label}</Field.Label>
+              <Field.Label htmlFor={fieldId}>
+                {label}
+                <Field.Length maxLength={maxLength} length={length} />
+              </Field.Label>
               <Field.Control
                 id={fieldId}
-                render={() => (
-                  <Picker.Color
-                    value={field.value}
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                    }}
-                    name={field.name}
-                  />
-                )}
+                kind="textarea"
+                type="text"
+                {...field}
+                value={field.value ?? ""}
+                spellCheck={false}
+                autoComplete="off"
+                placeholder={placeholder}
+                aria-invalid={!!error}
+                aria-describedby={error ? `${fieldId}-error` : undefined}
+                maxLength={maxLength}
               />
               <AnimatePresence>
                 {error && (
@@ -66,7 +74,7 @@ export function ColorFormField({
                     {String(
                       typeof error === "string"
                         ? error
-                        : (error?.message ?? "Invalid input"),
+                        : (error?.message ?? "Invalid input")
                     )}
                   </Field.Error>
                 )}

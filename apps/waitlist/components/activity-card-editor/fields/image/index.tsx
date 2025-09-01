@@ -9,14 +9,12 @@ import type { IconName } from "@/components/icons/types";
 import { MeasuredContainer } from "@/components/measured-container";
 import type { ColorName } from "@/components/picker";
 import { Picker } from "@/components/picker";
-import styles from "./styles.module.css";
+import styles from "../styles.module.css";
 
 interface ImageFormFieldProps {
   name: string;
   label: string;
-
   control: Control<any>;
-
   errors: FieldErrors<any>;
   shakeRef: React.RefObject<HTMLDivElement>;
 }
@@ -73,7 +71,7 @@ export function ImageFormField({
               <Field.Control
                 id={fieldId}
                 render={() => (
-                  <div className={styles.field}>
+                  <div className={styles.visual}>
                     <Picker.Icon
                       kind="grid"
                       value={imageValue.icon}
@@ -141,7 +139,7 @@ export function ImageFormField({
                     {String(
                       typeof error === "string"
                         ? error
-                        : (error?.message ?? "Invalid input"),
+                        : (error?.message ?? "Invalid input")
                     )}
                   </Field.Error>
                 )}

@@ -23,3 +23,10 @@
   aspect-ratio: 1 / 1;
   color: var(--white);
 }
+
+.visual {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  justify-content: space-between;
+}

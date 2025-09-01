@@ -7,27 +7,29 @@ import { useCardStore } from "@/lib/stores/card";
 
 type FormValues = z.infer<typeof Schemas.Item>;
 
-export function useItemTwoForm() {
+export function useItemOneForm() {
   const { card, updateSection } = useCardStore();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(Schemas.Item),
     defaultValues: {
-      title: card.item_two?.title ?? "",
-      subtitle: card.item_two?.subtitle ?? "",
-      image: card.item_two?.image ?? { color: "blue", icon: "crown" },
+      title: card.item_one?.title ?? "",
+      subtitle: card.item_one?.subtitle ?? "",
+      color: card.item_one?.color ?? "blue",
+      icon: card.item_one?.icon ?? "crown",
     },
     mode: "onSubmit",
     reValidateMode: "onChange",
   });
 
-  const onValid = ({ title, subtitle, image }: FormValues) => {
+  const onValid = ({ title, subtitle, color, icon }: FormValues) => {
     const clean = {
       title: (title ?? "").trim(),
       subtitle: (subtitle ?? "").trim(),
-      image,
+      color,
+      icon,
     };
-    updateSection("item_two", clean);
+    updateSection("item_one", clean);
     form.reset(clean, { keepDirty: false, keepValues: true });
   };
 
@@ -39,7 +41,6 @@ export function useItemTwoForm() {
     makeOnInvalid<FormValues>(form.setFocus, [
       { name: "title", shake: shakeHandlers.title || (() => {}) },
       { name: "subtitle", shake: shakeHandlers.subtitle || (() => {}) },
-      { name: "image", shake: shakeHandlers.image || (() => {}) },
     ]);
 
   return {

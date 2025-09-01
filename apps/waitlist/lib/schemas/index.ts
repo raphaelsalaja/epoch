@@ -2,17 +2,6 @@ import { z } from "zod";
 import { ICON_NAMES } from "@/components/icons/types";
 import { COLOR_NAMES } from "@/components/picker";
 
-const Color = z.enum(COLOR_NAMES);
-const Icon = z.enum(ICON_NAMES);
-
-const Image = z.union([
-  z.url(),
-  z.object({
-    color: Color,
-    icon: Icon,
-  }),
-]);
-
 const RequiredText = (label: string, max: number) =>
   z
     .string()
@@ -27,19 +16,20 @@ const RequiredText = (label: string, max: number) =>
 const Activity = z.object({
   title: RequiredText("Title", 100),
   description: RequiredText("Description", 150),
-  color: Color,
+  color: z.enum(COLOR_NAMES),
 });
 
 const Item = z.object({
   title: RequiredText("Title", 100),
   subtitle: RequiredText("Subtitle", 100),
-  image: Image,
+  color: z.enum(COLOR_NAMES),
+  icon: z.enum(ICON_NAMES),
 });
 
 const Spotify = z.object({
   title: z.string(),
   subtitle: z.string(),
-  image: Image,
+  image: z.url(),
 });
 
 const Quote = z.object({
@@ -61,8 +51,6 @@ const Card = z.object({
 });
 
 export const Schemas = {
-  Color,
-  Image,
   Item,
   Activity,
   Spotify,

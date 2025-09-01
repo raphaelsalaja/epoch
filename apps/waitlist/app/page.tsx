@@ -1,8 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ActivityCard } from "@/components/activity-card";
-import { Manifesto } from "@/components/manifesto";
+import { ActivityCard } from "@/components/activity-card-editor/activity-card";
 
 export default function Home() {
   const reduce = useReducedMotion();

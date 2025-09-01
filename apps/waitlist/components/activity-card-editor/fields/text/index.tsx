@@ -7,7 +7,7 @@ import { type Control, Controller, type FieldErrors } from "react-hook-form";
 import { Field } from "@/components/field";
 import { MeasuredContainer } from "@/components/measured-container";
 
-interface TextareaFormFieldProps {
+interface TextFormFieldProps {
   name: string;
   label: string;
   placeholder: string;
@@ -19,7 +19,7 @@ interface TextareaFormFieldProps {
   shakeRef: React.RefObject<HTMLDivElement>;
 }
 
-export function TextareaFormField({
+export function TextFormField({
   name,
   label,
   placeholder,
@@ -27,7 +27,7 @@ export function TextareaFormField({
   errors,
   maxLength,
   shakeRef,
-}: TextareaFormFieldProps) {
+}: TextFormFieldProps) {
   const fieldId = useId();
   const error = errors[name];
 
@@ -46,7 +46,6 @@ export function TextareaFormField({
               </Field.Label>
               <Field.Control
                 id={fieldId}
-                kind="textarea"
                 type="text"
                 {...field}
                 value={field.value ?? ""}
@@ -74,7 +73,7 @@ export function TextareaFormField({
                     {String(
                       typeof error === "string"
                         ? error
-                        : (error?.message ?? "Invalid input"),
+                        : (error?.message ?? "Invalid input")
                     )}
                   </Field.Error>
                 )}

@@ -6,8 +6,9 @@ import { useDebounce } from "use-debounce";
 import { useTrackSearch } from "@/lib/hooks/use-spotify-search";
 import { useSpotifyTrending } from "@/lib/hooks/use-spotify-trending";
 import type { Track } from "@/lib/spotify/types";
-import { Button } from "../../button";
-import { Dots, MagnifyingGlass, Trending } from "../../icons";
+// Removed per-view action button; submit is now handled by the parent action button.
+import { Button } from "../../../button";
+import { Dots, MagnifyingGlass, Trending } from "../../../icons";
 import styles from "./styles.module.css";
 
 const fade = {
@@ -60,7 +61,11 @@ function TrackItem({ track }: { track: Track }) {
   );
 }
 
-export const EditCardSpotify = () => {
+interface Props {
+  onDone?: () => void;
+}
+
+export const EditCardSpotify = ({ onDone }: Props) => {
   const prefersReducedMotion = useReducedMotion();
   const [rawQuery, setRawQuery] = useState("");
   const [debouncedQuery] = useDebounce(rawQuery.trim(), 250);
@@ -92,14 +97,20 @@ export const EditCardSpotify = () => {
     return (isSearching ? searchResults : trendingTracks) as Track[];
   }, [isSearching, searchResults, trendingTracks]);
 
-  const onSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-  }, []);
+  const onSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      // TODO: Wire selected track to store update once selection is implemented.
+      onDone?.();
+    },
+    [onDone]
+  );
 
   const clear = useCallback(() => setRawQuery(""), []);
 
   return (
-    <search
+    <form
+      id="edit-spotify-form"
       className={styles.container}
       onSubmit={onSubmit}
       aria-label="Spotify search"
@@ -192,6 +203,6 @@ export const EditCardSpotify = () => {
       <Button.Root type="submit" layout>
         <Button.Label>Update</Button.Label>
       </Button.Root>
-    </search>
+    </form>
   );
 };

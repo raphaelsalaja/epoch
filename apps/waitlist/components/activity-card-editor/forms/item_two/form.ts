@@ -1,0 +1,57 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import type { z } from "zod";
+import { makeOnInvalid } from "@/lib/hooks/use-invalid-submit-shake";
+import { Schemas } from "@/lib/schemas";
+import { useCardStore } from "@/lib/stores/card";
+
+type FormValues = z.infer<typeof Schemas.Item>;
+
+export function useItemTwoForm() {
+  const { card, updateSection } = useCardStore();
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(Schemas.Item),
+    defaultValues: {
+      title: card.item_two?.title ?? "",
+      subtitle: card.item_two?.subtitle ?? "",
+      color: card.item_two?.color ?? "blue",
+      icon: card.item_two?.icon ?? "crown",
+    },
+    mode: "onSubmit",
+    reValidateMode: "onChange",
+  });
+
+  const onValid = ({ title, subtitle, color, icon }: FormValues) => {
+    const clean = {
+      title: (title ?? "").trim(),
+      subtitle: (subtitle ?? "").trim(),
+      color,
+      icon,
+    };
+    updateSection("item_two", clean);
+    form.reset(clean, { keepDirty: false, keepValues: true });
+  };
+
+  const createOnInvalid = (shakeHandlers: {
+    title?: () => void;
+    subtitle?: () => void;
+    image?: () => void;
+  }) =>
+    makeOnInvalid<FormValues>(form.setFocus, [
+      { name: "title", shake: shakeHandlers.title || (() => {}) },
+      { name: "subtitle", shake: shakeHandlers.subtitle || (() => {}) },
+    ]);
+
+  return {
+    form,
+    onValid,
+    createOnInvalid,
+    maxLengths: {
+      title: 100,
+      subtitle: 100,
+    },
+  };
+}
+
+export type { FormValues as ItemTwoFormValues };
