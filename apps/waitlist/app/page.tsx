@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ActivityCard } from "@/components/activity-card-editor/activity-card";
+import { ActivityCardEditor } from "@/components/activity-card-editor";
 
 export default function Home() {
   const reduce = useReducedMotion();
@@ -17,7 +17,7 @@ export default function Home() {
             : { type: "spring", bounce: 0.2, duration: 0.3 }
         }
       >
-        <ActivityCard />
+        <ActivityCardEditor />
       </motion.div>
     </AnimatePresence>
   );

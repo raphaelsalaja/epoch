@@ -54,7 +54,7 @@ export function ActivityCard() {
               <div
                 className={styles.icon}
                 style={{
-                  background: card.item_one.color,
+                  background: `var(--${card.item_one.color})`,
                   width: 40,
                   height: 40,
                 }}
@@ -77,7 +77,7 @@ export function ActivityCard() {
             <div
               className={styles.icon}
               style={{
-                background: card.item_two.color,
+                background: `var(--${card.item_two.color})`,
                 width: 40,
                 height: 40,
               }}
@@ -97,7 +97,7 @@ export function ActivityCard() {
         className={styles.quote}
       >
         <p className={styles.text}>{card.quote.text}</p>
-        <p className={styles.author}>{card.quote.author}</p>
+        <p className={styles.author}>— {card.quote.author}</p>
       </button>
     </div>
   );

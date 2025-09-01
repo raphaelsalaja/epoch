@@ -45,7 +45,6 @@ export function Manifesto() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     try {
-      console.log("Email signup:", email);
       setIsSuccess(true);
       setButtonState(ButtonState.Success);
     } catch {

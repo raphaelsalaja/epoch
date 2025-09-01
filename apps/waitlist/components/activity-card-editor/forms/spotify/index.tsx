@@ -34,7 +34,6 @@ function SkeletonTrack() {
 }
 
 function TrackItem({ track }: { track: Track }) {
-  console.log("TrackItem received:", track);
   return (
     <div className={styles.track}>
       <Image

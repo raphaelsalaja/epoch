@@ -19,8 +19,6 @@ export const useButtonState = create<ButtonState>((set, get) => ({
   setActualState: (newState: State) => {
     const { timeoutId } = get();
 
-    console.log("setActualState called with:", newState);
-
     if (timeoutId) {
       clearTimeout(timeoutId);
     }
@@ -31,7 +29,6 @@ export const useButtonState = create<ButtonState>((set, get) => ({
     }
 
     const newTimeoutId = setTimeout(() => {
-      console.log("Setting displayState to:", newState);
       set({ displayState: newState, timeoutId: null });
     }, 1000);
 

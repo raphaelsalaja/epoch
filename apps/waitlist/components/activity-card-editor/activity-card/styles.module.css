@@ -9,6 +9,7 @@
 .card {
   display: flex;
   flex-direction: column;
+  gap: 24px;
   align-items: center;
   justify-content: space-between;
   width: 384px;
@@ -50,7 +51,7 @@
   gap: 32px;
   align-items: flex-start;
   align-self: stretch;
-  justify-content: center;
+  justify-content: start;
 
   .item {
     position: relative;
@@ -73,7 +74,6 @@
     }
 
     .image {
-      background: oklch(1 0 0 / 0.2);
       border-radius: 10px;
     }
 
