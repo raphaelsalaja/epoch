@@ -24,6 +24,7 @@
 .input {
   width: 100%;
   font-weight: var(--weight-medium);
+  color: var(--foreground-primary);
 
   &::placeholder {
     font-size: var(--size-medium);

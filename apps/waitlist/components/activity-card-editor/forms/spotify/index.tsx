@@ -103,12 +103,19 @@ export const EditCardSpotify = () => {
     return (isSearching ? searchResults : trendingTracks) as Track[];
   }, [isSearching, searchResults, trendingTracks]);
 
+  const showSkeletons =
+    !error && (isLoading || (Array.isArray(list) && list.length === 0));
+  const skeletonKeys = useMemo(
+    () => Array.from({ length: 5 }, (_, i) => `skeleton-${i}`),
+    []
+  );
+
   const onSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
       setView("card");
     },
-    [setView],
+    [setView]
   );
 
   const clear = useCallback(() => setRawQuery(""), []);
@@ -147,14 +154,16 @@ export const EditCardSpotify = () => {
         aria-busy={isLoading || undefined}
       >
         <AnimatePresence mode="wait" initial={!prefersReducedMotion}>
-          {isLoading ? (
+          {showSkeletons ? (
             <motion.output
-              key="loading"
+              key="skeletons"
               {...(prefersReducedMotion ? {} : fade)}
               className={styles.list}
-              aria-label="Loading tracks"
+              aria-label={isLoading ? "Loading tracks" : "Fetching tracks"}
             >
-              <SkeletonTrack />
+              {skeletonKeys.map((k) => (
+                <SkeletonTrack key={k} />
+              ))}
             </motion.output>
           ) : error ? (
             <motion.div
@@ -173,18 +182,6 @@ export const EditCardSpotify = () => {
               >
                 Try again
               </button>
-            </motion.div>
-          ) : list.length === 0 ? (
-            <motion.div
-              key="empty"
-              {...(prefersReducedMotion ? {} : fade)}
-              className={styles.empty}
-            >
-              <p>
-                {isSearching
-                  ? "No tracks match your search."
-                  : "No trending tracks found."}
-              </p>
             </motion.div>
           ) : (
             <motion.div
