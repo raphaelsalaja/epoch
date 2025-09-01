@@ -1,9 +1,8 @@
 import type { NextRequest } from "next/server";
 import { normalizeTracks, spotifySdk } from "@/lib/spotify";
 
-// Trending is broadly cacheable; serve from Edge and revalidate periodically
 export const runtime = "edge";
-export const revalidate = 300; // 5 minutes
+export const revalidate = 300;
 export const preferredRegion = "auto";
 
 export async function GET(_req: NextRequest) {

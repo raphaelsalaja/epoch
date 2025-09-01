@@ -18,7 +18,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={clsx(openrunde.className)}>
-        {/* Skip link for accessibility */}
         <a href="#main-content" className="skip">
           Skip to content
         </a>

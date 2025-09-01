@@ -1,7 +1,6 @@
 import type { NextRequest } from "next/server";
 import { normalizeTracks, spotifySdk } from "@/lib/spotify";
 
-// Search results are user-driven and should not be cached; use Edge for low latency
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
 export const preferredRegion = "auto";
