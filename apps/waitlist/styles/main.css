@@ -70,12 +70,6 @@ input {
   outline: none;
 }
 
-:focus-visible {
-  border-radius: 6px;
-  box-shadow: 0 0 0 3px
-    color-mix(in hsl, var(--foreground-primary) 30%, transparent);
-}
-
 /* Screen-reader only utility */
 .sr {
   position: absolute !important;

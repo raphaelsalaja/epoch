@@ -2,9 +2,14 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ActivityCardEditor } from "@/components/activity-card-editor";
+import { useViewStore } from "@/lib/stores/view";
 
 export default function Home() {
   const reduce = useReducedMotion();
+  const { view } = useViewStore();
+
+  console.log("Current view:", view);
+
   return (
     <AnimatePresence mode="wait">
       <motion.div

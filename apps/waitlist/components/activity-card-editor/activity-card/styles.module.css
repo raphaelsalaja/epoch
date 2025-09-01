@@ -92,6 +92,7 @@
       .title,
       .subtitle {
         display: block;
+        max-width: 256px;
         overflow: hidden;
         text-overflow: ellipsis;
         font-weight: var(--weight-semibold);

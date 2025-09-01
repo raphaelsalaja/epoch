@@ -14,12 +14,10 @@ interface ViewState {
   setView: (view: View) => void;
 }
 
-const initialView: View = "card";
-
 export const useViewStore = create<ViewState>()(
   persist(
     (set) => ({
-      view: initialView,
+      view: "card",
       setView: (view) => set({ view }),
     }),
     {

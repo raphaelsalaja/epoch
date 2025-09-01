@@ -57,6 +57,7 @@ ol {
 button {
   padding: 0;
   font: inherit;
+  text-align: unset;
   cursor: pointer;
   user-select: none;
   background: none;

@@ -5,10 +5,12 @@ import { useCallback, useDeferredValue, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useTrackSearch } from "@/lib/hooks/use-spotify-search";
 import { useSpotifyTrending } from "@/lib/hooks/use-spotify-trending";
+import { viewTransition } from "@/lib/motion";
 import type { Track } from "@/lib/spotify/types";
-// Removed per-view action button; submit is now handled by the parent action button.
+import { useViewStore } from "@/lib/stores/view";
 import { Button } from "../../../button";
 import { Dots, MagnifyingGlass, Trending } from "../../../icons";
+import { useSpotifyForm } from "./form";
 import styles from "./styles.module.css";
 
 const fade = {
@@ -33,9 +35,20 @@ function SkeletonTrack() {
   );
 }
 
-function TrackItem({ track }: { track: Track }) {
+function TrackItem({
+  track,
+  onSelect,
+}: {
+  track: Track;
+  onSelect: (t: Track) => void;
+}) {
   return (
-    <div className={styles.track}>
+    <button
+      type="button"
+      className={styles.track}
+      onClick={() => onSelect(track)}
+      aria-label={`Select ${track.title} by ${track.artist}`}
+    >
       <Image
         src={track.image}
         alt={`${track.title} cover art`}
@@ -49,26 +62,20 @@ function TrackItem({ track }: { track: Track }) {
         <div className={styles.title}>{track.title}</div>
         <div className={styles.artist}>{track.artist}</div>
       </div>
-      <button
-        type="button"
-        className={styles.menu}
-        aria-label="Open track menu"
-      >
+      <div className={styles.menu} aria-hidden>
         <Dots className={styles.icon} />
-      </button>
-    </div>
+      </div>
+    </button>
   );
 }
 
-interface Props {
-  onDone?: () => void;
-}
-
-export const EditCardSpotify = ({ onDone }: Props) => {
+export const EditCardSpotify = () => {
+  const { setView } = useViewStore();
   const prefersReducedMotion = useReducedMotion();
   const [rawQuery, setRawQuery] = useState("");
   const [debouncedQuery] = useDebounce(rawQuery.trim(), 250);
   const deferredQuery = useDeferredValue(debouncedQuery);
+  const { selectTrack } = useSpotifyForm();
 
   const {
     tracks: trendingTracks,
@@ -99,16 +106,16 @@ export const EditCardSpotify = ({ onDone }: Props) => {
   const onSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      // TODO: Wire selected track to store update once selection is implemented.
-      onDone?.();
+      setView("card");
     },
-    [onDone]
+    [setView],
   );
 
   const clear = useCallback(() => setRawQuery(""), []);
 
   return (
-    <form
+    <motion.form
+      {...viewTransition}
       id="edit-spotify-form"
       className={styles.container}
       onSubmit={onSubmit}
@@ -192,16 +199,23 @@ export const EditCardSpotify = ({ onDone }: Props) => {
                 </div>
               )}
               {list.map((track) => (
-                <TrackItem key={track.id} track={track} />
+                <TrackItem
+                  key={track.id}
+                  track={track}
+                  onSelect={(t) => {
+                    selectTrack(t);
+                    setView("card");
+                  }}
+                />
               ))}
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      <Button.Root type="submit" layout>
+      <Button.Root type="submit" layoutId="button">
         <Button.Label>Update</Button.Label>
       </Button.Root>
-    </form>
+    </motion.form>
   );
 };

@@ -6,6 +6,13 @@
   width: 100%;
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
 .card {
   display: flex;
   flex-direction: column;
