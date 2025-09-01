@@ -15,7 +15,8 @@ export type FieldConfig<T extends FieldValues> =
       maxLength: number;
     }
   | { kind: "color"; name: Path<T>; label: string }
-  | { kind: "image"; name: Path<T>; label: string };
+  | { kind: "image"; name: Path<T>; label: string }
+  | { kind: "image"; nameColor: Path<T>; nameIcon: Path<T>; label: string };
 
 export function RenderField<T extends FieldValues>({
   config,
@@ -54,9 +55,16 @@ export function RenderField<T extends FieldValues>({
         />
       );
     case "image":
-      return (
+      return "name" in config ? (
         <ImageFormField
           name={config.name}
+          label={config.label}
+          shakeRef={shakeRef}
+        />
+      ) : (
+        <ImageFormField
+          nameColor={config.nameColor}
+          nameIcon={config.nameIcon}
           label={config.label}
           shakeRef={shakeRef}
         />

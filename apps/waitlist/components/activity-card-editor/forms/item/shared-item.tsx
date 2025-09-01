@@ -44,7 +44,8 @@ export function createItemEditor(section: "item_one" | "item_two") {
           className={styles.form}
         >
           <ImageFormField
-            name="image"
+            nameColor="color"
+            nameIcon="icon"
             label="Item Image"
             shakeRef={imageShake.ref}
           />

@@ -17,8 +17,12 @@ import { Picker } from "@/components/picker";
 import styles from "../styles.module.css";
 
 interface ImageFormFieldProps<TFieldValues extends FieldValues = FieldValues> {
-  name: Path<TFieldValues>;
-  label: string;
+  // Composite binding (object with { color, icon })
+  name?: Path<TFieldValues>;
+  // Separate field binding (schema stores color and icon separately)
+  nameColor?: Path<TFieldValues>;
+  nameIcon?: Path<TFieldValues>;
+  label?: string;
   shakeRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -50,8 +54,40 @@ type ImageValue = { color: ColorName; icon: IconName };
 
 export function ImageFormField<TFieldValues extends FieldValues = FieldValues>({
   name,
+  nameColor,
+  nameIcon,
   shakeRef,
 }: ImageFormFieldProps<TFieldValues>) {
+  const isComposite = !!name && !nameColor && !nameIcon;
+  const isSeparate = !name && !!nameColor && !!nameIcon;
+
+  if (!isComposite && !isSeparate) {
+    throw new Error(
+      "ImageFormField: provide either `name` (composite) or both `nameColor` and `nameIcon` (separate)"
+    );
+  }
+
+  return isComposite ? (
+    <ImageFieldComposite<TFieldValues>
+      name={name as Path<TFieldValues>}
+      shakeRef={shakeRef}
+    />
+  ) : (
+    <ImageFieldSeparate<TFieldValues>
+      nameColor={nameColor as Path<TFieldValues>}
+      nameIcon={nameIcon as Path<TFieldValues>}
+      shakeRef={shakeRef}
+    />
+  );
+}
+
+function ImageFieldComposite<TFieldValues extends FieldValues = FieldValues>({
+  name,
+  shakeRef,
+}: {
+  name: Path<TFieldValues>;
+  shakeRef: React.RefObject<HTMLDivElement>;
+}) {
   const fieldId = useId();
   const { control } = useFormContext<TFieldValues>();
   const { field, fieldState } = useController<TFieldValues>({ name, control });
@@ -140,6 +176,87 @@ export function ImageFormField<TFieldValues extends FieldValues = FieldValues>({
             </Field.Error>
           )}
         </AnimatePresence>
+      </Field.Root>
+    </MeasuredContainer>
+  );
+}
+
+function ImageFieldSeparate<TFieldValues extends FieldValues = FieldValues>({
+  nameColor,
+  nameIcon,
+  shakeRef,
+}: {
+  nameColor: Path<TFieldValues>;
+  nameIcon: Path<TFieldValues>;
+  shakeRef: React.RefObject<HTMLDivElement>;
+}) {
+  const fieldId = useId();
+  const { control } = useFormContext<TFieldValues>();
+  const colorCtrl = useController<TFieldValues>({ name: nameColor, control });
+  const iconCtrl = useController<TFieldValues>({ name: nameIcon, control });
+
+  const imageValue: ImageValue = {
+    color: (colorCtrl.field.value as ColorName) ?? ("blue" as ColorName),
+    icon: (iconCtrl.field.value as IconName) ?? ("crown" as IconName),
+  };
+
+  return (
+    <MeasuredContainer ref={shakeRef}>
+      <Field.Root name={nameColor} invalid={false}>
+        <Field.Control
+          id={fieldId}
+          render={() => (
+            <div className={styles.visual}>
+              <Picker.Icon
+                kind="grid"
+                value={imageValue.icon}
+                onValueChange={(value) => {
+                  if (typeof value === "string") {
+                    iconCtrl.field.onChange(value as IconName);
+                  }
+                }}
+                name={iconCtrl.field.name}
+              />
+
+              <div
+                className={styles.preview}
+                style={{ background: `var(--${imageValue.color})` }}
+              >
+                <motion.div
+                  key={imageValue.icon}
+                  initial={false}
+                  animate={{
+                    scaleX: [1.3, 1],
+                    scaleY: [0.8, 1],
+                    opacity: 1,
+                  }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 110,
+                    damping: 2,
+                    mass: 0.1,
+                  }}
+                  style={{
+                    transformOrigin: "center center",
+                  }}
+                >
+                  <Icon name={imageValue.icon} className={styles.icon} />
+                </motion.div>
+              </div>
+
+              <Picker.Color
+                kind="grid"
+                value={imageValue.color}
+                onValueChange={(value) => {
+                  if (typeof value === "string") {
+                    colorCtrl.field.onChange(value as ColorName);
+                  }
+                }}
+                name={colorCtrl.field.name}
+              />
+            </div>
+          )}
+        />
       </Field.Root>
     </MeasuredContainer>
   );

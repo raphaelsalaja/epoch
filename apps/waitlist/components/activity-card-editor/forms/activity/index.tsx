@@ -66,14 +66,27 @@ export function EditCardActivity() {
         }, onInvalid)}
         className={styles.form}
       >
-        {fields.map((config) => (
-          <RenderField
-            // eslint-disable-next-line react/no-array-index-key
-            key={`${config.kind}:${String(config.name)}`}
-            config={config}
-            shakeRef={shakeRefs[String(config.name)]}
-          />
-        ))}
+        {fields.map((config) => {
+          const key =
+            config.kind === "image"
+              ? `image:${"name" in config ? String(config.name) : `${String(config.nameColor)}+${String(config.nameIcon)}`}`
+              : `${config.kind}:${String(config.name)}`;
+
+          const shakeKey =
+            config.kind === "image"
+              ? "name" in config
+                ? String(config.name)
+                : String(config.nameColor)
+              : String(config.name);
+
+          return (
+            <RenderField
+              key={key}
+              config={config}
+              shakeRef={shakeRefs[shakeKey]}
+            />
+          );
+        })}
 
         <Button.Root type="submit">
           <Button.Label>Update Activity</Button.Label>
