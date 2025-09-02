@@ -2,7 +2,7 @@ import type { MotionProps } from "motion/react";
 
 export const viewTransition: MotionProps = {
   initial: {
-    x: -24,
+    x: -32,
     opacity: 0,
     filter: "blur(4px)",
   },
@@ -12,7 +12,7 @@ export const viewTransition: MotionProps = {
     filter: "blur(0px)",
   },
   exit: {
-    x: 24,
+    x: 32,
     opacity: 0,
     filter: "blur(4px)",
   },
