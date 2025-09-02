@@ -1,7 +1,7 @@
 .field {
   display: flex;
   flex-direction: column;
-
+  gap: 8px;
   align-items: flex-start;
   width: 100%;
 
@@ -23,7 +23,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin-bottom: 8px;
+
   font-size: var(--size-regular);
   font-weight: var(--weight-medium);
   line-height: 24px;
@@ -73,7 +73,7 @@
 }
 
 .error {
-  margin-top: 8px;
+  width: 100%;
   font-size: var(--size-regular);
   font-weight: var(--weight-medium);
   line-height: 24px;

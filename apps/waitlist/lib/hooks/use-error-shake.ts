@@ -27,7 +27,6 @@ export function useErrorShake(opts: ErrorShakeOpts = {}) {
     }
   }, [ref, animate, amplitude, spring]);
 
-  // Auto-trigger shake when the specific field has an error
   useEffect(() => {
     if (fieldName && errors[fieldName]) {
       trigger();

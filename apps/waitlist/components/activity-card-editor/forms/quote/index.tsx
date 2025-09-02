@@ -8,6 +8,7 @@ import {
 } from "@/components/activity-card-editor/fields";
 import { useQuoteForm } from "@/components/activity-card-editor/forms/quote/form";
 import { Button } from "@/components/button";
+import { MeasuredContainer } from "@/components/measured-container";
 import { viewTransition } from "@/lib/motion";
 import { useViewStore } from "@/lib/stores/view";
 import styles from "../styles.module.css";
@@ -31,14 +32,14 @@ export function EditCardQuote() {
         <TextareaFormField
           name="text"
           label="Quote"
-          placeholder="Enter your favorite quote"
+          placeholder="e.g. You either die a hero or you live long enough to become the villain"
           maxLength={maxLengths.text}
         />
 
         <TextFormField
           name="author"
           label="Author"
-          placeholder="Quote author"
+          placeholder="e.g. Harvey Dent"
           maxLength={maxLengths.author}
         />
 

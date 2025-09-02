@@ -21,14 +21,14 @@ export function EditCardActivity() {
       kind: "text",
       name: "title",
       label: "Activity Title",
-      placeholder: "Enter your favorite quote",
+      placeholder: "e.g. John's Run",
       maxLength: maxLengths.title,
     },
     {
       kind: "textarea",
       name: "description",
       label: "Activity Description",
-      placeholder: "Quote author",
+      placeholder: "e.g. Went for a run",
       maxLength: maxLengths.description,
     },
     {
