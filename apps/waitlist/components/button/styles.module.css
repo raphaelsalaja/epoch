@@ -4,6 +4,12 @@
   align-self: stretch;
   justify-content: center;
   height: 48px;
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
   outline-width: 2px;
   outline-style: solid;
   outline-color: color-mix(in srgb, var(--foreground-secondary) 0%, transparent);
