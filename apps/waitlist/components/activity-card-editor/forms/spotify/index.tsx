@@ -17,7 +17,7 @@ const fade = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
   exit: { opacity: 0 },
-  transition: { duration: 0.4 },
+  transition: { duration: 0.2 },
 };
 
 function SkeletonTrack() {
@@ -55,7 +55,7 @@ function TrackItem({
         width={48}
         height={48}
         className={styles.album}
-        sizes="48px"
+        quality={100}
         placeholder="empty"
       />
       <div className={styles.info}>

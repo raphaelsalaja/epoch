@@ -23,7 +23,6 @@ interface ImageFormFieldProps<TFieldValues extends FieldValues = FieldValues> {
   nameColor?: Path<TFieldValues>;
   nameIcon?: Path<TFieldValues>;
   label?: string;
-  shakeRef: React.RefObject<HTMLDivElement>;
 }
 
 export const updateImageColor = (currentValue: unknown, newColor: string) => {
@@ -56,7 +55,6 @@ export function ImageFormField<TFieldValues extends FieldValues = FieldValues>({
   name,
   nameColor,
   nameIcon,
-  shakeRef,
 }: ImageFormFieldProps<TFieldValues>) {
   const isComposite = !!name && !nameColor && !nameIcon;
   const isSeparate = !name && !!nameColor && !!nameIcon;
@@ -68,25 +66,19 @@ export function ImageFormField<TFieldValues extends FieldValues = FieldValues>({
   }
 
   return isComposite ? (
-    <ImageFieldComposite<TFieldValues>
-      name={name as Path<TFieldValues>}
-      shakeRef={shakeRef}
-    />
+    <ImageFieldComposite<TFieldValues> name={name as Path<TFieldValues>} />
   ) : (
     <ImageFieldSeparate<TFieldValues>
       nameColor={nameColor as Path<TFieldValues>}
       nameIcon={nameIcon as Path<TFieldValues>}
-      shakeRef={shakeRef}
     />
   );
 }
 
 function ImageFieldComposite<TFieldValues extends FieldValues = FieldValues>({
   name,
-  shakeRef,
 }: {
   name: Path<TFieldValues>;
-  shakeRef: React.RefObject<HTMLDivElement>;
 }) {
   const fieldId = useId();
   const { control } = useFormContext<TFieldValues>();
@@ -102,93 +94,89 @@ function ImageFieldComposite<TFieldValues extends FieldValues = FieldValues>({
       : { color: "blue", icon: "crown" };
 
   return (
-    <MeasuredContainer ref={shakeRef}>
-      <Field.Root name={name} invalid={fieldState.invalid}>
-        <Field.Control
-          id={fieldId}
-          render={() => (
-            <div className={styles.visual}>
-              <Picker.Icon
-                kind="grid"
-                value={imageValue.icon}
-                onValueChange={(value) => {
-                  if (typeof value === "string") {
-                    field.onChange(updateImageIcon(field.value, value));
-                  }
-                }}
-                name={field.name}
-              />
-
-              <div
-                className={styles.preview}
-                style={{ background: `var(--${imageValue.color})` }}
-              >
-                <motion.div
-                  key={imageValue.icon}
-                  initial={false}
-                  animate={{
-                    scaleX: [1.3, 1],
-                    scaleY: [0.8, 1],
-                    opacity: 1,
-                  }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 110,
-                    damping: 2,
-                    mass: 0.1,
-                  }}
-                  style={{
-                    transformOrigin: "center center",
-                  }}
-                >
-                  <Icon name={imageValue.icon} className={styles.icon} />
-                </motion.div>
-              </div>
-
-              <Picker.Color
-                kind="grid"
-                value={imageValue.color}
-                onValueChange={(value) => {
-                  if (typeof value === "string") {
-                    field.onChange(updateImageColor(field.value, value));
-                  }
-                }}
-                name={field.name}
-              />
-            </div>
-          )}
-        />
-        <AnimatePresence>
-          {error && (
-            <Field.Error
-              id={`${fieldId}-error`}
-              role="alert"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{
-                duration: 0.24,
-                ease: [0.19, 1, 0.22, 1],
+    <Field.Root name={name} invalid={fieldState.invalid}>
+      <Field.Control
+        id={fieldId}
+        render={() => (
+          <div className={styles.visual}>
+            <Picker.Icon
+              kind="grid"
+              value={imageValue.icon}
+              onValueChange={(value) => {
+                if (typeof value === "string") {
+                  field.onChange(updateImageIcon(field.value, value));
+                }
               }}
-              match
+              name={field.name}
+            />
+
+            <div
+              className={styles.preview}
+              style={{ background: `var(--${imageValue.color})` }}
             >
-              {String(error?.message ?? "Invalid input")}
-            </Field.Error>
-          )}
-        </AnimatePresence>
-      </Field.Root>
-    </MeasuredContainer>
+              <motion.div
+                key={imageValue.icon}
+                initial={false}
+                animate={{
+                  scaleX: [1.3, 1],
+                  scaleY: [0.8, 1],
+                  opacity: 1,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 110,
+                  damping: 2,
+                  mass: 0.1,
+                }}
+                style={{
+                  transformOrigin: "center center",
+                }}
+              >
+                <Icon name={imageValue.icon} className={styles.icon} />
+              </motion.div>
+            </div>
+
+            <Picker.Color
+              kind="grid"
+              value={imageValue.color}
+              onValueChange={(value) => {
+                if (typeof value === "string") {
+                  field.onChange(updateImageColor(field.value, value));
+                }
+              }}
+              name={field.name}
+            />
+          </div>
+        )}
+      />
+      <AnimatePresence>
+        {error && (
+          <Field.Error
+            id={`${fieldId}-error`}
+            role="alert"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: 0.24,
+              ease: [0.19, 1, 0.22, 1],
+            }}
+            match
+          >
+            {String(error?.message ?? "Invalid input")}
+          </Field.Error>
+        )}
+      </AnimatePresence>
+    </Field.Root>
   );
 }
 
 function ImageFieldSeparate<TFieldValues extends FieldValues = FieldValues>({
   nameColor,
   nameIcon,
-  shakeRef,
 }: {
   nameColor: Path<TFieldValues>;
   nameIcon: Path<TFieldValues>;
-  shakeRef: React.RefObject<HTMLDivElement>;
 }) {
   const fieldId = useId();
   const { control } = useFormContext<TFieldValues>();
@@ -201,63 +189,61 @@ function ImageFieldSeparate<TFieldValues extends FieldValues = FieldValues>({
   };
 
   return (
-    <MeasuredContainer ref={shakeRef}>
-      <Field.Root name={nameColor} invalid={false}>
-        <Field.Control
-          id={fieldId}
-          render={() => (
-            <div className={styles.visual}>
-              <Picker.Icon
-                kind="grid"
-                value={imageValue.icon}
-                onValueChange={(value) => {
-                  if (typeof value === "string") {
-                    iconCtrl.field.onChange(value as IconName);
-                  }
-                }}
-                name={iconCtrl.field.name}
-              />
+    <Field.Root name={nameColor} invalid={false}>
+      <Field.Control
+        id={fieldId}
+        render={() => (
+          <div className={styles.visual}>
+            <Picker.Icon
+              kind="grid"
+              value={imageValue.icon}
+              onValueChange={(value) => {
+                if (typeof value === "string") {
+                  iconCtrl.field.onChange(value as IconName);
+                }
+              }}
+              name={iconCtrl.field.name}
+            />
 
-              <div
-                className={styles.preview}
-                style={{ background: `var(--${imageValue.color})` }}
+            <div
+              className={styles.preview}
+              style={{ background: `var(--${imageValue.color})` }}
+            >
+              <motion.div
+                key={imageValue.icon}
+                initial={false}
+                animate={{
+                  scaleX: [1.3, 1],
+                  scaleY: [0.8, 1],
+                  opacity: 1,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 110,
+                  damping: 2,
+                  mass: 0.1,
+                }}
+                style={{
+                  transformOrigin: "center center",
+                }}
               >
-                <motion.div
-                  key={imageValue.icon}
-                  initial={false}
-                  animate={{
-                    scaleX: [1.3, 1],
-                    scaleY: [0.8, 1],
-                    opacity: 1,
-                  }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 110,
-                    damping: 2,
-                    mass: 0.1,
-                  }}
-                  style={{
-                    transformOrigin: "center center",
-                  }}
-                >
-                  <Icon name={imageValue.icon} className={styles.icon} />
-                </motion.div>
-              </div>
-
-              <Picker.Color
-                kind="grid"
-                value={imageValue.color}
-                onValueChange={(value) => {
-                  if (typeof value === "string") {
-                    colorCtrl.field.onChange(value as ColorName);
-                  }
-                }}
-                name={colorCtrl.field.name}
-              />
+                <Icon name={imageValue.icon} className={styles.icon} />
+              </motion.div>
             </div>
-          )}
-        />
-      </Field.Root>
-    </MeasuredContainer>
+
+            <Picker.Color
+              kind="grid"
+              value={imageValue.color}
+              onValueChange={(value) => {
+                if (typeof value === "string") {
+                  colorCtrl.field.onChange(value as ColorName);
+                }
+              }}
+              name={colorCtrl.field.name}
+            />
+          </div>
+        )}
+      />
+    </Field.Root>
   );
 }

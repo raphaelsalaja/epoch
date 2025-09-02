@@ -3,7 +3,6 @@
 import { motion } from "motion/react";
 import { FormProvider } from "react-hook-form";
 import { Button } from "@/components/button";
-import { useShake } from "@/lib/hooks/use-shake";
 import { viewTransition } from "@/lib/motion";
 import { useViewStore } from "@/lib/stores/view";
 import type { FieldConfig } from "../../registry/fields";
@@ -14,18 +13,8 @@ import { useActivityForm } from "./form";
 
 export function EditCardActivity() {
   const { setView } = useViewStore();
-  const titleShake = useShake();
-  const descriptionShake = useShake();
-  const colorShake = useShake();
-
-  const { form, onValid, createOnInvalid, maxLengths } = useActivityForm();
+  const { form, onValid, maxLengths } = useActivityForm();
   const { handleSubmit } = form;
-
-  const onInvalid = createOnInvalid({
-    title: titleShake.trigger,
-    description: descriptionShake.trigger,
-    color: colorShake.trigger,
-  });
 
   const fields: FieldConfig<ActivityFormValues>[] = [
     {
@@ -49,12 +38,6 @@ export function EditCardActivity() {
     },
   ];
 
-  const shakeRefs: Record<string, React.RefObject<HTMLDivElement>> = {
-    title: titleShake.ref,
-    description: descriptionShake.ref,
-    color: colorShake.ref,
-  };
-
   return (
     <FormProvider {...form}>
       <motion.form
@@ -63,7 +46,7 @@ export function EditCardActivity() {
         onSubmit={handleSubmit((values) => {
           onValid(values);
           setView("card");
-        }, onInvalid)}
+        })}
         className={styles.form}
       >
         {fields.map((config) => {
@@ -72,20 +55,7 @@ export function EditCardActivity() {
               ? `image:${"name" in config ? String(config.name) : `${String(config.nameColor)}+${String(config.nameIcon)}`}`
               : `${config.kind}:${String(config.name)}`;
 
-          const shakeKey =
-            config.kind === "image"
-              ? "name" in config
-                ? String(config.name)
-                : String(config.nameColor)
-              : String(config.name);
-
-          return (
-            <RenderField
-              key={key}
-              config={config}
-              shakeRef={shakeRefs[shakeKey]}
-            />
-          );
+          return <RenderField key={key} config={config} />;
         })}
 
         <Button.Root type="submit">

@@ -20,10 +20,8 @@ export type FieldConfig<T extends FieldValues> =
 
 export function RenderField<T extends FieldValues>({
   config,
-  shakeRef,
 }: {
   config: FieldConfig<T>;
-  shakeRef: React.RefObject<HTMLDivElement>;
 }) {
   switch (config.kind) {
     case "text":
@@ -33,7 +31,6 @@ export function RenderField<T extends FieldValues>({
           label={config.label}
           placeholder={config.placeholder}
           maxLength={config.maxLength}
-          shakeRef={shakeRef}
         />
       );
     case "textarea":
@@ -43,30 +40,18 @@ export function RenderField<T extends FieldValues>({
           label={config.label}
           placeholder={config.placeholder}
           maxLength={config.maxLength}
-          shakeRef={shakeRef}
         />
       );
     case "color":
-      return (
-        <ColorFormField
-          name={config.name}
-          label={config.label}
-          shakeRef={shakeRef}
-        />
-      );
+      return <ColorFormField name={config.name} label={config.label} />;
     case "image":
       return "name" in config ? (
-        <ImageFormField
-          name={config.name}
-          label={config.label}
-          shakeRef={shakeRef}
-        />
+        <ImageFormField name={config.name} label={config.label} />
       ) : (
         <ImageFormField
           nameColor={config.nameColor}
           nameIcon={config.nameIcon}
           label={config.label}
-          shakeRef={shakeRef}
         />
       );
     default:

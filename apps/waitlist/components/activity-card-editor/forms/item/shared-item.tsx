@@ -8,7 +8,6 @@ import {
   TextFormField,
 } from "@/components/activity-card-editor/fields";
 import { Button } from "@/components/button";
-import { useShake } from "@/lib/hooks/use-shake";
 import { viewTransition } from "@/lib/motion";
 import { useViewStore } from "@/lib/stores/view";
 import styles from "../styles.module.css";
@@ -19,18 +18,8 @@ export function createItemEditor(section: "item_one" | "item_two") {
 
   return function EditCardItem() {
     const { setView } = useViewStore();
-    const titleShake = useShake();
-    const subtitleShake = useShake();
-    const imageShake = useShake();
-
-    const { form, onValid, createOnInvalid, maxLengths } = useItemForm();
+    const { form, onValid, maxLengths } = useItemForm();
     const { handleSubmit } = form;
-
-    const onInvalid = createOnInvalid({
-      title: titleShake.trigger,
-      subtitle: subtitleShake.trigger,
-      image: imageShake.trigger,
-    });
 
     return (
       <FormProvider {...form}>
@@ -40,30 +29,27 @@ export function createItemEditor(section: "item_one" | "item_two") {
           onSubmit={handleSubmit((values) => {
             onValid(values);
             setView("card");
-          }, onInvalid)}
+          })}
           className={styles.form}
         >
           <ImageFormField
             nameColor="color"
             nameIcon="icon"
             label="Item Image"
-            shakeRef={imageShake.ref}
           />
 
           <TextFormField
             name="title"
             label="Item Title"
-            placeholder="Enter the title"
+            placeholder="e.g. White Monster"
             maxLength={maxLengths.title}
-            shakeRef={titleShake.ref}
           />
 
           <TextFormField
             name="subtitle"
             label="Item Description"
-            placeholder="Enter the description"
+            placeholder="e.g. 4 cans"
             maxLength={maxLengths.subtitle}
-            shakeRef={subtitleShake.ref}
           />
 
           <Button.Root type="submit">

@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import { makeOnInvalid } from "@/lib/hooks/use-invalid-submit-shake";
 import { Schemas } from "@/lib/schemas";
 import { useCardStore } from "@/lib/stores/card";
 
@@ -32,21 +31,9 @@ export function useActivityForm() {
     form.reset(clean, { keepDirty: false, keepValues: true });
   };
 
-  const createOnInvalid = (shakeHandlers: {
-    title?: () => void;
-    description?: () => void;
-    color?: () => void;
-  }) =>
-    makeOnInvalid<FormValues>(form.setFocus, [
-      { name: "title", shake: shakeHandlers.title || (() => {}) },
-      { name: "description", shake: shakeHandlers.description || (() => {}) },
-      { name: "color", shake: shakeHandlers.color || (() => {}) },
-    ]);
-
   return {
     form,
     onValid,
-    createOnInvalid,
     maxLengths: {
       title: 100,
       description: 150,

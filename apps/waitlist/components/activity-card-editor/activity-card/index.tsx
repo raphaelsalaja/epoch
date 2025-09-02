@@ -42,7 +42,6 @@ export function ActivityCard() {
         cacheBust: true,
         backgroundColor: getComputedStyle(node).backgroundColor || undefined,
         filter: (n) => {
-          // Exclude any element marked as download control
           if (n instanceof HTMLElement && n.dataset?.slot === "button")
             return false;
           if (n instanceof HTMLElement && n.classList.contains("download"))
@@ -59,7 +58,6 @@ export function ActivityCard() {
       link.remove();
     } catch (err) {
       console.error("Failed to export image", err);
-      // TODO: Optionally add server fallback using @vercel/og
     } finally {
       setDownloading(false);
     }

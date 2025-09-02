@@ -9,7 +9,7 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
   align-items: center;
   justify-content: space-between;
   width: 384px;

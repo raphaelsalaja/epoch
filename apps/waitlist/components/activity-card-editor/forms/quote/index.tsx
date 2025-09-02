@@ -8,23 +8,14 @@ import {
 } from "@/components/activity-card-editor/fields";
 import { useQuoteForm } from "@/components/activity-card-editor/forms/quote/form";
 import { Button } from "@/components/button";
-import { useShake } from "@/lib/hooks/use-shake";
 import { viewTransition } from "@/lib/motion";
 import { useViewStore } from "@/lib/stores/view";
 import styles from "../styles.module.css";
 
 export function EditCardQuote() {
   const { setView } = useViewStore();
-  const textShake = useShake();
-  const authorShake = useShake();
-
-  const { form, onValid, createOnInvalid, maxLengths } = useQuoteForm();
+  const { form, onValid, maxLengths } = useQuoteForm();
   const { handleSubmit } = form;
-
-  const onInvalid = createOnInvalid({
-    text: textShake.trigger,
-    author: authorShake.trigger,
-  });
 
   return (
     <FormProvider {...form}>
@@ -34,7 +25,7 @@ export function EditCardQuote() {
         onSubmit={handleSubmit((values) => {
           onValid(values);
           setView("card");
-        }, onInvalid)}
+        })}
         className={styles.form}
       >
         <TextareaFormField
@@ -42,7 +33,6 @@ export function EditCardQuote() {
           label="Quote"
           placeholder="Enter your favorite quote"
           maxLength={maxLengths.text}
-          shakeRef={textShake.ref}
         />
 
         <TextFormField
@@ -50,7 +40,6 @@ export function EditCardQuote() {
           label="Author"
           placeholder="Quote author"
           maxLength={maxLengths.author}
-          shakeRef={authorShake.ref}
         />
 
         <Button.Root type="submit">
