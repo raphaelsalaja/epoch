@@ -22,8 +22,8 @@ export function ActivityCard() {
     const images = Array.from(root.querySelectorAll<HTMLImageElement>("img"));
     await Promise.all(
       images.map((img) =>
-        img.decode ? img.decode().catch(() => {}) : Promise.resolve()
-      )
+        img.decode ? img.decode().catch(() => {}) : Promise.resolve(),
+      ),
     );
   }, []);
 
@@ -37,7 +37,8 @@ export function ActivityCard() {
       const dataUrl = await htmlToImage.toPng(node, {
         pixelRatio: Math.min(
           3,
-          (typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1) * 2
+          (typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1) *
+            2,
         ),
         cacheBust: true,
         backgroundColor: getComputedStyle(node).backgroundColor || undefined,

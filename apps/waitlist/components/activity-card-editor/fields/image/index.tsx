@@ -11,7 +11,6 @@ import {
 import { Field } from "@/components/field";
 import { Icon } from "@/components/icons/helpers";
 import type { IconName } from "@/components/icons/types";
-import { MeasuredContainer } from "@/components/measured-container";
 import type { ColorName } from "@/components/picker";
 import { Picker } from "@/components/picker";
 import styles from "../styles.module.css";
@@ -61,7 +60,7 @@ export function ImageFormField<TFieldValues extends FieldValues = FieldValues>({
 
   if (!isComposite && !isSeparate) {
     throw new Error(
-      "ImageFormField: provide either `name` (composite) or both `nameColor` and `nameIcon` (separate)"
+      "ImageFormField: provide either `name` (composite) or both `nameColor` and `nameIcon` (separate)",
     );
   }
 

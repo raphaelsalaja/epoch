@@ -8,7 +8,6 @@ import {
 } from "@/components/activity-card-editor/fields";
 import { useQuoteForm } from "@/components/activity-card-editor/forms/quote/form";
 import { Button } from "@/components/button";
-import { MeasuredContainer } from "@/components/measured-container";
 import { viewTransition } from "@/lib/motion";
 import { useViewStore } from "@/lib/stores/view";
 import styles from "../styles.module.css";
