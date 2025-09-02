@@ -165,7 +165,7 @@
   }
 }
 
-.track::before {
+.track:not([data-skeleton])::before {
   position: absolute;
   inset: -12px;
   z-index: -1;
@@ -180,7 +180,7 @@
     scale 0.2s ease;
 }
 
-.track:hover::before {
+.track:not([data-skeleton]):hover::before {
   opacity: 1;
   scale: 1;
 }
