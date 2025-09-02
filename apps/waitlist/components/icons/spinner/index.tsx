@@ -22,13 +22,13 @@ export function Spinner() {
           cx="9"
           cy="9"
           r="7"
-          stroke="var(--white)"
+          stroke="var(--background-primary)"
           strokeOpacity="0.2"
           strokeWidth="2.5"
         />
         <path
           d="M16 9C16 5.13401 12.866 2 9 2"
-          stroke="var(--white)"
+          stroke="var(--background-primary)"
           strokeWidth="2.5"
           strokeLinecap="round"
         />

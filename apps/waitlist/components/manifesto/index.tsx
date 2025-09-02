@@ -42,7 +42,7 @@ export function Manifesto() {
     setIsSuccess(false);
     setButtonState(ButtonState.Loading);
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
     try {
       setIsSuccess(true);
@@ -88,7 +88,6 @@ export function Manifesto() {
                 invalid={fieldState.invalid}
                 disabled={isSuccess}
               >
-                {/* Visually hidden label for accessibility */}
                 <Field.Label htmlFor="email" className="sr">
                   Email address
                 </Field.Label>

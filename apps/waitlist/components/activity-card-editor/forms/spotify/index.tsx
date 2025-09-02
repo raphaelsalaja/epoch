@@ -210,7 +210,7 @@ export const EditCardSpotify = () => {
         </AnimatePresence>
       </div>
 
-      <Button.Root type="submit" layoutId="button">
+      <Button.Root type="submit">
         <Button.Label>Update</Button.Label>
       </Button.Root>
     </motion.form>
