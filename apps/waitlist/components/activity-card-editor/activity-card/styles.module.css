@@ -16,7 +16,7 @@
   width: 100%;
   max-width: 384px;
   aspect-ratio: 3 / 4;
-  padding: clamp(16px, 4vw, 32px);
+  padding: 32px;
   border-radius: 24px;
 }
 
@@ -54,7 +54,7 @@
   display: flex;
   flex: 1 0 0;
   flex-direction: column;
-  gap: clamp(16px, 4vw, 32px);
+  gap: 32px;
   align-items: flex-start;
   align-self: stretch;
   justify-content: start;
