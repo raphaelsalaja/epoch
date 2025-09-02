@@ -59,7 +59,7 @@ export function EditCardActivity() {
         })}
 
         <Button.Root type="submit">
-          <Button.Label>Update Activity</Button.Label>
+          <Button.Label>Update</Button.Label>
         </Button.Root>
         <button type="submit" hidden aria-hidden="true" tabIndex={-1} />
       </motion.form>

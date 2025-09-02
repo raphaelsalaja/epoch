@@ -11,7 +11,7 @@ export function ActivityCardEditor() {
 
   return (
     <div className={styles.container}>
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="popLayout">
         {view === "card" ? (
           <ActivityCard />
         ) : view === "edit-activity" ? (

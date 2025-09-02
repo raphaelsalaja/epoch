@@ -44,7 +44,7 @@ export function EditCardQuote() {
         />
 
         <Button.Root type="submit">
-          <Button.Label>Update Quote</Button.Label>
+          <Button.Label>Update</Button.Label>
         </Button.Root>
         <button type="submit" hidden aria-hidden="true" tabIndex={-1} />
       </motion.form>
