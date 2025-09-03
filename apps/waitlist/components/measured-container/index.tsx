@@ -25,7 +25,7 @@ export const MeasuredContainer = forwardRef<
   return (
     <motion.div
       ref={forwardedRef}
-      initial={{ width: "auto", height: "auto" }}
+      initial={{ width: "auto" }}
       animate={measuredStyles}
       transition={{
         duration: 0.4,

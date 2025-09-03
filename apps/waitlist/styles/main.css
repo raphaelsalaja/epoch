@@ -13,6 +13,11 @@ html {
 ::selection {
   color: var(--white);
   background: var(--black);
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--black);
+    background: var(--white);
+  }
 }
 
 body {
