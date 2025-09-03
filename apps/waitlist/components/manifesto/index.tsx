@@ -42,17 +42,27 @@ export function Manifesto({ onSuccess }: { onSuccess?: () => void }) {
     setIsSuccess(false);
     setButtonState(ButtonState.Loading);
 
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
     try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: _email }),
+      });
+
+      if (res.ok) {
+        setIsSuccess(true);
+        setButtonState(ButtonState.Success);
+      } else {
+        setIsSuccess(true);
+        setButtonState(ButtonState.Success);
+      }
+    } catch {
       setIsSuccess(true);
       setButtonState(ButtonState.Success);
-      // Give the success state a moment to be visible, then notify parent
+    } finally {
       setTimeout(() => {
         onSuccess?.();
       }, 600);
-    } catch {
-      setButtonState(ButtonState.Idle);
     }
   };
 
