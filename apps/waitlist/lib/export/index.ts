@@ -5,23 +5,15 @@ import * as htmlToImage from "html-to-image";
 type DownloadFormat = "png" | "jpeg";
 
 export type DownloadOptions = {
-  /** File name without extension or with one that matches format */
-  filename?: string; // default: "image.png"
-  /** Output format */
-  format?: DownloadFormat; // default: "png"
-  /** JPEG quality (0..1) when format is "jpeg" */
-  jpegQuality?: number; // default: 0.92
-  /** Cap the effective pixel ratio to avoid huge files */
-  maxPixelRatio?: number; // default: 3
-  /** Multiplier applied to DPR for crisper exports */
-  multiplier?: number; // default: 2
-  /** "auto" reads from computed style, or pass any CSS color */
-  background?: "auto" | string; // default: "auto"
-  /** Filter any DOM nodes you don’t want rasterized */
+  filename?: string;
+  format?: DownloadFormat;
+  jpegQuality?: number;
+  maxPixelRatio?: number;
+  multiplier?: number;
+  background?: "auto" | string;
   filter?: (n: Element) => boolean;
 };
 
-/** Make sure <img> tags are decoded to avoid blank boxes */
 async function ensureImagesLoaded(root: HTMLElement) {
   const imgs = Array.from(root.querySelectorAll<HTMLImageElement>("img"));
   await Promise.allSettled(
@@ -29,15 +21,12 @@ async function ensureImagesLoaded(root: HTMLElement) {
   );
 }
 
-/** Make sure web fonts are ready to avoid FOUT/FOIT */
 async function ensureFontsReady() {
-  // Safari still lacks full support, so gate it
   if (document?.fonts?.ready) {
     await document.fonts.ready;
   }
 }
 
-/** One-shot download using html-to-image */
 export async function downloadElementAsImage(
   node: HTMLElement,
   {
