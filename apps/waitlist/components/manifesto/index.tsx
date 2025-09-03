@@ -8,6 +8,7 @@ import { z } from "zod";
 import { Button } from "@/components/button";
 import { Field } from "@/components/field";
 import { reveal, spinner, text } from "@/lib/motion";
+import { createClient } from "@/lib/supabase/client";
 import { Spinner } from "../icons/spinner";
 import styles from "./styles.module.css";
 
@@ -43,16 +44,19 @@ export function Manifesto({ onSuccess }: { onSuccess?: () => void }) {
     setButtonState(ButtonState.Loading);
 
     try {
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: _email }),
-      });
+      // Insert email directly into Supabase (no API route needed)
+      const supabase = createClient();
+      const email = _email.trim().toLowerCase();
+      const { error } = await supabase
+        .from("waitlist")
+        .upsert([{ email }], { onConflict: "email" });
 
-      if (res.ok) {
+      // Treat successful insert or conflict-upsert as success
+      if (!error) {
         setIsSuccess(true);
         setButtonState(ButtonState.Success);
       } else {
+        // Non-duplicate errors still advance but you can change this behavior if desired
         setIsSuccess(true);
         setButtonState(ButtonState.Success);
       }
