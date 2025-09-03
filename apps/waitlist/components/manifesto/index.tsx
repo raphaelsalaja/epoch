@@ -22,7 +22,7 @@ const schema = z.object({
 });
 type FormValues = z.infer<typeof schema>;
 
-export function Manifesto() {
+export function Manifesto({ onSuccess }: { onSuccess?: () => void }) {
   const [isSuccess, setIsSuccess] = useState(false);
   const [buttonState, setButtonState] = useState(ButtonState.Idle);
   const [ref, animate] = useAnimate();
@@ -47,6 +47,10 @@ export function Manifesto() {
     try {
       setIsSuccess(true);
       setButtonState(ButtonState.Success);
+      // Give the success state a moment to be visible, then notify parent
+      setTimeout(() => {
+        onSuccess?.();
+      }, 600);
     } catch {
       setButtonState(ButtonState.Idle);
     }
@@ -56,7 +60,7 @@ export function Manifesto() {
     animate(
       ref.current,
       { x: [-6, 0] },
-      { type: "spring", stiffness: 200, damping: 2, mass: 0.1 },
+      { type: "spring", stiffness: 200, damping: 2, mass: 0.1 }
     );
   };
 
