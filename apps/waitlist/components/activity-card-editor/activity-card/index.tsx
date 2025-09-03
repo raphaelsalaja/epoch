@@ -1,81 +1,32 @@
 "use client";
 
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { Button } from "@/components/button";
 import { Icon } from "@/components/icons";
 import { Spinner } from "@/components/icons/spinner";
-import { downloadElementAsImage } from "@/lib/export";
-import { spinner, text, viewTransition } from "@/lib/motion";
+import { useEffectDownload } from "@/lib/hooks/use-effect-download";
+import { button, viewTransition } from "@/lib/motion";
 import { useCardStore } from "@/lib/stores/card";
 import { useViewStore } from "@/lib/stores/view";
 import styles from "./styles.module.css";
 
 export function ActivityCard() {
   const { card } = useCardStore();
+
   const { setView } = useViewStore();
+
   const cardRef = useRef<HTMLDivElement | null>(null);
-  const mountedRef = useRef(true);
 
-  useEffect(() => {
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []);
-
-  type DownloadState = "idle" | "working" | "done";
-  const [downloadState, setDownloadState] = useState<DownloadState>("idle");
-  const isWorking = downloadState === "working";
-  const isDone = downloadState === "done";
-
-  const onDownload = useCallback(async () => {
-    if (!cardRef.current || isWorking) return;
-
-    setDownloadState("working");
-
-    const start = Date.now();
-    const minDuration = 2000;
-
-    try {
-      await downloadElementAsImage(cardRef.current, {
-        filename: "activity-card",
-        format: "png",
-        background: "auto",
-        multiplier: 2,
-        maxPixelRatio: 3,
-        filter: (n) => {
-          if (!(n instanceof HTMLElement)) return true;
-          if (n.dataset?.slot === "button") return false;
-          if (n.classList.contains("download")) return false;
-          return true;
-        },
-      });
-
-      const elapsed = Date.now() - start;
-      if (elapsed < minDuration) {
-        await new Promise((r) => setTimeout(r, minDuration - elapsed));
-      }
-
-      if (!mountedRef.current) return;
-      setDownloadState("done");
-
-      const tid = window.setTimeout(() => {
-        if (!mountedRef.current) return;
-        setDownloadState("idle");
-      }, 1000);
-
-      return () => clearTimeout(tid);
-    } catch (err) {
-      console.error("Failed to export image", err);
-      const elapsed = Date.now() - start;
-      if (elapsed < minDuration) {
-        await new Promise((r) => setTimeout(r, minDuration - elapsed));
-      }
-      if (!mountedRef.current) return;
-      setDownloadState("idle");
-    }
-  }, [isWorking]);
+  const { start, state } = useEffectDownload(cardRef, {
+    filter: (n) => {
+      if (!(n instanceof HTMLElement)) return true;
+      if (n.dataset?.slot === "button") return false;
+      if (n.classList.contains("download")) return false;
+      return true;
+    },
+  });
 
   return (
     <motion.div {...viewTransition} className={styles.container}>
@@ -166,24 +117,30 @@ export function ActivityCard() {
           className={styles.quote}
         >
           <p className={styles.text}>{card.quote.text}</p>
-          <p className={styles.author}>by {card.quote.author}</p>
+          <p className={styles.author}>— {card.quote.author}</p>
         </button>
       </div>
 
       <Button.Root
         type="button"
-        onClick={onDownload}
+        onClick={() => start()}
         aria-label="Download activity card"
-        aria-busy={isWorking}
-        disabled={isWorking}
+        aria-busy={state === "working"}
+        disabled={state === "working"}
         className="download"
       >
-        <Button.Label {...spinner(isWorking)}>
-          <Spinner />
-        </Button.Label>
-        <Button.Label>Download</Button.Label>
-        <Button.Label {...text(isWorking)}>ing</Button.Label>
-        <Button.Label {...text(isDone)}>ed</Button.Label>
+        <AnimatePresence mode="popLayout" initial={false}>
+          {state === "working" && (
+            <Button.Label {...button.spinner}>
+              <Spinner />
+            </Button.Label>
+          )}
+        </AnimatePresence>
+        <AnimatePresence mode="popLayout" initial={false}>
+          {state !== "working" && (
+            <Button.Label {...button.text}>Download</Button.Label>
+          )}
+        </AnimatePresence>
       </Button.Root>
     </motion.div>
   );

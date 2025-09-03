@@ -2,20 +2,24 @@ import { type MotionProps, stagger } from "motion/react";
 
 export const viewTransition: MotionProps = {
   initial: {
+    scale: 0.96,
     opacity: 0,
     filter: "blur(4px)",
   },
   animate: {
+    y: 0,
+    scale: 1,
     opacity: 1,
     filter: "blur(0px)",
   },
   exit: {
+    scale: 1.04,
     opacity: 0,
     filter: "blur(4px)",
   },
   transition: {
     ease: [0.19, 1, 0.22, 1],
-    duration: 0.5,
+    duration: 0.4,
   },
 };
 
@@ -85,10 +89,10 @@ export function spinner(state: boolean): MotionProps {
     animate: {
       opacity: state ? 1 : 0,
       scale: state ? 1 : 0,
+      marginRight: state ? 8 : 0,
     },
     style: {
       width: state ? "auto" : 0,
-      marginRight: state ? 8 : 0,
     },
     transition: {
       scale: {
@@ -127,3 +131,18 @@ export function text(state: boolean): MotionProps {
     },
   };
 }
+
+export const button: Record<string, MotionProps> = {
+  text: {
+    initial: { opacity: 1, scale: 0.96, y: 32 },
+    animate: { opacity: 1, scale: 1, y: 0 },
+    exit: { opacity: 0, scale: 0.96, y: 32 },
+    transition: { type: "spring", duration: 0.6, bounce: 0.4 },
+  },
+  spinner: {
+    initial: { opacity: 0, scale: 0.96, y: -32 },
+    animate: { opacity: 1, scale: 1, y: 0 },
+    exit: { opacity: 0, scale: 0.96, y: -32 },
+    transition: { type: "spring", duration: 0.6, bounce: 0.4 },
+  },
+};

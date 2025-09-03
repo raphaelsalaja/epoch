@@ -7,8 +7,8 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/button";
 import { Field } from "@/components/field";
+import { reveal, spinner, text } from "@/lib/motion";
 import { Spinner } from "../icons/spinner";
-import { reveal, spinner, text } from "./motion";
 import styles from "./styles.module.css";
 
 enum ButtonState {

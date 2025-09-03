@@ -146,7 +146,7 @@
     align-self: stretch;
     justify-content: center;
     font-size: var(--size-regular);
-    font-weight: var(--weight-medium);
+    font-weight: var(--weight-semibold);
     line-height: 150%;
     color: var(--white);
     text-align: left;

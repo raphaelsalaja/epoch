@@ -11,19 +11,19 @@ export function ActivityCardEditor() {
 
   return (
     <div className={styles.container}>
-      <AnimatePresence mode="popLayout">
+      <AnimatePresence mode="wait">
         {view === "card" ? (
-          <ActivityCard />
+          <ActivityCard key="card" />
         ) : view === "edit-activity" ? (
-          <Forms.Activity />
+          <Forms.Activity key="edit-activity" />
         ) : view === "edit-spotify" ? (
-          <Forms.Spotify />
+          <Forms.Spotify key="edit-spotify" />
         ) : view === "edit-item-one" ? (
-          <Forms.ItemOne />
+          <Forms.ItemOne key="edit-item-one" />
         ) : view === "edit-item-two" ? (
-          <Forms.ItemTwo />
+          <Forms.ItemTwo key="edit-item-two" />
         ) : view === "edit-quote" ? (
-          <Forms.Quote />
+          <Forms.Quote key="edit-quote" />
         ) : null}
       </AnimatePresence>
     </div>
