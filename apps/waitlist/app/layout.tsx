@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import type { Metadata } from "next";
+import { Footer } from "@/components/footer";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { openrunde } from "@/lib/fonts";
 
@@ -22,9 +23,10 @@ export default function RootLayout({
           Skip to content
         </a>
         <QueryProvider>
-          <main id="main-content">{children}</main>
+          <main>{children}</main>
         </QueryProvider>
       </body>
+      <Footer />
     </html>
   );
 }
