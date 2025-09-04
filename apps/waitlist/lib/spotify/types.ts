@@ -30,6 +30,7 @@ export type UseTrackSearchResult = {
   isFetching: boolean;
   error: Error | null;
   flush: () => void;
+  refetch: () => Promise<unknown>;
 };
 
 export type UseTrackSearchProps = {

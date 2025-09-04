@@ -81,6 +81,7 @@ export const EditCardSpotify = () => {
     tracks: trendingTracks,
     isLoading: trendingLoading,
     error: trendingError,
+    refetch: refetchTrending,
   } = useSpotifyTrending();
 
   const {
@@ -88,6 +89,7 @@ export const EditCardSpotify = () => {
     isLoading: searchLoading,
     isFetching: searchFetching,
     error: searchError,
+    refetch: refetchSearch,
   } = useTrackSearch({ input: deferredQuery });
 
   const isSearching = deferredQuery.length >= 2;
@@ -107,7 +109,7 @@ export const EditCardSpotify = () => {
     !error && (isLoading || (Array.isArray(list) && list.length === 0));
   const skeletonKeys = useMemo(
     () => Array.from({ length: 5 }, (_, i) => `skeleton-${i}`),
-    [],
+    []
   );
 
   const onSubmit = useCallback(
@@ -115,7 +117,7 @@ export const EditCardSpotify = () => {
       e.preventDefault();
       setView("card");
     },
-    [setView],
+    [setView]
   );
 
   const clear = useCallback(() => setRawQuery(""), []);
@@ -177,7 +179,10 @@ export const EditCardSpotify = () => {
               </p>
               <button
                 type="button"
-                onClick={() => window.location.reload()}
+                onClick={() => {
+                  if (isSearching) refetchSearch();
+                  else refetchTrending();
+                }}
                 className={styles.retry}
               >
                 Try again

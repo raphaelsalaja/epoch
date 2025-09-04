@@ -2,13 +2,14 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import type { z } from "zod";
 import { Button } from "@/components/button";
 import { Field } from "@/components/field";
+import { useEffectTask } from "@/lib/hooks/use-effect-task";
 import { useShake } from "@/lib/hooks/use-shake";
-import { reveal, spinner, text } from "@/lib/motion";
+import { reveal, spinner, text, viewTransition } from "@/lib/motion";
 import { Schemas } from "@/lib/schemas";
 import { createClient } from "@/lib/supabase/client";
 import { Spinner } from "../icons/spinner";
@@ -38,32 +39,46 @@ export function Manifesto({ onSuccess }: { onSuccess?: () => void }) {
     reValidateMode: "onChange",
   });
 
-  const onValid = async ({ email: _email }: FormValues) => {
-    setIsSuccess(false);
-    setButtonState(ButtonState.Loading);
+  const { run, state: taskState } = useEffectTask({
+    minMs: 800,
+    donePulseMs: 600,
+    timeoutMs: 10_000,
+  });
 
-    try {
+  useEffect(() => {
+    setIsSuccess(taskState === "done");
+    if (taskState === "working") setButtonState(ButtonState.Loading);
+    if (taskState === "done") setButtonState(ButtonState.Success);
+    if (taskState === "idle") setButtonState(ButtonState.Idle);
+  }, [taskState]);
+
+  useEffect(() => {
+    if (taskState === "done") {
+      const t = setTimeout(() => onSuccess?.(), 600);
+      return () => clearTimeout(t);
+    }
+  }, [taskState, onSuccess]);
+
+  const onValid = async ({ email: _email }: FormValues) => {
+    await run(async () => {
       const supabase = createClient();
       const email = _email.trim().toLowerCase();
       const { error } = await supabase
         .from("waitlist")
         .upsert([{ email }], { onConflict: "email" });
-
-      if (!error) {
-        setIsSuccess(true);
-        setButtonState(ButtonState.Success);
-      } else {
-        setIsSuccess(true);
-        setButtonState(ButtonState.Success);
+      if (error) {
+        const msg = (error.message || "").toLowerCase();
+        const isDuplicate =
+          /duplicate|already exists|unique|23505|conflict/.test(msg);
+        const isPolicyUpdate = /row-level security|rls|permission.*update/.test(
+          msg
+        );
+        if (isDuplicate || isPolicyUpdate) {
+          return;
+        }
+        throw new Error(error.message || "Waitlist signup failed");
       }
-    } catch {
-      setIsSuccess(true);
-      setButtonState(ButtonState.Success);
-    } finally {
-      setTimeout(() => {
-        onSuccess?.();
-      }, 600);
-    }
+    });
   };
 
   const onInvalid = () => {
@@ -71,7 +86,7 @@ export function Manifesto({ onSuccess }: { onSuccess?: () => void }) {
   };
 
   return (
-    <div className={styles.manifesto}>
+    <motion.div {...viewTransition} className={styles.manifesto}>
       <div className={styles.text}>
         <h1>Epoch</h1>
         <p className={styles.paragraph}>
@@ -122,7 +137,7 @@ export function Manifesto({ onSuccess }: { onSuccess?: () => void }) {
             <motion.div {...reveal}>
               <Button.Root
                 type="submit"
-                disabled={isSubmitting}
+                disabled={taskState === "working"}
                 style={{ width: "100%" }}
                 layout
               >
@@ -159,6 +174,6 @@ export function Manifesto({ onSuccess }: { onSuccess?: () => void }) {
           </motion.span>
         )}
       </form>
-    </div>
+    </motion.div>
   );
 }

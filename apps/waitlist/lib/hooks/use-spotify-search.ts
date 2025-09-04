@@ -54,5 +54,6 @@ export function useTrackSearch({
     isFetching: queryResult.isFetching,
     error: (queryResult.error as Error) ?? null,
     flush: debouncedSetQuery.flush,
+    refetch: queryResult.refetch,
   };
 }
