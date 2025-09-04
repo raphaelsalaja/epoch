@@ -13,6 +13,10 @@ const RequiredText = (label: string, max: number) =>
       message: `${label} cannot be longer than ${max} characters`,
     });
 
+const SignUp = z.object({
+  email: z.string().email("Please enter a valid email address"),
+});
+
 const Activity = z.object({
   title: RequiredText("Title", 100),
   description: RequiredText("Description", 150),
@@ -51,6 +55,7 @@ const Card = z.object({
 });
 
 export const Schemas = {
+  SignUp,
   Item,
   Activity,
   Spotify,

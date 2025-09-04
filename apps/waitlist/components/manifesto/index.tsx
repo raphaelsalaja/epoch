@@ -1,13 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AnimatePresence, motion, useAnimate } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { Button } from "@/components/button";
 import { Field } from "@/components/field";
+import { useShake } from "@/lib/hooks/use-shake";
 import { reveal, spinner, text } from "@/lib/motion";
+import { Schemas } from "@/lib/schemas";
 import { createClient } from "@/lib/supabase/client";
 import { Spinner } from "../icons/spinner";
 import styles from "./styles.module.css";
@@ -18,22 +20,19 @@ enum ButtonState {
   Success = "success",
 }
 
-const schema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-});
-type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof Schemas.SignUp>;
 
 export function Manifesto({ onSuccess }: { onSuccess?: () => void }) {
   const [isSuccess, setIsSuccess] = useState(false);
   const [buttonState, setButtonState] = useState(ButtonState.Idle);
-  const [ref, animate] = useAnimate();
+  const { ref, trigger: shake } = useShake();
 
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
   } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(Schemas.SignUp),
     defaultValues: { email: "" },
     mode: "onSubmit",
     reValidateMode: "onChange",
@@ -44,19 +43,16 @@ export function Manifesto({ onSuccess }: { onSuccess?: () => void }) {
     setButtonState(ButtonState.Loading);
 
     try {
-      // Insert email directly into Supabase (no API route needed)
       const supabase = createClient();
       const email = _email.trim().toLowerCase();
       const { error } = await supabase
         .from("waitlist")
         .upsert([{ email }], { onConflict: "email" });
 
-      // Treat successful insert or conflict-upsert as success
       if (!error) {
         setIsSuccess(true);
         setButtonState(ButtonState.Success);
       } else {
-        // Non-duplicate errors still advance but you can change this behavior if desired
         setIsSuccess(true);
         setButtonState(ButtonState.Success);
       }
@@ -71,11 +67,7 @@ export function Manifesto({ onSuccess }: { onSuccess?: () => void }) {
   };
 
   const onInvalid = () => {
-    animate(
-      ref.current,
-      { x: [-6, 0] },
-      { type: "spring", stiffness: 200, damping: 2, mass: 0.1 }
-    );
+    shake();
   };
 
   return (
@@ -110,12 +102,11 @@ export function Manifesto({ onSuccess }: { onSuccess?: () => void }) {
                   Email address
                 </Field.Label>
                 <Field.Control
-                  id="email"
-                  type="email"
                   {...field}
+                  id="email"
+                  type="text"
                   spellCheck={false}
-                  autoComplete="email"
-                  required
+                  autoComplete="off"
                   placeholder="Email"
                   aria-invalid={!!errors.email}
                   aria-describedby={errors.email ? "email-error" : undefined}
