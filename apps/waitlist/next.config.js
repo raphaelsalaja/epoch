@@ -1,7 +1,6 @@
 import createMDX from "@next/mdx";
 
 const withMDX = createMDX({
-  // You can add remark/rehype plugins here
   options: {
     remarkPlugins: [],
     rehypePlugins: [],
@@ -10,13 +9,6 @@ const withMDX = createMDX({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    optimizePackageImports: [
-      "@tanstack/react-query",
-      "@tanstack/react-query-devtools",
-      "zustand",
-    ],
-  },
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
   images: {
     remotePatterns: [
