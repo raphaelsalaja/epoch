@@ -140,6 +140,11 @@ export function ActivityCard() {
           )}
         </AnimatePresence>
       </Button.Root>
+
+      <p className={styles.intro}>
+        A little preview while we get the release ready. Personalize the card,
+        and download when it feels complete.
+      </p>
     </motion.div>
   );
 }

@@ -1,3 +1,13 @@
+.intro {
+  padding: 0 16px;
+  font-size: var(--size-regular);
+  font-weight: var(--weight-medium);
+  line-height: 24px;
+  color: var(--foreground-quaternary);
+  text-align: center;
+  letter-spacing: var(--spacing-medium);
+}
+
 .container {
   display: flex;
   flex-direction: column;
