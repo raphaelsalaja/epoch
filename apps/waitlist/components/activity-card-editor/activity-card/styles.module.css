@@ -85,7 +85,6 @@
 
     .image {
       border-radius: 6px;
-      box-shadow: 0 4px 12px 0px oklch(0 0 0 / 30%);
     }
 
     .icon {

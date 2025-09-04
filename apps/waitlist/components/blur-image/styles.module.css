@@ -1,0 +1,55 @@
+.root {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.08) 25%,
+    rgba(255, 255, 255, 0.16) 37%,
+    rgba(255, 255, 255, 0.08) 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1s ease-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.hide {
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.img {
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 200ms cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.show {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .placeholder {
+    animation: none;
+  }
+  .hide,
+  .img {
+    transition: opacity 200ms ease;
+  }
+}

@@ -1,8 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import Image from "next/image";
 import { useRef } from "react";
+import BlurImage from "@/components/blur-image";
 import { Button } from "@/components/button";
 import { Icon } from "@/components/icons";
 import { Spinner } from "@/components/icons/spinner";
@@ -51,11 +51,9 @@ export function ActivityCard() {
             onClick={() => setView("edit-spotify")}
           >
             <div className={styles.image}>
-              <Image
-                width={40}
-                height={40}
+              <BlurImage
                 src={card.spotify.image}
-                alt="Item Image"
+                alt={card.spotify.title || "Item Image"}
                 priority={false}
               />
             </div>
