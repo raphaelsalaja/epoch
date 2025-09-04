@@ -109,7 +109,7 @@ export const EditCardSpotify = () => {
     !error && (isLoading || (Array.isArray(list) && list.length === 0));
   const skeletonKeys = useMemo(
     () => Array.from({ length: 5 }, (_, i) => `skeleton-${i}`),
-    []
+    [],
   );
 
   const onSubmit = useCallback(
@@ -117,7 +117,7 @@ export const EditCardSpotify = () => {
       e.preventDefault();
       setView("card");
     },
-    [setView]
+    [setView],
   );
 
   const clear = useCallback(() => setRawQuery(""), []);
