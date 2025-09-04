@@ -42,8 +42,8 @@ export function createUseItemForm(section: ItemSection) {
       form,
       onValid,
       maxLengths: {
-        title: 100,
-        subtitle: 100,
+        title: 30,
+        subtitle: 30,
       },
     } as const;
   };

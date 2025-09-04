@@ -33,8 +33,8 @@ export function useQuoteForm() {
     form,
     onValid,
     maxLengths: {
-      text: 150,
-      author: 100,
+      text: 100,
+      author: 30,
     },
   };
 }
