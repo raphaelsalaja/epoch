@@ -11,25 +11,9 @@ export default function Home() {
   return (
     <AnimatePresence mode="wait">
       {!proceed ? (
-        <motion.div
-          key="manifesto"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-        >
-          <Manifesto onSuccess={() => setProceed(true)} />
-        </motion.div>
+        <Manifesto onSuccess={() => setProceed(true)} />
       ) : (
-        <motion.div
-          key="editor"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-        >
-          <ActivityCardEditor />
-        </motion.div>
+        <ActivityCardEditor />
       )}
     </AnimatePresence>
   );
