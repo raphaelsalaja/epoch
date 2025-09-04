@@ -2,7 +2,7 @@ import clsx from "clsx";
 import type { Metadata } from "next";
 import { Footer } from "@/components/footer";
 import { QueryProvider } from "@/components/providers/query-provider";
-import { openrunde } from "@/lib/fonts";
+import { inter } from "@/lib/fonts";
 
 import "@/styles/main.css";
 
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={clsx(openrunde.className)}>
+      <body className={clsx(inter.className)}>
         <a href="#main-content" className="skip">
           Skip to content
         </a>
