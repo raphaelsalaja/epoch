@@ -59,7 +59,7 @@ export function ImageFormField<TFieldValues extends FieldValues = FieldValues>({
 
   if (!isComposite && !isSeparate) {
     throw new Error(
-      "ImageFormField: provide either `name` (composite) or both `nameColor` and `nameIcon` (separate)",
+      "ImageFormField: provide either `name` (composite) or both `nameColor` and `nameIcon` (separate)"
     );
   }
 

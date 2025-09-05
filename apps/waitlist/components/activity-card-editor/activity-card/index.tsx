@@ -140,11 +140,6 @@ export function ActivityCard() {
           )}
         </AnimatePresence>
       </Button.Root>
-
-      <p className={styles.intro}>
-        Here's a little something while we get the release ready. Customize the
-        card, and download when it feels complete.
-      </p>
     </motion.div>
   );
 }
