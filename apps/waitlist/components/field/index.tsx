@@ -1,7 +1,11 @@
+"use client";
+
 import { Field as BaseField } from "@base-ui-components/react/field";
 import clsx from "clsx";
 import { motion } from "motion/react";
 import type React from "react";
+import { useCallback } from "react";
+import useSound from "use-sound";
 import styles from "./styles.module.css";
 
 const MotionFieldRoot = motion.create(BaseField.Root);
@@ -44,14 +48,54 @@ interface FieldControlProps
 function FieldControl({
   kind = "input",
   className,
+  onValueChange,
   ...props
 }: FieldControlProps) {
+  const [playType1] = useSound("/media/sounds/type_01.wav", {
+    preload: true,
+    interrupt: true,
+    volume: 0.5,
+  });
+
+  const [playType2] = useSound("/media/sounds/type_02.wav", {
+    preload: true,
+    interrupt: true,
+    volume: 0.5,
+  });
+
+  const [playType3] = useSound("/media/sounds/type_03.wav", {
+    preload: true,
+    interrupt: true,
+    volume: 0.5,
+  });
+
+  const [playType4] = useSound("/media/sounds/type_04.wav", {
+    preload: true,
+    interrupt: true,
+    volume: 0.5,
+  });
+
+  const [playType5] = useSound("/media/sounds/type_05.wav", {
+    preload: true,
+    interrupt: true,
+    volume: 0.5,
+  });
+
+  const playRandom = useCallback(() => {
+    const players = [playType1, playType2, playType3, playType4, playType5];
+    const randomPlayer = players[Math.floor(Math.random() * players.length)];
+    randomPlayer();
+  }, [playType1, playType2, playType3, playType4, playType5]);
+
   switch (kind) {
     case "input":
       return (
         <BaseField.Control
           {...props}
-          data-field-control={kind}
+          onValueChange={(value, event) => {
+            playRandom();
+            onValueChange?.(value, event);
+          }}
           className={clsx(styles.control, className)}
         />
       );
@@ -59,8 +103,12 @@ function FieldControl({
       return (
         <BaseField.Control
           {...props}
+          onValueChange={(value, event) => {
+            playRandom();
+            onValueChange?.(value, event);
+          }}
           className={clsx(styles.control, className)}
-          render={(props) => <textarea data-field-control={kind} {...props} />}
+          render={(p) => <textarea data-field-control={kind} {...p} />}
         />
       );
   }

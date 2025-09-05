@@ -30,6 +30,7 @@
     "react-hook-form": "^7.62.0",
     "react-use-measure": "^2.1.7",
     "use-debounce": "^10.0.5",
+    "use-sound": "^4.0.3",
     "zod": "^4.0.17",
     "zustand": "^5.0.7"
   },

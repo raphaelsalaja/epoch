@@ -16,9 +16,7 @@ import { Picker } from "@/components/picker";
 import styles from "../styles.module.css";
 
 interface ImageFormFieldProps<TFieldValues extends FieldValues = FieldValues> {
-  // Composite binding (object with { color, icon })
   name?: Path<TFieldValues>;
-  // Separate field binding (schema stores color and icon separately)
   nameColor?: Path<TFieldValues>;
   nameIcon?: Path<TFieldValues>;
   label?: string;
@@ -60,7 +58,7 @@ export function ImageFormField<TFieldValues extends FieldValues = FieldValues>({
 
   if (!isComposite && !isSeparate) {
     throw new Error(
-      "ImageFormField: provide either `name` (composite) or both `nameColor` and `nameIcon` (separate)",
+      "ImageFormField: provide either `name` (composite) or both `nameColor` and `nameIcon` (separate)"
     );
   }
 

@@ -80,6 +80,9 @@ importers:
       use-debounce:
         specifier: ^10.0.5
         version: 10.0.6(react@19.1.1)
+      use-sound:
+        specifier: ^4.0.3
+        version: 4.0.4(react@19.1.1)
       zod:
         specifier: ^4.0.17
         version: 4.1.5
@@ -1130,6 +1133,9 @@ packages:
   hast-util-whitespace@3.0.0:
     resolution: {integrity: sha512-88JUN06ipLwsnv+dVn+OIYOvAuvBMy/Qoi6O7mQHxdPXpjy+Cd6xRkWwux7DKO+4sYILtLBRIKgsdpS2gQc7qw==}
 
+  howler@2.2.4:
+    resolution: {integrity: sha512-iARIBPgcQrwtEr+tALF+rapJ8qSc+Set2GJQl7xT1MQzWaVkFebdJhR3alVlSiUf5U7nAANKuj3aWpwerocD5w==}
+
   html-to-image@1.11.13:
     resolution: {integrity: sha512-cuOPoI7WApyhBElTTb9oqsawRvZ0rHhaHwghRLlTuffoD1B2aDemlCruLeZrUIIdvG7gs9xeELEPm6PhuASqrg==}
 
@@ -1733,6 +1739,11 @@ packages:
     engines: {node: '>= 16.0.0'}
     peerDependencies:
       react: '*'
+
+  use-sound@4.0.4:
+    resolution: {integrity: sha512-SW81yRUu3K0rJHW0WVANCAK581A2qgD97+QrLxPhlAhvdIAIgw2J9d1VThdbHmPHjzCbwKE/is82V88sgFdjCg==}
+    peerDependencies:
+      react: '>=16.8'
 
   use-sync-external-store@1.5.0:
     resolution: {integrity: sha512-Rb46I4cGGVBmjamjphe8L/UnvJD+uPPtTkNvX5mZgqdbavhI4EbgIWJiIHXJ8bc/i9EQGPRh4DwEURJ552Do0A==}
@@ -2881,6 +2892,8 @@ snapshots:
     dependencies:
       '@types/hast': 3.0.4
 
+  howler@2.2.4: {}
+
   html-to-image@1.11.13: {}
 
   ignore@5.3.2: {}
@@ -3686,6 +3699,11 @@ snapshots:
 
   use-debounce@10.0.6(react@19.1.1):
     dependencies:
+      react: 19.1.1
+
+  use-sound@4.0.4(react@19.1.1):
+    dependencies:
+      howler: 2.2.4
       react: 19.1.1
 
   use-sync-external-store@1.5.0(react@19.1.1):
