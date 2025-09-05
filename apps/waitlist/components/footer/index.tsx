@@ -10,7 +10,7 @@ import { useSettings } from "@/lib/stores/settings";
 import { VolumeFull, VolumeMute } from "../icons";
 import styles from "./styles.module.css";
 
-const BaseMotionToggle = motion(Toggle);
+const BaseMotionToggle = motion.create(Toggle);
 
 export function Footer() {
   const { isMuted, toggleMute } = useSettings();
