@@ -18,19 +18,8 @@
     background-color 0.2s ease,
     scale 0.1s ease;
 
-  &::before {
-    position: absolute;
-    inset: -4px -8px;
-    content: "";
-    background-color: color-mix(in srgb, currentcolor 0%, transparent);
-    border-radius: 4px;
-    scale: 0.95;
-    transition: background-color 0.2s ease;
-  }
-
-  &:hover::before {
-    background-color: color-mix(in srgb, currentcolor 10%, transparent);
-    scale: 1;
+  &:hover {
+    color: var(--foreground-primary);
   }
 
   &:active {
