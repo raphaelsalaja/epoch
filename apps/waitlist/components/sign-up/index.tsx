@@ -73,7 +73,7 @@ export function SignUp({ onSuccess }: { onSuccess?: () => void }) {
         const isDuplicate =
           /duplicate|already exists|unique|23505|conflict/.test(msg);
         const isPolicyUpdate = /row-level security|rls|permission.*update/.test(
-          msg
+          msg,
         );
         if (isDuplicate || isPolicyUpdate) {
           setIsReturningUser(true);
