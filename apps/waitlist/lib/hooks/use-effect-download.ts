@@ -3,6 +3,7 @@
 import { Duration, Effect } from "effect";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { downloadElementAsImage } from "@/lib/export";
+import { useSoundController } from "@/lib/sounds";
 
 type State = "idle" | "working" | "done";
 
@@ -33,6 +34,7 @@ export function useEffectDownload(
 ) {
   const mounted = useRef(true);
   const [state, setState] = useState<State>("idle");
+  const { play } = useSoundController();
 
   useEffect(() => {
     mounted.current = true;
@@ -76,7 +78,12 @@ export function useEffectDownload(
 
       const program = Effect.sleep(Duration.millis(minMs)).pipe(
         Effect.flatMap(() => exportEff),
-        Effect.tap(() => Effect.sync(() => safeSet("done"))),
+        Effect.tap(() =>
+          Effect.sync(() => {
+            play("celebration");
+            safeSet("done");
+          }),
+        ),
         Effect.tap(() => Effect.sleep(Duration.millis(donePulseMs))),
         Effect.timeoutFail({
           duration: Duration.millis(timeoutMs),
@@ -90,7 +97,7 @@ export function useEffectDownload(
 
       Effect.runPromise(program);
     },
-    [nodeRef, opts, state, safeSet],
+    [nodeRef, opts, state, safeSet, play],
   );
 
   return {

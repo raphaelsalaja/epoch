@@ -4,7 +4,7 @@ import { Field as BaseField } from "@base-ui-components/react/field";
 import clsx from "clsx";
 import { motion } from "motion/react";
 import type React from "react";
-import { useTypingSound } from "@/lib/sounds";
+import { useSoundController } from "@/lib/sounds";
 import styles from "./styles.module.css";
 
 const MotionFieldRoot = motion.create(BaseField.Root);
@@ -50,7 +50,7 @@ function FieldControl({
   onValueChange,
   ...props
 }: FieldControlProps) {
-  const playRandom = useTypingSound();
+  const { play } = useSoundController();
 
   switch (kind) {
     case "input":
@@ -58,7 +58,7 @@ function FieldControl({
         <BaseField.Control
           {...props}
           onValueChange={(value, event) => {
-            playRandom();
+            play("typing");
             onValueChange?.(value, event);
           }}
           className={clsx(styles.control, className)}
@@ -69,7 +69,7 @@ function FieldControl({
         <BaseField.Control
           {...props}
           onValueChange={(value, event) => {
-            playRandom();
+            play("typing");
             onValueChange?.(value, event);
           }}
           className={clsx(styles.control, className)}

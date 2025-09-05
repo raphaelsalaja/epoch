@@ -8,14 +8,14 @@ import { Icon } from "@/components/icons";
 import { Spinner } from "@/components/icons/spinner";
 import { useEffectDownload } from "@/lib/hooks/use-effect-download";
 import { button, viewTransition } from "@/lib/motion";
+
 import { useCardStore } from "@/lib/stores/card";
-import { useViewStore } from "@/lib/stores/view";
+import { useViewSwitcher } from "@/lib/stores/view";
 import styles from "./styles.module.css";
 
 export function ActivityCard() {
   const { card } = useCardStore();
-
-  const { setView } = useViewStore();
+  const { setView } = useViewSwitcher();
 
   const cardRef = useRef<HTMLDivElement | null>(null);
 

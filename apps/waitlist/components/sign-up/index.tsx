@@ -9,7 +9,7 @@ import { Button } from "@/components/button";
 import { Field } from "@/components/field";
 import { useEffectTask } from "@/lib/hooks/use-effect-task";
 import { useShake } from "@/lib/hooks/use-shake";
-import { reveal, spinner, text, viewTransition } from "@/lib/motion";
+import { button, reveal, viewTransition } from "@/lib/motion";
 import { Schemas } from "@/lib/schemas";
 import { createClient } from "@/lib/supabase/client";
 import { Spinner } from "../icons/spinner";
@@ -25,7 +25,8 @@ type FormValues = z.infer<typeof Schemas.SignUp>;
 
 export function SignUp({ onSuccess }: { onSuccess?: () => void }) {
   const [isSuccess, setIsSuccess] = useState(false);
-  const [buttonState, setButtonState] = useState(ButtonState.Idle);
+  const [isReturningUser, setIsReturningUser] = useState(false);
+  const [_buttonState, setButtonState] = useState(ButtonState.Idle);
   const { ref, trigger: shake } = useShake();
 
   const {
@@ -60,6 +61,7 @@ export function SignUp({ onSuccess }: { onSuccess?: () => void }) {
   }, [taskState, onSuccess]);
 
   const onValid = async ({ email: _email }: FormValues) => {
+    setIsReturningUser(false); // Reset the returning user state
     await run(async () => {
       const supabase = createClient();
       const email = _email.trim().toLowerCase();
@@ -74,6 +76,7 @@ export function SignUp({ onSuccess }: { onSuccess?: () => void }) {
           msg,
         );
         if (isDuplicate || isPolicyUpdate) {
+          setIsReturningUser(true);
           return;
         }
         throw new Error(error.message || "Waitlist signup failed");
@@ -141,19 +144,27 @@ export function SignUp({ onSuccess }: { onSuccess?: () => void }) {
                 style={{ width: "100%" }}
                 layout
               >
-                <Button.Label {...spinner(buttonState === ButtonState.Loading)}>
-                  <Spinner />
-                </Button.Label>
-                <Button.Label>Join</Button.Label>
-                <Button.Label {...text(buttonState === ButtonState.Loading)}>
-                  ing
-                </Button.Label>
-                <Button.Label {...text(buttonState === ButtonState.Success)}>
-                  ed!
-                </Button.Label>
-                <Button.Label {...text(buttonState !== ButtonState.Success)}>
-                  <>&nbsp;</>The Waitlist
-                </Button.Label>
+                <AnimatePresence mode="popLayout" initial={false}>
+                  {taskState === "idle" && (
+                    <Button.Label {...button.text}>
+                      Join The Waitlist
+                    </Button.Label>
+                  )}
+                </AnimatePresence>
+                <AnimatePresence mode="popLayout" initial={false}>
+                  {taskState === "working" && (
+                    <Button.Label {...button.spinner}>
+                      <Spinner />
+                    </Button.Label>
+                  )}
+                </AnimatePresence>
+                <AnimatePresence mode="popLayout" initial={false}>
+                  {taskState === "done" && (
+                    <Button.Label {...button.text}>
+                      {isReturningUser ? "Welcome Back!" : "Joined!"}
+                    </Button.Label>
+                  )}
+                </AnimatePresence>
               </Button.Root>
             </motion.div>
           )}

@@ -9,11 +9,11 @@ import {
 import { useQuoteForm } from "@/components/activity-card-editor/forms/quote/form";
 import { Button } from "@/components/button";
 import { viewTransition } from "@/lib/motion";
-import { useViewStore } from "@/lib/stores/view";
+import { useViewSwitcher } from "@/lib/stores/view";
 import styles from "../styles.module.css";
 
 export function EditCardQuote() {
-  const { setView } = useViewStore();
+  const { setView } = useViewSwitcher();
   const { form, onValid, maxLengths } = useQuoteForm();
   const { handleSubmit } = form;
 

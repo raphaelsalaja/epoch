@@ -13,6 +13,7 @@ import { Icon } from "@/components/icons/helpers";
 import type { IconName } from "@/components/icons/types";
 import type { ColorName } from "@/components/picker";
 import { Picker } from "@/components/picker";
+import { useSoundController } from "@/lib/sounds";
 import styles from "../styles.module.css";
 
 interface ImageFormFieldProps<TFieldValues extends FieldValues = FieldValues> {
@@ -80,6 +81,7 @@ function ImageFieldComposite<TFieldValues extends FieldValues = FieldValues>({
   const fieldId = useId();
   const { control } = useFormContext<TFieldValues>();
   const { field, fieldState } = useController<TFieldValues>({ name, control });
+  const { play } = useSoundController();
   const error = fieldState.error;
 
   const imageValue: ImageValue =
@@ -100,6 +102,7 @@ function ImageFieldComposite<TFieldValues extends FieldValues = FieldValues>({
               kind="grid"
               value={imageValue.icon}
               onValueChange={(value) => {
+                play("select");
                 if (typeof value === "string") {
                   field.onChange(updateImageIcon(field.value, value));
                 }
@@ -137,6 +140,7 @@ function ImageFieldComposite<TFieldValues extends FieldValues = FieldValues>({
               kind="grid"
               value={imageValue.color}
               onValueChange={(value) => {
+                play("select");
                 if (typeof value === "string") {
                   field.onChange(updateImageColor(field.value, value));
                 }
@@ -179,6 +183,7 @@ function ImageFieldSeparate<TFieldValues extends FieldValues = FieldValues>({
   const { control } = useFormContext<TFieldValues>();
   const colorCtrl = useController<TFieldValues>({ name: nameColor, control });
   const iconCtrl = useController<TFieldValues>({ name: nameIcon, control });
+  const { play } = useSoundController();
 
   const imageValue: ImageValue = {
     color: (colorCtrl.field.value as ColorName) ?? ("blue" as ColorName),
@@ -195,6 +200,7 @@ function ImageFieldSeparate<TFieldValues extends FieldValues = FieldValues>({
               kind="grid"
               value={imageValue.icon}
               onValueChange={(value) => {
+                play("select");
                 if (typeof value === "string") {
                   iconCtrl.field.onChange(value as IconName);
                 }
@@ -232,6 +238,7 @@ function ImageFieldSeparate<TFieldValues extends FieldValues = FieldValues>({
               kind="grid"
               value={imageValue.color}
               onValueChange={(value) => {
+                play("select");
                 if (typeof value === "string") {
                   colorCtrl.field.onChange(value as ColorName);
                 }

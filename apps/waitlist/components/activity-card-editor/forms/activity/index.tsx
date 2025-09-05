@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { FormProvider } from "react-hook-form";
 import { Button } from "@/components/button";
 import { viewTransition } from "@/lib/motion";
-import { useViewStore } from "@/lib/stores/view";
+import { useViewSwitcher } from "@/lib/stores/view";
 import type { FieldConfig } from "../../registry/fields";
 import { RenderField } from "../../registry/fields";
 import styles from "../styles.module.css";
@@ -12,7 +12,7 @@ import type { ActivityFormValues } from "./form";
 import { useActivityForm } from "./form";
 
 export function EditCardActivity() {
-  const { setView } = useViewStore();
+  const { setView } = useViewSwitcher();
   const { form, onValid, maxLengths } = useActivityForm();
   const { handleSubmit } = form;
 

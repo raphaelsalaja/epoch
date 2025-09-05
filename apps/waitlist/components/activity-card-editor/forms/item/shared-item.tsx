@@ -9,7 +9,7 @@ import {
 } from "@/components/activity-card-editor/fields";
 import { Button } from "@/components/button";
 import { viewTransition } from "@/lib/motion";
-import { useViewStore } from "@/lib/stores/view";
+import { useViewSwitcher } from "@/lib/stores/view";
 import styles from "../styles.module.css";
 import { createUseItemForm } from "./use-item-form";
 
@@ -17,7 +17,7 @@ export function createItemEditor(section: "item_one" | "item_two") {
   const useItemForm = createUseItemForm(section);
 
   return function EditCardItem() {
-    const { setView } = useViewStore();
+    const { setView } = useViewSwitcher();
     const { form, onValid, maxLengths } = useItemForm();
     const { handleSubmit } = form;
 

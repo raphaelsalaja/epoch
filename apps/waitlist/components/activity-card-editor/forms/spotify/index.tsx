@@ -7,7 +7,7 @@ import { useTrackSearch } from "@/lib/hooks/use-spotify-search";
 import { useSpotifyTrending } from "@/lib/hooks/use-spotify-trending";
 import { viewTransition } from "@/lib/motion";
 import type { Track } from "@/lib/spotify/types";
-import { useViewStore } from "@/lib/stores/view";
+import { useViewSwitcher } from "@/lib/stores/view";
 import { Button } from "../../../button";
 import { Dots, MagnifyingGlass, Trending } from "../../../icons";
 import { useSpotifyForm } from "./form";
@@ -70,7 +70,7 @@ function TrackItem({
 }
 
 export const EditCardSpotify = () => {
-  const { setView } = useViewStore();
+  const { setView } = useViewSwitcher();
   const prefersReducedMotion = useReducedMotion();
   const [rawQuery, setRawQuery] = useState("");
   const [debouncedQuery] = useDebounce(rawQuery.trim(), 250);

@@ -11,6 +11,7 @@ import {
 
 import { Field } from "@/components/field";
 import { Picker } from "@/components/picker";
+import { useSoundController } from "@/lib/sounds";
 
 interface ColorFormFieldProps<TFieldValues extends FieldValues = FieldValues> {
   name: Path<TFieldValues>;
@@ -23,6 +24,7 @@ export function ColorFormField<TFieldValues extends FieldValues = FieldValues>({
 }: ColorFormFieldProps<TFieldValues>) {
   const fieldId = useId();
   const { control } = useFormContext<TFieldValues>();
+  const { play } = useSoundController();
   const { field, fieldState } = useController<TFieldValues>({ name, control });
   const error = fieldState.error;
 
@@ -35,6 +37,7 @@ export function ColorFormField<TFieldValues extends FieldValues = FieldValues>({
           <Picker.Color
             value={field.value}
             onValueChange={(value) => {
+              play("select");
               field.onChange(value);
             }}
             name={field.name}
