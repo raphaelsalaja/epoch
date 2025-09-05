@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import useSound from "use-sound";
+import { useSettings } from "../stores/settings";
 
 const root = "/media/sounds";
 
@@ -22,7 +23,10 @@ export type SoundKey =
   | "taps";
 
 export interface SoundController {
-  play: (sounds: SoundKey | SoundKey[]) => void;
+  play: (
+    sounds: SoundKey | SoundKey[],
+    options?: { ignoreMute?: boolean },
+  ) => void;
 }
 
 function pickRandom<T>(arr: readonly T[]): T | undefined {
@@ -37,6 +41,7 @@ export function useSoundController(
     volume: 0.75,
   },
 ): SoundController {
+  const { isMuted } = useSettings();
   const [playButton] = useSound(`${root}/button.wav`);
   const [playCaution] = useSound(`${root}/caution.wav`, config);
   const [playCelebration] = useSound(`${root}/celebration.wav`, config);
@@ -67,7 +72,10 @@ export function useSoundController(
   const [playTap5] = useSound(`${root}/tap_05.wav`, config);
 
   const play = useCallback<SoundController["play"]>(
-    (input: SoundKey | SoundKey[]) => {
+    (input: SoundKey | SoundKey[], options?: { ignoreMute?: boolean }) => {
+      // Don't play sounds if muted, unless explicitly ignoring mute
+      if (isMuted && !options?.ignoreMute) return;
+
       const keys = Array.isArray(input) ? input : [input];
 
       keys.forEach((key) => {
@@ -148,6 +156,7 @@ export function useSoundController(
       });
     },
     [
+      isMuted,
       playButton,
       playCaution,
       playCelebration,

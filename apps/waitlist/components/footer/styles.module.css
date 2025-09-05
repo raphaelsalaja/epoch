@@ -36,4 +36,17 @@
       border-radius: 50%;
     }
   }
+
+  .toggle {
+    font-size: var(--size-small);
+    font-weight: var(--weight-normal);
+    line-height: 150%;
+    color: var(--foreground-quaternary);
+    letter-spacing: var(--spacing-small);
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--foreground-primary);
+    }
+  }
 }

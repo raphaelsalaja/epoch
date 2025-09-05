@@ -12,3 +12,5 @@ export { default as MagnifyingGlass } from "./magnifying-glass";
 export { default as Tablet } from "./tablet";
 export { default as Trending } from "./trending";
 export type { IconProps } from "./types";
+export { default as VolumeFull } from "./volume-full";
+export { default as VolumeMute } from "./volume-mute";
