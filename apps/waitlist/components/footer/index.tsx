@@ -1,7 +1,6 @@
 "use client";
 
 import { Toggle } from "@base-ui-components/react";
-import clsx from "clsx";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -9,7 +8,6 @@ import { useCallback } from "react";
 import { useSoundController } from "@/lib/sounds";
 import { useSettings } from "@/lib/stores/settings";
 import { VolumeFull, VolumeMute } from "../icons";
-import { MeasuredContainer } from "../measured-container";
 import styles from "./styles.module.css";
 
 const BaseMotionToggle = motion(Toggle);
@@ -67,39 +65,37 @@ export function Footer() {
           </a>
         </li>
         <li>
-          <MeasuredContainer height={false} width={true}>
-            <BaseMotionToggle
-              type="button"
-              onClick={handleToggle}
-              className={styles.toggle}
-              aria-label={isMuted ? "Unmute sounds" : "Mute sounds"}
-              whileTap={{ scale: 0.96 }}
-              transition={{ duration: 0.1 }}
-              pressed={!isMuted}
-            >
-              <AnimatePresence mode="popLayout" initial={false}>
-                {isMuted ? (
-                  <motion.div
-                    initial={{ opacity: 0, filter: "blur(2px)" }}
-                    animate={{ opacity: 1, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, filter: "blur(2px)" }}
-                    key="unmute"
-                  >
-                    Unmute
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    initial={{ opacity: 0, filter: "blur(2px)" }}
-                    animate={{ opacity: 1, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, filter: "blur(2px)" }}
-                    key="mute"
-                  >
-                    Mute
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </BaseMotionToggle>
-          </MeasuredContainer>
+          <BaseMotionToggle
+            type="button"
+            onClick={handleToggle}
+            className={styles.toggle}
+            aria-label={isMuted ? "Unmute sounds" : "Mute sounds"}
+            whileTap={{ scale: 0.96 }}
+            transition={{ duration: 0.1 }}
+            pressed={!isMuted}
+          >
+            <AnimatePresence initial={false} mode="popLayout">
+              {isMuted ? (
+                <motion.div
+                  initial={{ opacity: 0, filter: "blur(2px)" }}
+                  animate={{ opacity: 1, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, filter: "blur(2px)" }}
+                  key="unmute"
+                >
+                  <VolumeMute size={16} className={styles.icon} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0, filter: "blur(2px)" }}
+                  animate={{ opacity: 1, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, filter: "blur(2px)" }}
+                  key="mute"
+                >
+                  <VolumeFull size={16} className={styles.icon} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </BaseMotionToggle>
         </li>
       </ul>
     </div>

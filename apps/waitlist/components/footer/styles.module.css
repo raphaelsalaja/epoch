@@ -2,8 +2,7 @@
   position: absolute;
   bottom: 32px;
   width: 100%;
-
-  > ul {
+  .links {
     display: flex;
     gap: 0.5rem;
     align-items: center;
@@ -38,15 +37,18 @@
   }
 
   .toggle {
-    font-size: var(--size-small);
-    font-weight: var(--weight-normal);
-    line-height: 150%;
-    color: var(--foreground-quaternary);
-    letter-spacing: var(--spacing-small);
-    transition: color 0.2s;
+    margin-bottom: 2px;
+    vertical-align: middle;
+
+    .icon {
+      color: var(--foreground-quaternary);
+      transition: color 0.2s;
+    }
 
     &:hover {
-      color: var(--foreground-primary);
+      .icon {
+        color: var(--foreground-primary);
+      }
     }
   }
 }
