@@ -142,8 +142,9 @@ export function ActivityCard() {
       </Button.Root>
 
       <p className={styles.intro}>
-        A little preview while we get the release ready. Personalize the card,
-        and download when it feels complete.
+        Here's a little something while we get the release ready. Customize the
+        card, and download when it feels complete. Share it with friends or keep
+        it for yourself.
       </p>
     </motion.div>
   );
