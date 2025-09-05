@@ -37,17 +37,13 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 640px;
+  width: 384px;
   height: 100%;
-
   isolation: isolate;
   transition: width 0.4s ease;
 
   @media (width <= 800px) {
-    width: 80%;
-  }
-  @media (width <= 420px) {
-    width: 92%;
+    scale: 0.9;
   }
 }
 
@@ -56,7 +52,6 @@ input {
   outline: none;
 }
 
-/* Accessible skip link - visually hidden until focused */
 .skip {
   position: absolute;
   top: 0;
@@ -74,12 +69,10 @@ input {
   transform: translateY(0);
 }
 
-/* Only show focus ring for keyboard users */
 :focus {
   outline: none;
 }
 
-/* Screen-reader only utility */
 .sr {
   position: absolute !important;
   width: 1px !important;
@@ -92,7 +85,6 @@ input {
   clip: rect(0, 0, 0, 0) !important;
 }
 
-/* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

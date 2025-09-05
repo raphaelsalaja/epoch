@@ -9,7 +9,7 @@ export function Footer() {
   if (pathname?.startsWith("/manifesto")) return null;
 
   return (
-    <footer className={styles.footer}>
+    <div className={styles.footer}>
       <ul className={styles.links}>
         <li>
           <Link href="/manifesto">Manifesto</Link>
@@ -44,6 +44,6 @@ export function Footer() {
           </a>
         </li>
       </ul>
-    </footer>
+    </div>
   );
 }

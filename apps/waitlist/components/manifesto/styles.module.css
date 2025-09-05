@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 24px;
   align-items: flex-start;
-  width: 384px;
+  width: 100%;
 }
 
 .return {

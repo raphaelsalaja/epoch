@@ -3,5 +3,5 @@
   flex-direction: column;
   gap: 32px;
   align-items: flex-start;
-  width: 384px;
+  width: 100%;
 }

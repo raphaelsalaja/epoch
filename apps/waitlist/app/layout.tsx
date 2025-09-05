@@ -72,15 +72,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={clsx(inter.className)}>
-        <a href="#main-content" className="skip">
-          Skip to content
-        </a>
-        <QueryProvider>
+      <QueryProvider>
+        <body className={clsx(inter.className)}>
+          <a href="#main-content" className="skip">
+            Skip to content
+          </a>
           <main id="main-content">{children}</main>
-        </QueryProvider>
-      </body>
-      <Footer />
+          <Footer />
+        </body>
+      </QueryProvider>
     </html>
   );
 }
