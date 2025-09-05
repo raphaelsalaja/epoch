@@ -1,8 +1,5 @@
 .signup {
-  position: fixed;
-  top: 50%;
-  width: 384px;
-  transform: translate(-50%, -50%);
+  position: relative;
 }
 
 .text {

@@ -74,10 +74,7 @@ export default function RootLayout({
     <html lang="en">
       <QueryProvider>
         <body className={clsx(inter.className)}>
-          <a href="#main-content" className="skip">
-            Skip to content
-          </a>
-          <main id="main-content">{children}</main>
+          <main>{children}</main>
           <Footer />
         </body>
       </QueryProvider>

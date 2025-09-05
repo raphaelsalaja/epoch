@@ -6,6 +6,16 @@
   width: 100%;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+  width: 384px;
+  padding: 128px 0;
+  margin: 0 auto 64px;
+}
+
 .return {
   position: relative;
   display: inline-block;
@@ -35,7 +45,6 @@
   align-self: stretch;
 
   .title {
-    font-family: var(--family-body, "Open Runde");
     font-size: var(--size-large, 18px);
     font-style: normal;
     font-weight: var(--weight-semibold, 600);
@@ -46,7 +55,6 @@
   }
 
   .subtitle {
-    font-family: var(--family-body);
     font-size: var(--size-small);
     font-weight: var(--weight-normal);
     line-height: 150%;

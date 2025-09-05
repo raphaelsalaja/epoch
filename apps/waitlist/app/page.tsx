@@ -11,17 +11,29 @@ export default function Home() {
   const { setView } = useViewSwitcher();
 
   return (
-    <AnimatePresence mode="wait">
-      {!proceed ? (
-        <SignUp
-          onSuccess={() => {
-            setProceed(true);
-            setView("card");
-          }}
-        />
-      ) : (
-        <ActivityCardEditor />
-      )}
-    </AnimatePresence>
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <div style={{ width: "384px" }}>
+        <AnimatePresence mode="wait">
+          {!proceed ? (
+            <SignUp
+              onSuccess={() => {
+                setProceed(true);
+                setView("card");
+              }}
+            />
+          ) : (
+            <ActivityCardEditor />
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
   );
 }

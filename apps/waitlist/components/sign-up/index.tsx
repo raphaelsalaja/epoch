@@ -61,7 +61,7 @@ export function SignUp({ onSuccess }: { onSuccess?: () => void }) {
   }, [taskState, onSuccess]);
 
   const onValid = async ({ email: _email }: FormValues) => {
-    setIsReturningUser(false); // Reset the returning user state
+    setIsReturningUser(false);
     await run(async () => {
       const supabase = createClient();
       const email = _email.trim().toLowerCase();
