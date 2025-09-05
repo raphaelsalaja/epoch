@@ -1,8 +1,8 @@
-.manifesto {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
+.signup {
+  position: fixed;
+  top: 50%;
+  width: 384px;
+  transform: translate(-50%, -50%);
 }
 
 .text {
@@ -14,20 +14,20 @@
   justify-content: center;
 }
 
-.manifesto h1,
-.manifesto p {
+.signup h1,
+.signup p {
   line-height: 24px;
   text-align: center;
 }
 
-.manifesto h1 {
+.signup h1 {
   font-size: var(--size-large);
   font-weight: var(--weight-semibold);
   color: var(--foreground-primary);
   letter-spacing: var(--spacing-large);
 }
 
-.manifesto p {
+.signup p {
   font-size: var(--size-medium);
   font-weight: var(--weight-normal);
   color: var(--foreground-quaternary);

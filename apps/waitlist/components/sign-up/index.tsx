@@ -73,7 +73,7 @@ export function SignUp({ onSuccess }: { onSuccess?: () => void }) {
         const isDuplicate =
           /duplicate|already exists|unique|23505|conflict/.test(msg);
         const isPolicyUpdate = /row-level security|rls|permission.*update/.test(
-          msg,
+          msg
         );
         if (isDuplicate || isPolicyUpdate) {
           setIsReturningUser(true);
@@ -89,7 +89,7 @@ export function SignUp({ onSuccess }: { onSuccess?: () => void }) {
   };
 
   return (
-    <motion.div {...viewTransition} className={styles.manifesto}>
+    <motion.div {...viewTransition} className={styles.signup}>
       <div className={styles.text}>
         <h1>Epoch</h1>
         <p className={styles.paragraph}>
