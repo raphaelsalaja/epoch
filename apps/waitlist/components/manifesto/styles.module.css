@@ -95,7 +95,6 @@
   flex-direction: column;
 }
 
-/* MDX content defaults */
 .article :is(h1, h2, h3) {
   margin: 0 0 16px;
   font-size: var(--size-medium);
@@ -112,4 +111,21 @@
   line-height: 24px;
   color: var(--foreground-secondary);
   letter-spacing: var(--spacing-regular);
+}
+
+.article blockquote {
+  padding-left: 16px;
+  margin-bottom: 24px;
+  border-left: 2px solid var(--border-primary);
+
+  > p {
+    margin-bottom: 0px;
+    font-family: var(--font-newsreader);
+    color: var(--foreground-quaternary);
+
+    > strong {
+      font-weight: var(--weight-semibold);
+      color: var(--foreground-primary);
+    }
+  }
 }

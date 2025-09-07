@@ -80,7 +80,7 @@ export function Footer() {
                   initial={{ opacity: 0, filter: "blur(2px)" }}
                   animate={{ opacity: 1, filter: "blur(0px)" }}
                   exit={{ opacity: 0, filter: "blur(2px)" }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.1 }}
                   key="unmute"
                 >
                   <VolumeMute size={16} className={styles.icon} />
@@ -90,7 +90,7 @@ export function Footer() {
                   initial={{ opacity: 0, filter: "blur(2px)" }}
                   animate={{ opacity: 1, filter: "blur(0px)" }}
                   exit={{ opacity: 0, filter: "blur(2px)" }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.1 }}
                   key="mute"
                 >
                   <VolumeFull size={16} className={styles.icon} />

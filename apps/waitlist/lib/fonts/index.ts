@@ -1,7 +1,15 @@
+import clsx from "clsx";
+import { Newsreader } from "next/font/google";
 import localFont from "next/font/local";
 
 const inter = localFont({
   src: "../../app/fonts/inter/variable.ttf",
+  display: "swap",
+});
+
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
+  subsets: ["latin"],
   display: "swap",
 });
 
@@ -33,4 +41,8 @@ const openrunde = localFont({
   ],
 });
 
-export { inter, openrunde };
+export const font = clsx(
+  inter.className,
+  newsreader.variable,
+  openrunde.variable,
+);
