@@ -129,3 +129,38 @@
     }
   }
 }
+
+.article a {
+  font-size: var(--size-small);
+  font-weight: var(--weight-normal);
+  line-height: 150%;
+  color: var(--foreground-quaternary);
+  letter-spacing: var(--spacing-small);
+
+  .author {
+    position: relative;
+    display: inline-block;
+    font-weight: var(--weight-medium);
+    color: var(--foreground-primary);
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+
+    &::after {
+      position: absolute;
+      right: 0px;
+      bottom: 0px;
+      left: 0px;
+      height: 2px;
+      pointer-events: none;
+      content: "";
+      background: color-mix(in srgb, currentcolor 20%, transparent);
+      border-radius: 2px;
+      transition: inherit;
+    }
+
+    &:hover::after {
+      background: color-mix(in srgb, currentcolor 80%, transparent);
+    }
+  }
+}
